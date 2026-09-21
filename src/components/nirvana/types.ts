@@ -63,6 +63,7 @@ export type Subcategoria = {
 export type Pasta = {
   id: string;
   nome: string;
+  cor: CorCategoria;
 };
 
 export type Categoria = {
@@ -147,7 +148,13 @@ export const normalizarPastas = (pastas: unknown): Pasta[] =>
           (p): p is Pasta =>
             !!p && typeof (p as Pasta).id === "string" && typeof (p as Pasta).nome === "string",
         )
-        .map((p) => ({ id: p.id, nome: p.nome }))
+        .map((p) => ({
+          id: p.id,
+          nome: p.nome,
+          cor: ehCorCategoria((p as { cor?: unknown }).cor)
+            ? ((p as Pasta).cor as CorCategoria)
+            : corCategoriaAleatoria(),
+        }))
     : [];
 
 const ORDEM_PRIORIDADE: Record<Prioridade, number> = {
