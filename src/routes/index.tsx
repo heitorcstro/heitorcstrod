@@ -34,9 +34,8 @@ import { SubcategoriasAccordion } from "@/components/nirvana/subcategorias-accor
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
 import { ItemOrdenavel, ListaOrdenavel } from "@/components/nirvana/dnd";
 import {
+  ESTILOS_COR_CATEGORIA,
   GradeCoresCategoria,
-  IndicadorCorCategoria,
-  NomeCategoriaColorido,
   TrocarCorCategoria,
 } from "@/components/nirvana/cores-categoria";
 import {
@@ -452,22 +451,16 @@ function NirvanaPage() {
                       {(alca) => (
                         <AccordionItem
                           value={categoria.id}
-                          className="group relative flex min-h-[100px] flex-col rounded-xl border border-border bg-card p-4 transition-colors hover:border-foreground/40"
+                          className={`group relative flex min-h-[100px] flex-col rounded-xl border border-black bg-card p-4 transition-colors hover:border-foreground/40 ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
                         >
                           <AccordionTrigger
                             showChevron={false}
-                            className="relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start gap-1 py-1 pb-8 pr-[260px] text-left hover:no-underline [&>svg]:text-muted-foreground"
+                            className={`relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start gap-1 py-1 pb-8 pr-[260px] text-left text-white hover:no-underline ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
                           >
-                            <span className="flex min-w-0 flex-row items-center gap-2">
-                              <IndicadorCorCategoria cor={categoria.cor} />
-                              <NomeCategoriaColorido
-                                cor={categoria.cor}
-                                className="truncate font-medium tracking-tight"
-                              >
-                                {categoria.nome}
-                              </NomeCategoriaColorido>
+                            <span className="truncate font-medium tracking-tight text-white">
+                              {categoria.nome}
                             </span>
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-white/80">
                               {categoria.subcategorias.length} subcategoria
                               {categoria.subcategorias.length === 1 ? "" : "s"}
                               {total > 0 &&
@@ -476,7 +469,7 @@ function NirvanaPage() {
                             <ChevronDown
                               size={28}
                               strokeWidth={3}
-                              className="pointer-events-none absolute bottom-0 right-0 h-7 w-7 text-muted-foreground transition-transform duration-200"
+                              className="pointer-events-none absolute bottom-0 right-0 h-7 w-7 text-white transition-transform duration-200"
                             />
                           </AccordionTrigger>
                           <div className="absolute right-3 top-3 z-10 flex flex-row items-center gap-2">
