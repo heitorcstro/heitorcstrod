@@ -35,6 +35,8 @@ type Props = {
   categoria: Categoria;
   modoCompras?: boolean;
   className?: string;
+  subcategoriasAbertas?: string[];
+  onSubcategoriasAbertasChange?: (subcategoriasAbertas: string[]) => void;
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
@@ -68,6 +70,8 @@ export function SubcategoriasAccordion({
   categoria,
   modoCompras = false,
   className,
+  subcategoriasAbertas,
+  onSubcategoriasAbertasChange,
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
@@ -114,7 +118,12 @@ export function SubcategoriasAccordion({
         ids={categoria.subcategorias.map((s) => s.id)}
         onReordenar={onReordenarSubcategorias}
       >
-        <Accordion type="multiple" className={cn("grid gap-3 border-l border-border pl-3 sm:pl-4", className)}>
+        <Accordion
+          type="multiple"
+          value={subcategoriasAbertas}
+          onValueChange={onSubcategoriasAbertasChange}
+          className={cn("grid gap-3 border-l border-border pl-3 sm:pl-4", className)}
+        >
           {categoria.subcategorias.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             const itensOrdenados = itensExibidos(sub);
