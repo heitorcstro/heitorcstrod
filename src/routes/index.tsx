@@ -415,7 +415,7 @@ function NirvanaPage() {
                         >
                           <AccordionTrigger
                             showChevron={false}
-                            className="flex flex-1 flex-col gap-1 py-1 text-left hover:no-underline [&>svg]:text-muted-foreground"
+                            className="flex min-w-0 flex-1 flex-col gap-1 py-1 pr-[260px] text-left hover:no-underline [&>svg]:text-muted-foreground"
                           >
                             <span className="flex min-w-0 flex-row items-center gap-2">
                               <IndicadorCorCategoria cor={categoria.cor} />
