@@ -436,6 +436,13 @@ function NirvanaPage() {
     <div className="flex h-screen w-full bg-white">
       <SidebarCategorias
         categorias={categoriasVisiveis}
+        pastas={pastas}
+        onCriarPasta={() => {
+          setNomeNovaPasta("");
+          setModalPastaAberto(true);
+        }}
+        onDeletarPasta={() => setModalDeletarPastaAberto(true)}
+        onMoverCategoriaParaPasta={moverCategoriaParaPasta}
         onCriarCategoria={() => setModalAberto(true)}
         onDeletarCategoria={() => setModalDeletarAberto(true)}
         onSelecionarCategoria={(categoriaId) => {
