@@ -473,7 +473,7 @@ function NirvanaPage() {
                       {(alca) => (
                           <AccordionItem
                             value={categoria.id}
-                            className="group relative flex min-h-[100px] flex-col rounded-xl border border-black bg-white transition-colors hover:border-foreground/40"
+                            className="group relative flex min-h-[100px] flex-col overflow-hidden rounded-xl border border-black bg-white transition-colors hover:border-foreground/40 lg:min-h-[132px]"
                           >
                             <AccordionTrigger
                               showChevron={false}
