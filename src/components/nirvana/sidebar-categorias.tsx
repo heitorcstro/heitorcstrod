@@ -56,7 +56,9 @@ export function SidebarCategorias({
       atual.includes(pastaId) ? atual.filter((id) => id !== pastaId) : [...atual, pastaId],
     );
 
-  const categoriasSoltas = categorias.filter((c) => !c.pastaId);
+  const categoriasSoltas = categorias.filter(
+    (c) => !c.pastaId || c.manterEmCategorias !== false,
+  );
   const categoriasDaPasta = (pastaId: string) =>
     categorias.filter((c) => c.pastaId === pastaId);
 
@@ -78,8 +80,9 @@ export function SidebarCategorias({
 
   const linhaCategoria = (categoria: Categoria, dentroDePasta = false) => (
     <ItemOrdenavel
-      key={categoria.id}
+      key={dentroDePasta ? `pasta-${categoria.id}` : categoria.id}
       id={categoria.id}
+      tipo="categoria"
       textoAlca="Mover essa Categoria"
       alcaLetra="M"
       inline
