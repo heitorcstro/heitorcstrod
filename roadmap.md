@@ -7,3 +7,6 @@
 
 ## Aberto
 (nenhum)
+1. Split background (colored left / white right) on category cards
+2. Chevron -> black (visible on white right side)
+3. Keep buttons exact top-right positions; cluster wraps only on 2-col (lg) to avoid covering title
