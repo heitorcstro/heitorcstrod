@@ -115,6 +115,8 @@ function NirvanaPage() {
   const [pastasAbertasCentral, setPastasAbertasCentral] = useState<string[]>([]);
   const [pastaAtivaId, setPastaAtivaId] = useState<string | null>(null);
   const [modalRemoverDaPastaAberto, setModalRemoverDaPastaAberto] = useState(false);
+  const [modalImportarAberto, setModalImportarAberto] = useState(false);
+  const [categoriasParaImportar, setCategoriasParaImportar] = useState<string[]>([]);
   const [categoriaParaRemoverDaPasta, setCategoriaParaRemoverDaPasta] = useState<string | null>(
     null,
   );
@@ -865,13 +867,25 @@ function NirvanaPage() {
                   </p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setModalRemoverDaPastaAberto(true)}
-                className="rounded-md bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700"
-              >
-                Excluir Categoria da Pasta
-              </button>
+              <div className="flex flex-row items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategoriasParaImportar([]);
+                    setModalImportarAberto(true);
+                  }}
+                  className="rounded-md bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                >
+                  Importar Categorias
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalRemoverDaPastaAberto(true)}
+                  className="rounded-md bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700"
+                >
+                  Excluir Categoria da Pasta
+                </button>
+              </div>
             </div>
 
             {categoriasDaPastaAtiva.length > 0 ? (
