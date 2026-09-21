@@ -227,8 +227,16 @@ export function SubcategoriasAccordion({
                     value={sub.id}
                     className="rounded-xl border border-border bg-card px-6 transition-colors hover:border-foreground/40"
                   >
-                    <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-center">
-                      <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
+                     <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-center">
+                       <button
+                         type="button"
+                         aria-label={`Excluir ${sub.nome}`}
+                         onClick={() => setSubParaExcluir(sub.id)}
+                         className="shrink-0 self-start rounded p-1 text-gray-400 transition-colors hover:text-red-500 active:text-red-600"
+                       >
+                         <Trash2 className="size-4" />
+                       </button>
+                       <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
                         <span className="flex min-w-0 flex-1 flex-col gap-1.5">
                           {renomeandoId === sub.id ? (
                             <span className="text-base text-muted-foreground">Renomeando…</span>
