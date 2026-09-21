@@ -62,11 +62,8 @@ type Props = {
   ) => void;
 };
 
-const estiloLink =
-  "text-xs text-slate-500 underline-offset-2 transition-colors hover:text-black hover:underline disabled:opacity-40 disabled:hover:no-underline";
-
-const estiloBotao =
-  "inline-flex shrink-0 select-none items-center rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5";
+const estiloBaseAcao =
+  "inline-flex shrink-0 select-none items-center rounded-md border border-black bg-white px-2 py-1 text-xs font-medium whitespace-nowrap transition-colors hover:bg-black/5 disabled:opacity-40 disabled:hover:bg-transparent";
 
 function BarraProgressoSubcategoria({
   total,
