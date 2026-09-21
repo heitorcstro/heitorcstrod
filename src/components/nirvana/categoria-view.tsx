@@ -8,9 +8,10 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
 import {
   formatarBRL,
-  ordenarItens,
+  itensExibidos,
   totalCategoria,
   totalSubcategoria,
 } from "./types";
@@ -22,6 +23,7 @@ type Props = {
   onAbrirSubcategoria: (subcategoriaId: string) => void;
   onCriarSubcategoria: (nome: string) => void;
   onAlternarModoCompras: () => void;
+  onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
 };
 
 export function CategoriaView({
@@ -30,6 +32,7 @@ export function CategoriaView({
   onAbrirSubcategoria,
   onCriarSubcategoria,
   onAlternarModoCompras,
+  onReordenarSubcategorias,
 }: Props) {
   const modoCompras = categoria.isShoppingList === true;
   const [criando, setCriando] = useState(false);
