@@ -420,11 +420,32 @@ function NirvanaPage() {
             }}
             className="flex flex-row items-center gap-3"
           >
-            <img
-              src="/placeholder.svg"
-              alt="Nirvana"
-              className="h-10 w-10 rounded-md object-cover shadow-sm"
-            />
+            <svg
+              viewBox="0 0 40 40"
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-10 w-10 rounded-md shadow-sm"
+              role="img"
+              aria-label="Nirvana"
+            >
+              <rect width="40" height="40" rx="9" fill="#FFFFFF" />
+              <path
+                d="M8 8H14V22L26 8H32V32H26V18L14 32H8Z"
+                fill="url(#nirvana-n-grad)"
+              />
+              <defs>
+                <linearGradient
+                  id="nirvana-n-grad"
+                  x1="8"
+                  y1="8"
+                  x2="32"
+                  y2="32"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#0B192C" />
+                  <stop offset="1" stopColor="#112745" />
+                </linearGradient>
+              </defs>
+            </svg>
             <span className="font-display text-lg font-semibold tracking-tight">Nirvana</span>
           </button>
           <span className="text-xs uppercase tracking-[0.18em] text-primary-foreground/60">
