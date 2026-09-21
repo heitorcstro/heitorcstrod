@@ -146,7 +146,7 @@ export function SubcategoriasAccordion({
     <>
       <ListaOrdenavel
         id={`subcategorias-${categoria.id}`}
-        ids={categoria.subcategorias.map((s) => s.id)}
+        ids={subcategoriasVisiveis.map((s) => s.id)}
         onReordenar={onReordenarSubcategorias}
       >
         <Accordion
@@ -154,7 +154,7 @@ export function SubcategoriasAccordion({
           {...accordionControle}
           className={cn("grid gap-3 border-l border-border pl-3 sm:pl-4", className)}
         >
-          {categoria.subcategorias.map((sub) => {
+          {subcategoriasVisiveis.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             const itensOrdenados = itensExibidos(sub);
             const itensAtivos = itensOrdenados.filter((item) => !item.concluido);
@@ -253,6 +253,15 @@ export function SubcategoriasAccordion({
                             </span>
                           )}
                         </span>
+                        {onArquivarSubcategoria && (
+                          <span className="ml-auto flex shrink-0 items-center pl-3">
+                            <BotaoArquivar
+                              comoSpan
+                              rotulo={`Arquivar ${sub.nome}`}
+                              onArquivar={() => onArquivarSubcategoria(sub.id)}
+                            />
+                          </span>
+                        )}
                       </AccordionTrigger>
 
                       <div className="flex min-w-0 flex-wrap items-center gap-2 xl:justify-end">
