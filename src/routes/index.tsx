@@ -93,6 +93,8 @@ function NirvanaPage() {
   const [novoNome, setNovoNome] = useState("");
   const [novaCorCategoria, setNovaCorCategoria] = useState<CorCategoria | null>(null);
   const [carregado, setCarregado] = useState(false);
+  const [categoriaCriandoSubId, setCategoriaCriandoSubId] = useState<string | null>(null);
+  const [nomeNovaSub, setNomeNovaSub] = useState("");
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
@@ -252,6 +254,22 @@ function NirvanaPage() {
           : c,
       ),
     );
+
+  const abrirCriarSubcategoria = (categoriaId: string) => {
+    setNomeNovaSub("");
+    setCategoriaCriandoSubId(categoriaId);
+    if (!categoriasAbertas.includes(categoriaId)) {
+      setCategoriasAbertas((abertas) => [...abertas, categoriaId]);
+    }
+  };
+
+  const confirmarCriarSubcategoria = () => {
+    const nome = nomeNovaSub.trim();
+    if (!categoriaCriandoSubId || !nome) return;
+    criarSubcategoria(categoriaCriandoSubId, nome);
+    setCategoriaCriandoSubId(null);
+    setNomeNovaSub("");
+  };
 
   // Marca/desmarca apenas os itens desta subcategoria e volta à ordenação automática.
   const marcarTodosItens = (subcategoriaId: string, concluido: boolean) =>
@@ -453,37 +471,47 @@ function NirvanaPage() {
                       inline
                     >
                       {(alca) => (
-                        <AccordionItem
-                          value={categoria.id}
-                          className={`group relative flex min-h-[100px] flex-col rounded-xl border border-black bg-card p-4 transition-colors hover:border-foreground/40 ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
-                        >
-                          <AccordionTrigger
-                            showChevron={false}
-                            className={`relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start gap-1 py-1 pb-8 pr-[260px] text-left text-white hover:no-underline ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
+                          <AccordionItem
+                            value={categoria.id}
+                            className="group relative flex min-h-[100px] flex-col overflow-hidden rounded-xl border border-black bg-white transition-colors hover:border-foreground/40 lg:min-h-[132px]"
                           >
-                            <span className="truncate font-medium tracking-tight text-white">
-                              {categoria.nome}
-                            </span>
-                            <span className="text-xs text-white/80">
-                              {categoria.subcategorias.length} subcategoria
-                              {categoria.subcategorias.length === 1 ? "" : "s"}
-                              {total > 0 &&
-                                ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
-                            </span>
-                            <ChevronDown
-                              size={28}
-                              strokeWidth={3}
-                              className="pointer-events-none absolute bottom-0 right-0 h-7 w-7 text-white transition-transform duration-200"
-                            />
-                          </AccordionTrigger>
-                          <div className="absolute right-3 top-3 z-10 flex flex-row items-center gap-2">
-                            {alca}
-                            <TrocarCorCategoria
-                              corAtual={categoria.cor}
-                              onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
-                            />
-                          </div>
-                          <AccordionContent className="mt-3 rounded-lg bg-card p-4 pb-5">
+                            <AccordionTrigger
+                              showChevron={false}
+                              className="relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start pr-[260px] text-left text-white hover:no-underline"
+                            >
+                              <div className={`absolute inset-y-0 left-0 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}>
+                                <span className="w-full truncate font-medium tracking-tight text-white">
+                                  {categoria.nome}
+                                </span>
+                                <span className="text-xs text-white/80">
+                                  {categoria.subcategorias.length} subcategoria
+                                  {categoria.subcategorias.length === 1 ? "" : "s"}
+                                  {total > 0 &&
+                                    ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
+                                </span>
+                              </div>
+                              <ChevronDown
+                                size={28}
+                                strokeWidth={3}
+                                className="pointer-events-none absolute bottom-3 right-3 h-7 w-7 text-black transition-transform duration-200"
+                              />
+                            </AccordionTrigger>
+                            <div className="absolute right-3 top-3 z-10 flex flex-row flex-wrap items-center justify-end gap-2 lg:max-w-[58%]">
+                              <button
+                                type="button"
+                                onClick={() => abrirCriarSubcategoria(categoria.id)}
+                                className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5"
+                              >
+                                <Plus className="size-4" />
+                                Adicionar Subcategoria
+                              </button>
+                              {alca}
+                              <TrocarCorCategoria
+                                corAtual={categoria.cor}
+                                onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
+                              />
+                            </div>
+                            <AccordionContent className="mb-4 mx-4 mt-3 rounded-lg bg-card p-4 pb-5">
                             <div className="space-y-4">
                               {categoria.subcategorias.length > 0 ? (
                                 <SubcategoriasAccordion
@@ -666,6 +694,55 @@ function NirvanaPage() {
         onFechar={() => setItemTransferindo(null)}
         onEscolher={transferirItem}
       />
+
+      <Dialog
+        open={categoriaCriandoSubId !== null}
+        onOpenChange={(aberto) => {
+          if (!aberto) {
+            setCategoriaCriandoSubId(null);
+            setNomeNovaSub("");
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Adicionar Subcategoria</DialogTitle>
+            <DialogDescription>
+              {categoriaCriandoSubId
+                ? `Nova subcategoria em "${categorias.find((c) => c.id === categoriaCriandoSubId)?.nome ?? ""}".`
+                : ""}
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              confirmarCriarSubcategoria();
+            }}
+          >
+            <Input
+              autoFocus
+              value={nomeNovaSub}
+              onChange={(e) => setNomeNovaSub(e.target.value)}
+              placeholder="Nome da subcategoria"
+            />
+            <DialogFooter className="mt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setCategoriaCriandoSubId(null);
+                  setNomeNovaSub("");
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={!nomeNovaSub.trim()}>
+                Criar
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
