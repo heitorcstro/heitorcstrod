@@ -394,13 +394,16 @@ function NirvanaPage() {
   return (
     <div className="flex h-screen w-full bg-white">
       <SidebarCategorias
-        categorias={categorias}
+        categorias={categoriasVisiveis}
         onCriarCategoria={() => setModalAberto(true)}
         onSelecionarCategoria={(categoriaId) => {
+          setMostrandoArquivados(false);
           setCategoriaAtivaId(categoriaId);
           setSubcategoriaAtivaId(null);
         }}
         onReordenarCategorias={reordenarCategorias}
+        onAbrirArquivados={abrirArquivados}
+        totalArquivados={totalArquivados}
       />
       <main className="flex-1 overflow-y-auto bg-background">
       <header className="border-b border-border bg-primary text-primary-foreground">
