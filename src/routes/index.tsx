@@ -322,6 +322,7 @@ function NirvanaPage() {
             }
             onRenomearSubcategoria={renomearSubcategoria}
             onExcluirSubcategoria={excluirSubcategoria}
+            onMarcarTodos={marcarTodosItens}
           />
         ) : (
           <>
