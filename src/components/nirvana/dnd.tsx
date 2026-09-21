@@ -131,7 +131,7 @@ export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
 type AreaProps = {
   id: string;
   /** Tipo aceito por esta área (usado nas restrições de arrasto). */
-  tipo?: TipoArrasto;
+  tipo?: TipoArrasto | undefined;
   className?: string;
   classNameAtiva?: string;
   children: ReactNode;
@@ -150,7 +150,7 @@ export function AreaSoltavel({ id, tipo, className, classNameAtiva, children }: 
 type ItemProps = {
   id: string;
   /** Tipo arrastado: define quais alvos aceitam este item. */
-  tipo?: TipoArrasto;
+  tipo?: TipoArrasto | undefined;
   textoAlca:
     | "Mover categoria"
     | "Mover subcategoria"
