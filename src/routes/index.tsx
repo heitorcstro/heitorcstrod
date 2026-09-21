@@ -62,9 +62,7 @@ const CHAVE = "nirvana:categorias:v2";
 function NirvanaPage() {
   const [categorias, setCategorias] = useState<Categoria[]>(categoriasIniciais);
   const [categoriaAtivaId, setCategoriaAtivaId] = useState<string | null>(null);
-  const [subcategoriaAtivaId, setSubcategoriaAtivaId] = useState<string | null>(
-    null,
-  );
+  const [subcategoriaAtivaId, setSubcategoriaAtivaId] = useState<string | null>(null);
   const [modalAberto, setModalAberto] = useState(false);
   const [novoNome, setNovoNome] = useState("");
   const [carregado, setCarregado] = useState(false);
@@ -88,16 +86,11 @@ function NirvanaPage() {
     localStorage.setItem(CHAVE, JSON.stringify(categorias));
   }, [categorias, carregado]);
 
-  const categoriaAtiva =
-    categorias.find((c) => c.id === categoriaAtivaId) ?? null;
+  const categoriaAtiva = categorias.find((c) => c.id === categoriaAtivaId) ?? null;
   const subcategoriaAtiva =
-    categoriaAtiva?.subcategorias.find((s) => s.id === subcategoriaAtivaId) ??
-    null;
+    categoriaAtiva?.subcategorias.find((s) => s.id === subcategoriaAtivaId) ?? null;
 
-  const atualizarSubcategoria = (
-    subcategoriaId: string,
-    fn: (itens: Item[]) => Item[],
-  ) =>
+  const atualizarSubcategoria = (subcategoriaId: string, fn: (itens: Item[]) => Item[]) =>
     setCategorias((atual) =>
       atual.map((c) => ({
         ...c,
@@ -107,16 +100,11 @@ function NirvanaPage() {
       })),
     );
 
-  const patchSubcategoria = (
-    subcategoriaId: string,
-    fn: (sub: Subcategoria) => Subcategoria,
-  ) =>
+  const patchSubcategoria = (subcategoriaId: string, fn: (sub: Subcategoria) => Subcategoria) =>
     setCategorias((atual) =>
       atual.map((c) => ({
         ...c,
-        subcategorias: c.subcategorias.map((s) =>
-          s.id === subcategoriaId ? fn(s) : s,
-        ),
+        subcategorias: c.subcategorias.map((s) => (s.id === subcategoriaId ? fn(s) : s)),
       })),
     );
 
@@ -124,11 +112,7 @@ function NirvanaPage() {
   const reordenarCategorias = (ativoId: string, sobreId: string) =>
     setCategorias((atual) => moverPorId(atual, ativoId, sobreId));
 
-  const reordenarSubcategorias = (
-    categoriaId: string,
-    ativoId: string,
-    sobreId: string,
-  ) =>
+  const reordenarSubcategorias = (categoriaId: string, ativoId: string, sobreId: string) =>
     setCategorias((atual) =>
       atual.map((c) =>
         c.id === categoriaId
@@ -159,15 +143,11 @@ function NirvanaPage() {
       ordemManual: false,
     }));
 
-
   const criarCategoria = (e: React.FormEvent) => {
     e.preventDefault();
     const nome = novoNome.trim();
     if (!nome) return;
-    setCategorias((atual) => [
-      ...atual,
-      { id: criarId(), nome, subcategorias: [] },
-    ]);
+    setCategorias((atual) => [...atual, { id: criarId(), nome, subcategorias: [] }]);
     setNovoNome("");
     setModalAberto(false);
   };
@@ -178,10 +158,7 @@ function NirvanaPage() {
         c.id === categoriaId
           ? {
               ...c,
-              subcategorias: [
-                ...c.subcategorias,
-                { id: criarId(), nome, itens: [] },
-              ],
+              subcategorias: [...c.subcategorias, { id: criarId(), nome, itens: [] }],
             }
           : c,
       ),
@@ -189,9 +166,7 @@ function NirvanaPage() {
 
   const alternarModoCompras = (categoriaId: string) =>
     setCategorias((atual) =>
-      atual.map((c) =>
-        c.id === categoriaId ? { ...c, isShoppingList: !c.isShoppingList } : c,
-      ),
+      atual.map((c) => (c.id === categoriaId ? { ...c, isShoppingList: !c.isShoppingList } : c)),
     );
 
   const transferirItem = (destinoId: string) => {
@@ -224,9 +199,7 @@ function NirvanaPage() {
             className="flex items-center gap-2.5"
           >
             <ListChecks className="size-5" />
-            <span className="font-display text-lg font-semibold tracking-tight">
-              Nirvana
-            </span>
+            <span className="font-display text-lg font-semibold tracking-tight">Nirvana</span>
           </button>
           <span className="text-xs uppercase tracking-[0.18em] text-primary-foreground/60">
             Suas listas
@@ -256,9 +229,7 @@ function NirvanaPage() {
             }
             onAlternarItem={(itemId) =>
               atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
-                itens.map((i) =>
-                  i.id === itemId ? { ...i, concluido: !i.concluido } : i,
-                ),
+                itens.map((i) => (i.id === itemId ? { ...i, concluido: !i.concluido } : i)),
               )
             }
             onRemoverItem={(itemId) =>
@@ -289,14 +260,10 @@ function NirvanaPage() {
                 sobreId,
               )
             }
-            onRestaurarOrdem={() =>
-              restaurarOrdemAutomatica(subcategoriaAtiva.id)
-            }
+            onRestaurarOrdem={() => restaurarOrdemAutomatica(subcategoriaAtiva.id)}
             onAtualizarValores={(itemId, valores) =>
               atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
-                itens.map((i) =>
-                  i.id === itemId ? { ...i, ...valores } : i,
-                ),
+                itens.map((i) => (i.id === itemId ? { ...i, ...valores } : i)),
               )
             }
           />
@@ -305,12 +272,8 @@ function NirvanaPage() {
             categoria={categoriaAtiva}
             onVoltar={() => setCategoriaAtivaId(null)}
             onAbrirSubcategoria={(id) => setSubcategoriaAtivaId(id)}
-            onCriarSubcategoria={(nome) =>
-              criarSubcategoria(categoriaAtiva.id, nome)
-            }
-            onAlternarModoCompras={() =>
-              alternarModoCompras(categoriaAtiva.id)
-            }
+            onCriarSubcategoria={(nome) => criarSubcategoria(categoriaAtiva.id, nome)}
+            onAlternarModoCompras={() => alternarModoCompras(categoriaAtiva.id)}
             onReordenarSubcategorias={(ativoId, sobreId) =>
               reordenarSubcategorias(categoriaAtiva.id, ativoId, sobreId)
             }
@@ -319,9 +282,7 @@ function NirvanaPage() {
           <>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h1 className="font-display text-3xl font-semibold tracking-tight">
-                  Categorias
-                </h1>
+                <h1 className="font-display text-3xl font-semibold tracking-tight">Categorias</h1>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Escolha uma categoria para ver suas subcategorias.
                 </p>
@@ -332,99 +293,91 @@ function NirvanaPage() {
               </Button>
             </div>
 
-            <ListaOrdenavel
-              ids={categorias.map((c) => c.id)}
-              onReordenar={reordenarCategorias}
-            >
-            <Accordion type="multiple" className="mt-8 grid gap-3 lg:grid-cols-2">
-              {categorias.map((categoria) => {
-                const total = contarItens(categoria);
-                const pendentes = contarPendentes(categoria);
-                return (
-                  <ItemOrdenavel
-                    key={categoria.id}
-                    id={categoria.id}
-                    rotulo={categoria.nome}
-                  >
-                    {(alca) => (
-                  <AccordionItem
-                    value={categoria.id}
-                    className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
-                  >
-                    <div className="flex items-center gap-1">
-                      {alca}
-                    <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
-                      <span>
-                        <span className="block font-medium tracking-tight">
-                          {categoria.nome}
-                        </span>
-                        <span className="mt-0.5 block text-xs text-muted-foreground">
-                          {categoria.subcategorias.length} subcategoria
-                          {categoria.subcategorias.length === 1 ? "" : "s"}
-                          {total > 0 && ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
-                        </span>
-                      </span>
-                    </AccordionTrigger>
-                    </div>
-                    <AccordionContent className="pb-5">
-                      <div className="space-y-4 border-t border-border pt-4">
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => {
-                            setCategoriaAtivaId(categoria.id);
-                            setSubcategoriaAtivaId(null);
-                          }}
+            <ListaOrdenavel ids={categorias.map((c) => c.id)} onReordenar={reordenarCategorias}>
+              <Accordion type="multiple" className="mt-8 grid gap-3 lg:grid-cols-2">
+                {categorias.map((categoria) => {
+                  const total = contarItens(categoria);
+                  const pendentes = contarPendentes(categoria);
+                  return (
+                    <ItemOrdenavel key={categoria.id} id={categoria.id} rotulo={categoria.nome}>
+                      {(alca) => (
+                        <AccordionItem
+                          value={categoria.id}
+                          className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                         >
-                          Abrir categoria
-                        </Button>
-
-                        {categoria.subcategorias.length > 0 ? (
-                          <div className="space-y-2">
-                            {categoria.subcategorias.map((sub) => {
-                              const subPendentes = sub.itens.filter(
-                                (i) => !i.concluido,
-                              ).length;
-                              return (
-                                <Button
-                                  key={sub.id}
-                                  type="button"
-                                  variant="outline"
-                                  onClick={() => {
-                                    setCategoriaAtivaId(categoria.id);
-                                    setSubcategoriaAtivaId(sub.id);
-                                  }}
-                                  className="h-auto w-full justify-between whitespace-normal px-3 py-3 text-left"
-                                >
-                                  <span>
-                                    <span className="block font-medium">
-                                      {sub.nome}
-                                    </span>
-                                    <span className="block text-xs font-normal text-muted-foreground">
-                                      {sub.itens.length === 0
-                                        ? "Lista vazia"
-                                        : `${subPendentes} pendente${subPendentes === 1 ? "" : "s"} · ${
-                                            sub.itens.length
-                                          } ${sub.itens.length === 1 ? "item" : "itens"}`}
-                                    </span>
-                                  </span>
-                                </Button>
-                              );
-                            })}
+                          <div className="flex items-center gap-1">
+                            {alca}
+                            <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
+                              <span>
+                                <span className="block font-medium tracking-tight">
+                                  {categoria.nome}
+                                </span>
+                                <span className="mt-0.5 block text-xs text-muted-foreground">
+                                  {categoria.subcategorias.length} subcategoria
+                                  {categoria.subcategorias.length === 1 ? "" : "s"}
+                                  {total > 0 &&
+                                    ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
+                                </span>
+                              </span>
+                            </AccordionTrigger>
                           </div>
-                        ) : (
-                          <p className="text-sm text-muted-foreground">
-                            Nenhuma subcategoria ainda.
-                          </p>
-                        )}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                    )}
-                  </ItemOrdenavel>
-                );
-              })}
-            </Accordion>
+                          <AccordionContent className="pb-5">
+                            <div className="space-y-4 border-t border-border pt-4">
+                              <Button
+                                type="button"
+                                size="sm"
+                                onClick={() => {
+                                  setCategoriaAtivaId(categoria.id);
+                                  setSubcategoriaAtivaId(null);
+                                }}
+                              >
+                                Abrir categoria
+                              </Button>
+
+                              {categoria.subcategorias.length > 0 ? (
+                                <div className="space-y-2">
+                                  {categoria.subcategorias.map((sub) => {
+                                    const subPendentes = sub.itens.filter(
+                                      (i) => !i.concluido,
+                                    ).length;
+                                    return (
+                                      <Button
+                                        key={sub.id}
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => {
+                                          setCategoriaAtivaId(categoria.id);
+                                          setSubcategoriaAtivaId(sub.id);
+                                        }}
+                                        className="h-auto w-full justify-between whitespace-normal px-3 py-3 text-left"
+                                      >
+                                        <span>
+                                          <span className="block font-medium">{sub.nome}</span>
+                                          <span className="block text-xs font-normal text-muted-foreground">
+                                            {sub.itens.length === 0
+                                              ? "Lista vazia"
+                                              : `${subPendentes} pendente${subPendentes === 1 ? "" : "s"} · ${
+                                                  sub.itens.length
+                                                } ${sub.itens.length === 1 ? "item" : "itens"}`}
+                                          </span>
+                                        </span>
+                                      </Button>
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <p className="text-sm text-muted-foreground">
+                                  Nenhuma subcategoria ainda.
+                                </p>
+                              )}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      )}
+                    </ItemOrdenavel>
+                  );
+                })}
+              </Accordion>
             </ListaOrdenavel>
           </>
         )}
@@ -434,9 +387,7 @@ function NirvanaPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Criar Categoria</DialogTitle>
-            <DialogDescription>
-              Dê um nome para a sua nova categoria.
-            </DialogDescription>
+            <DialogDescription>Dê um nome para a sua nova categoria.</DialogDescription>
           </DialogHeader>
           <form onSubmit={criarCategoria} className="space-y-4">
             <div className="space-y-2">
@@ -450,11 +401,7 @@ function NirvanaPage() {
               />
             </div>
             <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setModalAberto(false)}
-              >
+              <Button type="button" variant="outline" onClick={() => setModalAberto(false)}>
                 Cancelar
               </Button>
               <Button type="submit">Criar</Button>

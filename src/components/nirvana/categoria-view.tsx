@@ -9,12 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
-import {
-  formatarBRL,
-  itensExibidos,
-  totalCategoria,
-  totalSubcategoria,
-} from "./types";
+import { formatarBRL, itensExibidos, totalCategoria, totalSubcategoria } from "./types";
 import type { Categoria } from "./types";
 
 type Props = {
@@ -60,9 +55,7 @@ export function CategoriaView({
 
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">
-            {categoria.nome}
-          </h1>
+          <h1 className="font-display text-3xl font-semibold tracking-tight">{categoria.nome}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {categoria.subcategorias.length === 0
               ? "Crie uma subcategoria para começar."
@@ -129,9 +122,7 @@ export function CategoriaView({
                       {alca}
                       <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
                         <span>
-                          <span className="block font-medium tracking-tight">
-                            {sub.nome}
-                          </span>
+                          <span className="block font-medium tracking-tight">{sub.nome}</span>
                           <span className="mt-0.5 block text-xs text-muted-foreground">
                             {sub.itens.length === 0
                               ? "Lista vazia"
@@ -193,8 +184,7 @@ export function CategoriaView({
           })}
           {categoria.subcategorias.length === 0 && (
             <p className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground sm:col-span-2">
-              Nenhuma subcategoria ainda. Use “Nova Subcategoria” para criar a
-              primeira.
+              Nenhuma subcategoria ainda. Use “Nova Subcategoria” para criar a primeira.
             </p>
           )}
         </Accordion>

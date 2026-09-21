@@ -12,12 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { SeletorPrioridade } from "./seletor-prioridade";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
-import {
-  formatarBRL,
-  itensExibidos,
-  totalItem,
-  totalSubcategoria,
-} from "./types";
+import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
 import type { Item, Prioridade, Subcategoria } from "./types";
 
 type Props = {
@@ -76,9 +71,7 @@ export function ListaView({
       </Button>
 
       <header className="mb-6">
-        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-          {nomeCategoria}
-        </p>
+        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">{nomeCategoria}</p>
       </header>
 
       <Accordion type="single" collapsible className="rounded-xl border border-border bg-card px-5">
@@ -115,21 +108,13 @@ export function ListaView({
                 <span className="text-xs text-muted-foreground">
                   Ordem manual ativa (arrastada por você).
                 </span>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={onRestaurarOrdem}
-                >
+                <Button type="button" variant="outline" size="sm" onClick={onRestaurarOrdem}>
                   Ordenar por prioridade
                 </Button>
               </div>
             )}
 
-            <ListaOrdenavel
-              ids={itensOrdenados.map((i) => i.id)}
-              onReordenar={onReordenarItens}
-            >
+            <ListaOrdenavel ids={itensOrdenados.map((i) => i.id)} onReordenar={onReordenarItens}>
               <ul className="mt-6 divide-y divide-border border-y border-border">
                 {itensOrdenados.map((item) => (
                   <ItemOrdenavel
@@ -144,9 +129,7 @@ export function ListaView({
                           {alca}
                           <SeletorPrioridade
                             prioridade={item.prioridade}
-                            onSelecionar={(prioridade) =>
-                              onDefinirPrioridade(item.id, prioridade)
-                            }
+                            onSelecionar={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
                             onTransferir={() => onTransferir(item)}
                           />
                           <Checkbox
@@ -158,9 +141,7 @@ export function ListaView({
                             htmlFor={item.id}
                             className={cn(
                               "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed",
-                              item.concluido
-                                ? "text-destructive no-underline"
-                                : "text-foreground",
+                              item.concluido ? "text-destructive no-underline" : "text-foreground",
                             )}
                           >
                             {item.texto}
@@ -168,10 +149,7 @@ export function ListaView({
 
                           {modoCompras && (
                             <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
-                              <CamposCompra
-                                item={item}
-                                onAtualizarValores={onAtualizarValores}
-                              />
+                              <CamposCompra item={item} onAtualizarValores={onAtualizarValores} />
                             </div>
                           )}
 
@@ -220,10 +198,7 @@ function CamposCompra({
 }: {
   item: Item;
   onAtualizarValores:
-    | ((
-        itemId: string,
-        valores: { precoUnitario?: number; quantidade?: number },
-      ) => void)
+    | ((itemId: string, valores: { precoUnitario?: number; quantidade?: number }) => void)
     | undefined;
 }) {
   const paraNumero = (valor: string) => {

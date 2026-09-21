@@ -44,11 +44,7 @@ export function ListaOrdenavel({ ids, onReordenar, children }: ListaProps) {
   };
 
   return (
-    <DndContext
-      sensors={sensores}
-      collisionDetection={closestCenter}
-      onDragEnd={aoSoltar}
-    >
+    <DndContext sensors={sensores} collisionDetection={closestCenter} onDragEnd={aoSoltar}>
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
         {children}
       </SortableContext>
