@@ -113,6 +113,11 @@ function NirvanaPage() {
   const [nomeNovaPasta, setNomeNovaPasta] = useState("");
   const [novaCorPasta, setNovaCorPasta] = useState<CorCategoria | null>(null);
   const [pastasAbertasCentral, setPastasAbertasCentral] = useState<string[]>([]);
+  const [pastaAtivaId, setPastaAtivaId] = useState<string | null>(null);
+  const [modalRemoverDaPastaAberto, setModalRemoverDaPastaAberto] = useState(false);
+  const [categoriaParaRemoverDaPasta, setCategoriaParaRemoverDaPasta] = useState<string | null>(
+    null,
+  );
   const [pendenteMoverPasta, setPendenteMoverPasta] = useState<{
     categoriaId: string;
     pastaId: string;
@@ -164,9 +169,33 @@ function NirvanaPage() {
   );
   const totalArquivados = categoriasArquivadas.length + subcategoriasArquivadas.length;
 
+  const pastaAtiva = pastas.find((p) => p.id === pastaAtivaId) ?? null;
+  const categoriasDaPastaAtiva = pastaAtiva
+    ? categoriasVisiveis.filter((c) => c.pastaId === pastaAtiva.id)
+    : [];
+
+  const abrirPasta = (pastaId: string) => {
+    setMostrandoArquivados(false);
+    setCategoriaAtivaId(null);
+    setSubcategoriaAtivaId(null);
+    setPastaAtivaId(pastaId);
+  };
+
+  /** Remove a categoria da pasta sem excluí-la: ela volta para a página principal. */
+  const removerCategoriaDaPasta = (categoriaId: string) => {
+    setCategorias((atual) =>
+      atual.map((c) =>
+        c.id === categoriaId ? { ...c, pastaId: null, manterEmCategorias: true } : c,
+      ),
+    );
+    setCategoriaParaRemoverDaPasta(null);
+    setModalRemoverDaPastaAberto(false);
+  };
+
   const abrirArquivados = () => {
     setCategoriaAtivaId(null);
     setSubcategoriaAtivaId(null);
+    setPastaAtivaId(null);
     setMostrandoArquivados(true);
   };
 
@@ -642,12 +671,14 @@ function NirvanaPage() {
           setModalPastaAberto(true);
         }}
         onDeletarPasta={() => setModalDeletarPastaAberto(true)}
+        onSelecionarPasta={abrirPasta}
         onMoverCategoriaParaPasta={moverCategoriaParaPasta}
         onSoltarHierarquia={aoSoltarHierarquia}
         onCriarCategoria={() => setModalAberto(true)}
         onDeletarCategoria={() => setModalDeletarAberto(true)}
         onSelecionarCategoria={(categoriaId) => {
           setMostrandoArquivados(false);
+          setPastaAtivaId(null);
           setCategoriaAtivaId(categoriaId);
           setSubcategoriaAtivaId(null);
         }}
@@ -664,6 +695,7 @@ function NirvanaPage() {
             type="button"
             onClick={() => {
               setMostrandoArquivados(false);
+              setPastaAtivaId(null);
               setCategoriaAtivaId(null);
               setSubcategoriaAtivaId(null);
             }}
@@ -811,6 +843,57 @@ function NirvanaPage() {
             onRestaurarOrdem={restaurarOrdemAutomatica}
             onAtualizarValores={atualizarValoresItem}
           />
+        ) : pastaAtiva ? (
+          <section>
+            <Button variant="ghost" size="sm" onClick={() => setPastaAtivaId(null)}>
+              Voltar
+            </Button>
+            <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
+              <div className="flex flex-row items-center gap-3">
+                <Folder
+                  className={`size-8 shrink-0 ${ESTILOS_COR_CATEGORIA[pastaAtiva.cor].texto}`}
+                  strokeWidth={2.5}
+                  fill="currentColor"
+                />
+                <div>
+                  <h1 className="font-display text-3xl font-semibold tracking-tight">
+                    {pastaAtiva.nome}
+                  </h1>
+                  <p className="text-sm text-black/60">
+                    {categoriasDaPastaAtiva.length}{" "}
+                    {categoriasDaPastaAtiva.length === 1 ? "categoria" : "categorias"}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalRemoverDaPastaAberto(true)}
+                className="rounded-md bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700"
+              >
+                Excluir Categoria da Pasta
+              </button>
+            </div>
+
+            {categoriasDaPastaAtiva.length > 0 ? (
+              <ContextoArrasto
+                ids={categoriasDaPastaAtiva.map((c) => c.id)}
+                onSoltar={aoSoltarHierarquia}
+              >
+                <Accordion
+                  type="multiple"
+                  value={categoriasAbertas}
+                  onValueChange={atualizarCategoriasAbertas}
+                  className="mt-8 grid gap-3 lg:grid-cols-2"
+                >
+                  {categoriasDaPastaAtiva.map((categoria) => cartaoCategoria(categoria))}
+                </Accordion>
+              </ContextoArrasto>
+            ) : (
+              <p className="mt-8 text-sm text-black/60">
+                Esta pasta ainda não tem categorias. Arraste uma categoria para dentro dela.
+              </p>
+            )}
+          </section>
         ) : (
           <>
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -864,18 +947,22 @@ function NirvanaPage() {
                               />
                               <button
                                 type="button"
-                                onClick={() => alternarPastaCentral(pasta.id)}
-                                className="flex min-w-0 flex-1 flex-row items-center gap-3 text-left"
+                                onClick={() => abrirPasta(pasta.id)}
+                                className="min-w-0 flex-1 text-left"
                               >
-                                <span className="min-w-0 flex-1">
-                                  <span className="block truncate text-sm font-semibold text-black">
-                                    {pasta.nome}
-                                  </span>
-                                  <span className="block text-xs text-black/60">
-                                    {dentro.length}{" "}
-                                    {dentro.length === 1 ? "categoria" : "categorias"}
-                                  </span>
+                                <span className="block truncate text-sm font-semibold text-black">
+                                  {pasta.nome}
                                 </span>
+                                <span className="block text-xs text-black/60">
+                                  {dentro.length} {dentro.length === 1 ? "categoria" : "categorias"}
+                                </span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => alternarPastaCentral(pasta.id)}
+                                aria-label={`Expandir ${pasta.nome}`}
+                                className="shrink-0"
+                              >
                                 <ChevronDown
                                   className={`size-5 shrink-0 text-black transition-transform duration-200 ${aberta ? "rotate-180" : ""}`}
                                   strokeWidth={3}
@@ -1238,6 +1325,78 @@ function NirvanaPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={modalRemoverDaPastaAberto} onOpenChange={setModalRemoverDaPastaAberto}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir Categoria da Pasta</DialogTitle>
+            <DialogDescription>
+              Escolha qual categoria você quer remover desta pasta. A categoria não é apagada.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            {categoriasDaPastaAtiva.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Nenhuma categoria nesta pasta.</p>
+            ) : (
+              categoriasDaPastaAtiva.map((categoria) => (
+                <div
+                  key={categoria.id}
+                  className="flex flex-row items-center justify-between gap-3 rounded-md border border-black bg-white px-3 py-2"
+                >
+                  <span className="min-w-0 flex-1 truncate text-sm font-medium text-black">
+                    {categoria.nome}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setCategoriaParaRemoverDaPasta(categoria.id)}
+                    className="rounded-md bg-red-600 px-3 py-1 text-xs font-bold text-white hover:bg-red-700"
+                  >
+                    Remover
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setModalRemoverDaPastaAberto(false)}
+            >
+              Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={!!categoriaParaRemoverDaPasta}
+        onOpenChange={(aberto) => {
+          if (!aberto) setCategoriaParaRemoverDaPasta(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover da pasta?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja remover esta categoria da pasta? Ela voltará para a página
+              principal.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 text-white hover:bg-red-700"
+              onClick={() => {
+                if (categoriaParaRemoverDaPasta)
+                  removerCategoriaDaPasta(categoriaParaRemoverDaPasta);
+              }}
+            >
+              Remover da pasta
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       </main>
     </div>
   );

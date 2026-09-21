@@ -17,6 +17,7 @@ type Props = {
   pastas?: Pasta[];
   onCriarPasta?: () => void;
   onDeletarPasta?: () => void;
+  onSelecionarPasta?: (pastaId: string) => void;
   onMoverCategoriaParaPasta?: (categoriaId: string, pastaId: string | null) => void;
   /** Handler unificado de arrasto (pastas + categorias). */
   onSoltarHierarquia?: (ativoId: string, sobreId: string) => void;
@@ -38,6 +39,7 @@ export function SidebarCategorias({
   pastas = [],
   onCriarPasta,
   onDeletarPasta,
+  onSelecionarPasta,
   onMoverCategoriaParaPasta,
   onSoltarHierarquia,
   onCriarCategoria,
@@ -250,13 +252,18 @@ export function SidebarCategorias({
                           />
                           <button
                             type="button"
-                            onClick={() => alternarPasta(pasta.id)}
-                            className="flex min-w-0 flex-1 flex-row items-center gap-2 text-left"
+                            onClick={() => onSelecionarPasta?.(pasta.id)}
+                            className="min-w-0 flex-1 whitespace-normal break-words text-left text-sm font-medium"
                           >
-                            <span className="min-w-0 flex-1 whitespace-normal break-words text-sm font-medium">
-                              {pasta.nome}
-                            </span>
-                            <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
+                            {pasta.nome}
+                          </button>
+                          <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
+                          <button
+                            type="button"
+                            onClick={() => alternarPasta(pasta.id)}
+                            aria-label={`Expandir ${pasta.nome}`}
+                            className="shrink-0"
+                          >
                             <ChevronDown
                               className={cn(
                                 "size-[18px] shrink-0 transition-transform duration-200",
