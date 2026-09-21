@@ -59,6 +59,7 @@
 
   --animate-accordion-down: accordion-down 0.18s ease-out;
   --animate-accordion-up: accordion-up 0.18s ease-out;
+  --animate-heartbeat: heartbeat 1.4s ease-in-out infinite;
 }
 
 @keyframes accordion-down {
