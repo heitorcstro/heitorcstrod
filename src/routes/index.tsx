@@ -46,6 +46,7 @@ import {
   itensExibidos,
   moverPorId,
   normalizarCategorias,
+  totalCategoria,
   type Categoria,
   type CorCategoria,
   type Item,
@@ -179,7 +180,13 @@ function NirvanaPage() {
     if (!nome || !novaCorCategoria) return;
     setCategorias((atual) => [
       ...atual,
-      { id: criarId(), nome, cor: novaCorCategoria, subcategorias: [] },
+      {
+        id: criarId(),
+        nome,
+        cor: novaCorCategoria,
+        isShoppingList: novaCorCategoria === "Gold",
+        subcategorias: [],
+      },
     ]);
     setNovoNome("");
     setNovaCorCategoria(null);
@@ -187,7 +194,9 @@ function NirvanaPage() {
   };
 
   const trocarCorCategoria = (categoriaId: string, cor: CorCategoria) =>
-    setCategorias((atual) => atual.map((c) => (c.id === categoriaId ? { ...c, cor } : c)));
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, cor, isShoppingList: cor === "Gold" } : c)),
+    );
 
   const atualizarCategoriasAbertas = (novasCategoriasAbertas: string[]) => {
     const categoriasFechadas = categoriasAbertas.filter(
@@ -308,11 +317,6 @@ function NirvanaPage() {
       itens.map((i) => (i.id === itemId ? { ...i, ...valores } : i)),
     );
 
-  const alternarModoCompras = (categoriaId: string) =>
-    setCategorias((atual) =>
-      atual.map((c) => (c.id === categoriaId ? { ...c, isShoppingList: !c.isShoppingList } : c)),
-    );
-
   const transferirItem = (destinoId: string) => {
     if (!itemTransferindo) return;
     const { item, subcategoriaId } = itemTransferindo;
@@ -356,7 +360,7 @@ function NirvanaPage() {
           <ListaView
             nomeCategoria={categoriaAtiva.nome}
             subcategoria={subcategoriaAtiva}
-            modoCompras={categoriaAtiva.isShoppingList === true}
+            modoCompras={categoriaAtiva.cor === "Gold"}
             onVoltar={() => setSubcategoriaAtivaId(null)}
             onAdicionarItem={(texto) => adicionarItem(subcategoriaAtiva.id, texto)}
             onAlternarItem={(itemId) => alternarItem(subcategoriaAtiva.id, itemId)}
@@ -386,7 +390,6 @@ function NirvanaPage() {
             onVoltar={() => setCategoriaAtivaId(null)}
             onTrocarCor={(cor) => trocarCorCategoria(categoriaAtiva.id, cor)}
             onCriarSubcategoria={(nome) => criarSubcategoria(categoriaAtiva.id, nome)}
-            onAlternarModoCompras={() => alternarModoCompras(categoriaAtiva.id)}
             onReordenarSubcategorias={(ativoId, sobreId) =>
               reordenarSubcategorias(categoriaAtiva.id, ativoId, sobreId)
             }
@@ -484,7 +487,7 @@ function NirvanaPage() {
                               {categoria.subcategorias.length > 0 ? (
                                 <SubcategoriasAccordion
                                   categoria={categoria}
-                                  modoCompras={categoria.isShoppingList === true}
+                                  modoCompras={categoria.cor === "Gold"}
                                   subcategoriasAbertas={
                                     subcategoriasAbertasPorCategoria[categoria.id] ?? []
                                   }
@@ -515,6 +518,16 @@ function NirvanaPage() {
                                 <p className="text-sm text-muted-foreground">
                                   Nenhuma subcategoria ainda.
                                 </p>
+                              )}
+                              {categoria.cor === "Gold" && (
+                                <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-secondary px-4 py-3">
+                                  <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                                    Resultado
+                                  </span>
+                                  <span className="font-display text-lg font-semibold tracking-tight tabular-nums">
+                                    {formatarBRL(totalCategoria(categoria))}
+                                  </span>
+                                </div>
                               )}
                             </div>
                           </AccordionContent>

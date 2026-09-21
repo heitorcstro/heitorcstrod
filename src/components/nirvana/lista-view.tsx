@@ -93,7 +93,7 @@ export function ListaView({
             </label>
 
             {modoCompras && (
-              <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
+              <div className="order-last ml-9 flex w-full flex-wrap items-end gap-2 sm:order-none sm:ml-0 sm:w-auto">
                 <CamposCompra item={item} onAtualizarValores={onAtualizarValores} />
               </div>
             )}
@@ -241,38 +241,46 @@ function CamposCompra({
 
   return (
     <>
-      <Input
-        type="number"
-        min={0}
-        step="0.01"
-        inputMode="decimal"
-        value={item.precoUnitario ?? ""}
-        onChange={(e) =>
-          onAtualizarValores?.(item.id, {
-            precoUnitario: paraNumero(e.target.value),
-          })
-        }
-        placeholder="Preço"
-        aria-label={`Preço unitário de ${item.texto}`}
-        className="h-8 w-20 px-2 text-right text-xs"
-      />
-      <span className="text-xs text-muted-foreground">×</span>
-      <Input
-        type="number"
-        min={1}
-        step="1"
-        inputMode="numeric"
-        value={item.quantidade ?? 1}
-        onChange={(e) =>
-          onAtualizarValores?.(item.id, {
-            quantidade: Math.max(1, Math.round(paraNumero(e.target.value))),
-          })
-        }
-        aria-label={`Quantidade de ${item.texto}`}
-        className="h-8 w-14 px-2 text-right text-xs"
-      />
-      <span className="w-20 shrink-0 text-right text-xs font-medium tabular-nums">
-        {formatarBRL(totalItem(item))}
+      <label className="flex w-28 flex-col gap-1 text-[11px] font-medium text-muted-foreground">
+        Valor por Item
+        <Input
+          type="number"
+          min={0}
+          step="0.01"
+          inputMode="decimal"
+          value={item.precoUnitario ?? ""}
+          onChange={(e) =>
+            onAtualizarValores?.(item.id, {
+              precoUnitario: paraNumero(e.target.value),
+            })
+          }
+          placeholder="0,00"
+          aria-label={`Valor por Item de ${item.texto}`}
+          className="h-8 px-2 text-right text-xs text-foreground"
+        />
+      </label>
+      <label className="flex w-28 flex-col gap-1 text-[11px] font-medium text-muted-foreground">
+        Número de Itens
+        <Input
+          type="number"
+          min={1}
+          step="1"
+          inputMode="numeric"
+          value={item.quantidade ?? 1}
+          onChange={(e) =>
+            onAtualizarValores?.(item.id, {
+              quantidade: Math.max(1, Math.round(paraNumero(e.target.value))),
+            })
+          }
+          aria-label={`Número de Itens de ${item.texto}`}
+          className="h-8 px-2 text-right text-xs text-foreground"
+        />
+      </label>
+      <span className="flex w-28 flex-col gap-1 text-[11px] font-medium text-muted-foreground">
+        Total do Item
+        <span className="flex h-8 items-center justify-end rounded-md border border-border bg-secondary px-2 text-xs font-semibold tabular-nums text-foreground">
+          {formatarBRL(totalItem(item))}
+        </span>
       </span>
     </>
   );
