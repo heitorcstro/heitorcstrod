@@ -208,6 +208,26 @@ export function CategoriaView({
                       </DropdownMenu>
                     </div>
 
+                    <div className="flex flex-wrap items-center gap-4 pb-3">
+                      <button
+                        type="button"
+                        className={estiloLink}
+                        disabled={sub.itens.length === 0}
+                        onClick={() => onMarcarTodos(sub.id, true)}
+                      >
+                        Marcar Tudo
+                      </button>
+                      <button
+                        type="button"
+                        className={estiloLink}
+                        disabled={sub.itens.length === 0}
+                        onClick={() => onMarcarTodos(sub.id, false)}
+                      >
+                        Desmarcar Tudo
+                      </button>
+                    </div>
+
+
                     {renomeandoId === sub.id && (
                       <div className="pb-3">
                         <Input
