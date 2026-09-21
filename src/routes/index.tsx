@@ -564,7 +564,7 @@ function NirvanaPage() {
 
             <ListaOrdenavel
               id="categorias"
-              ids={categorias.map((c) => c.id)}
+              ids={categoriasVisiveis.map((c) => c.id)}
               onReordenar={reordenarCategorias}
             >
               <Accordion
@@ -573,7 +573,7 @@ function NirvanaPage() {
                 onValueChange={atualizarCategoriasAbertas}
                 className="mt-8 grid gap-3 lg:grid-cols-2"
               >
-                {categorias.map((categoria) => {
+                {categoriasVisiveis.map((categoria) => {
                   const total = contarItens(categoria);
                   const pendentes = contarPendentes(categoria);
                   return (
