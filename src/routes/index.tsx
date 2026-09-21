@@ -127,6 +127,41 @@ function NirvanaPage() {
   const subcategoriaAtiva =
     categoriaAtiva?.subcategorias.find((s) => s.id === subcategoriaAtivaId) ?? null;
 
+  const categoriasVisiveis = categorias.filter((c) => !c.arquivada);
+  const categoriasArquivadas = categorias.filter((c) => c.arquivada);
+  const subcategoriasArquivadas = categorias.flatMap((c) =>
+    c.subcategorias.filter((s) => s.arquivada).map((s) => ({ categoria: c, sub: s })),
+  );
+  const totalArquivados = categoriasArquivadas.length + subcategoriasArquivadas.length;
+
+  const abrirArquivados = () => {
+    setCategoriaAtivaId(null);
+    setSubcategoriaAtivaId(null);
+    setMostrandoArquivados(true);
+  };
+
+  const arquivarCategoria = (categoriaId: string) => {
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, arquivada: true } : c)),
+    );
+    setCategoriasAbertas((atual) => atual.filter((id) => id !== categoriaId));
+    abrirArquivados();
+  };
+
+  const restaurarCategoria = (categoriaId: string) =>
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, arquivada: false } : c)),
+    );
+
+  const arquivarSubcategoria = (subcategoriaId: string) => {
+    patchSubcategoria(subcategoriaId, (sub) => ({ ...sub, arquivada: true }));
+    if (subcategoriaAtivaId === subcategoriaId) setSubcategoriaAtivaId(null);
+    abrirArquivados();
+  };
+
+  const restaurarSubcategoria = (subcategoriaId: string) =>
+    patchSubcategoria(subcategoriaId, (sub) => ({ ...sub, arquivada: false }));
+
   const atualizarSubcategoria = (subcategoriaId: string, fn: (itens: Item[]) => Item[]) =>
     setCategorias((atual) =>
       atual.map((c) => ({
