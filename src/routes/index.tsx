@@ -315,14 +315,14 @@ function NirvanaPage() {
                           className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                         >
                           <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
-                            <span>
+                            <span className="flex flex-1 flex-col gap-1">
                               <span className="flex flex-row items-center gap-3">
                                 <span className="font-medium tracking-tight">
                                   {categoria.nome}
                                 </span>
                                 {alca}
                               </span>
-                              <span className="mt-0.5 block text-xs text-muted-foreground">
+                              <span className="text-xs text-muted-foreground">
                                 {categoria.subcategorias.length} subcategoria
                                 {categoria.subcategorias.length === 1 ? "" : "s"}
                                 {total > 0 &&

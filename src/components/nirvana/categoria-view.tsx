@@ -120,12 +120,12 @@ export function CategoriaView({
                     className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                   >
                     <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
-                      <span>
+                      <span className="flex flex-1 flex-col gap-1">
                         <span className="flex flex-row items-center gap-3">
                           <span className="font-medium tracking-tight">{sub.nome}</span>
                           {alca}
                         </span>
-                        <span className="mt-0.5 block text-xs text-muted-foreground">
+                        <span className="text-xs text-muted-foreground">
                           {sub.itens.length === 0
                             ? "Lista vazia"
                             : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
@@ -133,7 +133,7 @@ export function CategoriaView({
                               } ${sub.itens.length === 1 ? "item" : "itens"}`}
                         </span>
                         {modoCompras && (
-                          <span className="mt-1 block text-xs font-medium tabular-nums">
+                          <span className="block text-xs font-medium tabular-nums">
                             {formatarBRL(totalSubcategoria(sub))}
                           </span>
                         )}
