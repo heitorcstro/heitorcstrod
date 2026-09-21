@@ -71,9 +71,16 @@ export function SidebarCategorias({
           ))}
         </ListaOrdenavel>
 
-        <div className="flex flex-row items-center justify-between border-b border-gray-200 px-4 py-3 text-black">
+        <button
+          type="button"
+          onClick={onAbrirArquivados}
+          className="flex w-full flex-row items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 text-left text-black transition-colors hover:bg-black/5"
+        >
           <span className="truncate text-sm font-medium">Arquivados</span>
-        </div>
+          {totalArquivados > 0 && (
+            <span className="shrink-0 text-xs text-black/60">{totalArquivados}</span>
+          )}
+        </button>
       </div>
     </aside>
   );
