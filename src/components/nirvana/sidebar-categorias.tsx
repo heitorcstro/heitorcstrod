@@ -39,6 +39,7 @@ export function SidebarCategorias({
   pastas = [],
   onCriarPasta,
   onDeletarPasta,
+  onSelecionarPasta,
   onMoverCategoriaParaPasta,
   onSoltarHierarquia,
   onCriarCategoria,
