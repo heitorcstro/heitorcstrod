@@ -227,6 +227,44 @@ function NirvanaPage() {
   const reordenarCategorias = (ativoId: string, sobreId: string) =>
     setCategorias((atual) => moverPorId(atual, ativoId, sobreId));
 
+  const reordenarPastas = (ativoId: string, sobreId: string) =>
+    setPastas((atual) => moverPorId(atual, ativoId, sobreId));
+
+  /**
+   * Trata todos os arrastos da hierarquia Pastas/Categorias:
+   * reordenar pastas, aninhar categoria em pasta, tirar da pasta e reordenar.
+   */
+  const aoSoltarHierarquia = (ativoId: string, sobreId: string) => {
+    const pastaAtiva = ativoId.startsWith("pasta:");
+    const pastaAlvo = sobreId.startsWith("pasta:");
+
+    if (pastaAtiva) {
+      if (pastaAlvo) {
+        reordenarPastas(ativoId.slice("pasta:".length), sobreId.slice("pasta:".length));
+      }
+      return;
+    }
+
+    if (pastaAlvo) {
+      moverCategoriaParaPasta(ativoId, sobreId.slice("pasta:".length));
+      return;
+    }
+
+    if (sobreId === "raiz") {
+      moverCategoriaParaPasta(ativoId, null);
+      return;
+    }
+
+    const alvo = categorias.find((c) => c.id === sobreId);
+    const ativa = categorias.find((c) => c.id === ativoId);
+    if (!alvo || !ativa) return;
+    const destino = alvo.pastaId ?? null;
+    if ((ativa.pastaId ?? null) !== destino) {
+      moverCategoriaParaPasta(ativoId, destino);
+    }
+    reordenarCategorias(ativoId, sobreId);
+  };
+
   const reordenarSubcategorias = (categoriaId: string, ativoId: string, sobreId: string) =>
     setCategorias((atual) =>
       atual.map((c) =>

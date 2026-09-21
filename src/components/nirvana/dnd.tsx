@@ -115,7 +115,9 @@ type ItemProps = {
     | "Mover categoria"
     | "Mover subcategoria"
     | "Mover item"
-    | "Mover essa Categoria";
+    | "Mover essa Categoria"
+    | "Mover pasta"
+    | "Mover essa Pasta";
   className?: string;
   /**
    * Quando verdadeiro, renderiza a alça como um texto sutil embutido ao lado
