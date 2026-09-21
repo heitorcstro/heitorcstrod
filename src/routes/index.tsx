@@ -199,6 +199,28 @@ function NirvanaPage() {
       })),
     );
 
+  // ===== Pastas =====
+  const criarPasta = (e: React.FormEvent) => {
+    e.preventDefault();
+    const nome = nomeNovaPasta.trim();
+    if (!nome) return;
+    setPastas((atual) => [...atual, { id: criarId(), nome }]);
+    setNomeNovaPasta("");
+    setModalPastaAberto(false);
+  };
+
+  const excluirPasta = (pastaId: string) => {
+    setPastas((atual) => atual.filter((p) => p.id !== pastaId));
+    setCategorias((atual) =>
+      atual.map((c) => (c.pastaId === pastaId ? { ...c, pastaId: null } : c)),
+    );
+  };
+
+  const moverCategoriaParaPasta = (categoriaId: string, pastaId: string | null) =>
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, pastaId } : c)),
+    );
+
   // ===== Reordenação por arrastar-e-soltar =====
   const reordenarCategorias = (ativoId: string, sobreId: string) =>
     setCategorias((atual) => moverPorId(atual, ativoId, sobreId));
