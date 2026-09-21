@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { ArrowLeft, ChevronRight, Plus } from "lucide-react";
+import { ArrowLeft, ChevronRight, Plus, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { formatarBRL, totalCategoria, totalSubcategoria } from "./types";
 import type { Categoria } from "./types";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
   onVoltar: () => void;
   onAbrirSubcategoria: (subcategoriaId: string) => void;
   onCriarSubcategoria: (nome: string) => void;
+  onAlternarModoCompras: () => void;
 };
 
 export function CategoriaView({
@@ -16,7 +18,9 @@ export function CategoriaView({
   onVoltar,
   onAbrirSubcategoria,
   onCriarSubcategoria,
+  onAlternarModoCompras,
 }: Props) {
+  const modoCompras = categoria.isShoppingList === true;
   const [criando, setCriando] = useState(false);
   const [nome, setNome] = useState("");
 
@@ -53,10 +57,16 @@ export function CategoriaView({
                 }`}
           </p>
         </div>
-        <Button onClick={() => setCriando((v) => !v)}>
-          <Plus className="size-4" />
-          Nova Subcategoria
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" onClick={onAlternarModoCompras}>
+            <ShoppingCart className="size-4" />
+            {modoCompras ? "Desativar compras" : "Lista de Compras"}
+          </Button>
+          <Button onClick={() => setCriando((v) => !v)}>
+            <Plus className="size-4" />
+            Nova Subcategoria
+          </Button>
+        </div>
       </div>
 
       {criando && (
@@ -107,6 +117,11 @@ export function CategoriaView({
                         sub.itens.length
                       } ${sub.itens.length === 1 ? "item" : "itens"}`}
                 </span>
+                {modoCompras && (
+                  <span className="mt-1 block text-xs font-medium tabular-nums">
+                    {formatarBRL(totalSubcategoria(sub))}
+                  </span>
+                )}
               </span>
               <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
             </button>
@@ -119,6 +134,17 @@ export function CategoriaView({
           </p>
         )}
       </div>
+
+      {modoCompras && (
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-primary px-6 py-5 text-primary-foreground">
+          <span className="text-xs uppercase tracking-[0.18em] text-primary-foreground/70">
+            Valor Total da Categoria
+          </span>
+          <span className="font-display text-2xl font-semibold tracking-tight tabular-nums">
+            {formatarBRL(totalCategoria(categoria))}
+          </span>
+        </div>
+      )}
     </section>
   );
 }

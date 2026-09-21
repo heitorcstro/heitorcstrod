@@ -124,6 +124,13 @@ function NirvanaPage() {
       ),
     );
 
+  const alternarModoCompras = (categoriaId: string) =>
+    setCategorias((atual) =>
+      atual.map((c) =>
+        c.id === categoriaId ? { ...c, isShoppingList: !c.isShoppingList } : c,
+      ),
+    );
+
   const transferirItem = (destinoId: string) => {
     if (!itemTransferindo) return;
     const { item, subcategoriaId } = itemTransferindo;
@@ -169,11 +176,19 @@ function NirvanaPage() {
           <ListaView
             nomeCategoria={categoriaAtiva.nome}
             subcategoria={subcategoriaAtiva}
+            modoCompras={categoriaAtiva.isShoppingList === true}
             onVoltar={() => setSubcategoriaAtivaId(null)}
             onAdicionarItem={(texto) =>
               atualizarSubcategoria(subcategoriaAtiva.id, (itens) => [
                 ...itens,
-                { id: criarId(), texto, concluido: false, prioridade: null },
+                {
+                  id: criarId(),
+                  texto,
+                  concluido: false,
+                  prioridade: null,
+                  precoUnitario: 0,
+                  quantidade: 1,
+                },
               ])
             }
             onAlternarItem={(itemId) =>
@@ -203,6 +218,13 @@ function NirvanaPage() {
             onTransferir={(item) =>
               setItemTransferindo({ item, subcategoriaId: subcategoriaAtiva.id })
             }
+            onAtualizarValores={(itemId, valores) =>
+              atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
+                itens.map((i) =>
+                  i.id === itemId ? { ...i, ...valores } : i,
+                ),
+              )
+            }
           />
         ) : categoriaAtiva ? (
           <CategoriaView
@@ -211,6 +233,9 @@ function NirvanaPage() {
             onAbrirSubcategoria={(id) => setSubcategoriaAtivaId(id)}
             onCriarSubcategoria={(nome) =>
               criarSubcategoria(categoriaAtiva.id, nome)
+            }
+            onAlternarModoCompras={() =>
+              alternarModoCompras(categoriaAtiva.id)
             }
           />
         ) : (
