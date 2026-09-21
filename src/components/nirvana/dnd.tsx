@@ -5,6 +5,7 @@ import {
   PointerSensor,
   TouchSensor,
   closestCenter,
+  useDroppable,
   useSensor,
   useSensors,
   type DragEndEvent,
