@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dialog";
 import { ListaView } from "@/components/nirvana/lista-view";
 import { CategoriaView } from "@/components/nirvana/categoria-view";
+import { SubcategoriasAccordion } from "@/components/nirvana/subcategorias-accordion";
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
 import { ItemOrdenavel, ListaOrdenavel } from "@/components/nirvana/dnd";
 import {
@@ -207,6 +208,48 @@ function NirvanaPage() {
     if (subcategoriaAtivaId === subcategoriaId) setSubcategoriaAtivaId(null);
   };
 
+  const adicionarItem = (subcategoriaId: string, texto: string) =>
+    atualizarSubcategoria(subcategoriaId, (itens) => [
+      ...itens,
+      {
+        id: criarId(),
+        texto,
+        concluido: false,
+        prioridade: null,
+        precoUnitario: 0,
+        quantidade: 1,
+      },
+    ]);
+
+  const alternarItem = (subcategoriaId: string, itemId: string) =>
+    atualizarSubcategoria(subcategoriaId, (itens) =>
+      itens.map((i) => (i.id === itemId ? { ...i, concluido: !i.concluido } : i)),
+    );
+
+  const removerItem = (subcategoriaId: string, itemId: string) =>
+    atualizarSubcategoria(subcategoriaId, (itens) => itens.filter((i) => i.id !== itemId));
+
+  const definirPrioridade = (subcategoriaId: string, itemId: string, prioridade: Prioridade) =>
+    atualizarSubcategoria(subcategoriaId, (itens) =>
+      itens.map((i) =>
+        i.id === itemId
+          ? {
+              ...i,
+              prioridade: i.prioridade === prioridade ? null : prioridade,
+            }
+          : i,
+      ),
+    );
+
+  const atualizarValoresItem = (
+    subcategoriaId: string,
+    itemId: string,
+    valores: { precoUnitario?: number; quantidade?: number },
+  ) =>
+    atualizarSubcategoria(subcategoriaId, (itens) =>
+      itens.map((i) => (i.id === itemId ? { ...i, ...valores } : i)),
+    );
+
   const alternarModoCompras = (categoriaId: string) =>
     setCategorias((atual) =>
       atual.map((c) => (c.id === categoriaId ? { ...c, isShoppingList: !c.isShoppingList } : c)),
@@ -257,40 +300,11 @@ function NirvanaPage() {
             subcategoria={subcategoriaAtiva}
             modoCompras={categoriaAtiva.isShoppingList === true}
             onVoltar={() => setSubcategoriaAtivaId(null)}
-            onAdicionarItem={(texto) =>
-              atualizarSubcategoria(subcategoriaAtiva.id, (itens) => [
-                ...itens,
-                {
-                  id: criarId(),
-                  texto,
-                  concluido: false,
-                  prioridade: null,
-                  precoUnitario: 0,
-                  quantidade: 1,
-                },
-              ])
-            }
-            onAlternarItem={(itemId) =>
-              atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
-                itens.map((i) => (i.id === itemId ? { ...i, concluido: !i.concluido } : i)),
-              )
-            }
-            onRemoverItem={(itemId) =>
-              atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
-                itens.filter((i) => i.id !== itemId),
-              )
-            }
-            onDefinirPrioridade={(itemId, prioridade: Prioridade) =>
-              atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
-                itens.map((i) =>
-                  i.id === itemId
-                    ? {
-                        ...i,
-                        prioridade: i.prioridade === prioridade ? null : prioridade,
-                      }
-                    : i,
-                ),
-              )
+            onAdicionarItem={(texto) => adicionarItem(subcategoriaAtiva.id, texto)}
+            onAlternarItem={(itemId) => alternarItem(subcategoriaAtiva.id, itemId)}
+            onRemoverItem={(itemId) => removerItem(subcategoriaAtiva.id, itemId)}
+            onDefinirPrioridade={(itemId, prioridade) =>
+              definirPrioridade(subcategoriaAtiva.id, itemId, prioridade)
             }
             onTransferir={(item) =>
               setItemTransferindo({ item, subcategoriaId: subcategoriaAtiva.id })
@@ -305,16 +319,13 @@ function NirvanaPage() {
             }
             onRestaurarOrdem={() => restaurarOrdemAutomatica(subcategoriaAtiva.id)}
             onAtualizarValores={(itemId, valores) =>
-              atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
-                itens.map((i) => (i.id === itemId ? { ...i, ...valores } : i)),
-              )
+              atualizarValoresItem(subcategoriaAtiva.id, itemId, valores)
             }
           />
         ) : categoriaAtiva ? (
           <CategoriaView
             categoria={categoriaAtiva}
             onVoltar={() => setCategoriaAtivaId(null)}
-            onAbrirSubcategoria={(id) => setSubcategoriaAtivaId(id)}
             onCriarSubcategoria={(nome) => criarSubcategoria(categoriaAtiva.id, nome)}
             onAlternarModoCompras={() => alternarModoCompras(categoriaAtiva.id)}
             onReordenarSubcategorias={(ativoId, sobreId) =>
@@ -323,6 +334,14 @@ function NirvanaPage() {
             onRenomearSubcategoria={renomearSubcategoria}
             onExcluirSubcategoria={excluirSubcategoria}
             onMarcarTodos={marcarTodosItens}
+            onAdicionarItem={adicionarItem}
+            onAlternarItem={alternarItem}
+            onRemoverItem={removerItem}
+            onDefinirPrioridade={definirPrioridade}
+            onTransferir={(subcategoriaId, item) => setItemTransferindo({ item, subcategoriaId })}
+            onReordenarItens={reordenarItens}
+            onRestaurarOrdem={restaurarOrdemAutomatica}
+            onAtualizarValores={atualizarValoresItem}
           />
         ) : (
           <>
@@ -388,48 +407,27 @@ function NirvanaPage() {
                           </AccordionTrigger>
                           <AccordionContent className="pb-5">
                             <div className="space-y-4 border-t border-border pt-4">
-                              <Button
-                                type="button"
-                                size="sm"
-                                onClick={() => {
-                                  setCategoriaAtivaId(categoria.id);
-                                  setSubcategoriaAtivaId(null);
-                                }}
-                              >
-                                Abrir categoria
-                              </Button>
-
                               {categoria.subcategorias.length > 0 ? (
-                                <div className="space-y-2">
-                                  {categoria.subcategorias.map((sub) => {
-                                    const subPendentes = sub.itens.filter(
-                                      (i) => !i.concluido,
-                                    ).length;
-                                    return (
-                                      <Button
-                                        key={sub.id}
-                                        type="button"
-                                        variant="outline"
-                                        onClick={() => {
-                                          setCategoriaAtivaId(categoria.id);
-                                          setSubcategoriaAtivaId(sub.id);
-                                        }}
-                                        className="h-auto w-full justify-between whitespace-normal px-3 py-3 text-left"
-                                      >
-                                        <span>
-                                          <span className="block font-medium">{sub.nome}</span>
-                                          <span className="block text-xs font-normal text-muted-foreground">
-                                            {sub.itens.length === 0
-                                              ? "Lista vazia"
-                                              : `${subPendentes} pendente${subPendentes === 1 ? "" : "s"} · ${
-                                                  sub.itens.length
-                                                } ${sub.itens.length === 1 ? "item" : "itens"}`}
-                                          </span>
-                                        </span>
-                                      </Button>
-                                    );
-                                  })}
-                                </div>
+                                <SubcategoriasAccordion
+                                  categoria={categoria}
+                                  modoCompras={categoria.isShoppingList === true}
+                                  onReordenarSubcategorias={(ativoId, sobreId) =>
+                                    reordenarSubcategorias(categoria.id, ativoId, sobreId)
+                                  }
+                                  onRenomearSubcategoria={renomearSubcategoria}
+                                  onExcluirSubcategoria={excluirSubcategoria}
+                                  onMarcarTodos={marcarTodosItens}
+                                  onAdicionarItem={adicionarItem}
+                                  onAlternarItem={alternarItem}
+                                  onRemoverItem={removerItem}
+                                  onDefinirPrioridade={definirPrioridade}
+                                  onTransferir={(subcategoriaId, item) =>
+                                    setItemTransferindo({ item, subcategoriaId })
+                                  }
+                                  onReordenarItens={reordenarItens}
+                                  onRestaurarOrdem={restaurarOrdemAutomatica}
+                                  onAtualizarValores={atualizarValoresItem}
+                                />
                               ) : (
                                 <p className="text-sm text-muted-foreground">
                                   Nenhuma subcategoria ainda.
