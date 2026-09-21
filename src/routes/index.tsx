@@ -33,7 +33,12 @@ import { CategoriaView } from "@/components/nirvana/categoria-view";
 import { SubcategoriasAccordion } from "@/components/nirvana/subcategorias-accordion";
 import { SidebarCategorias } from "@/components/nirvana/sidebar-categorias";
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
-import { ItemOrdenavel, ListaOrdenavel } from "@/components/nirvana/dnd";
+import {
+  AreaSoltavel,
+  ContextoArrasto,
+  ItemOrdenavel,
+  ListaOrdenavel,
+} from "@/components/nirvana/dnd";
 import { BotaoArquivar } from "@/components/nirvana/botao-arquivar";
 import {
   ESTILOS_COR_CATEGORIA,
@@ -107,6 +112,7 @@ function NirvanaPage() {
   const [modalDeletarPastaAberto, setModalDeletarPastaAberto] = useState(false);
   const [nomeNovaPasta, setNomeNovaPasta] = useState("");
   const [novaCorPasta, setNovaCorPasta] = useState<CorCategoria | null>(null);
+  const [pastasAbertasCentral, setPastasAbertasCentral] = useState<string[]>([]);
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
