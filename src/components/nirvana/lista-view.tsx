@@ -174,10 +174,12 @@ function CamposCompra({
   onAtualizarValores,
 }: {
   item: Item;
-  onAtualizarValores?: (
-    itemId: string,
-    valores: { precoUnitario?: number; quantidade?: number },
-  ) => void;
+  onAtualizarValores:
+    | ((
+        itemId: string,
+        valores: { precoUnitario?: number; quantidade?: number },
+      ) => void)
+    | undefined;
 }) {
   const paraNumero = (valor: string) => {
     const n = Number(valor.replace(",", "."));
