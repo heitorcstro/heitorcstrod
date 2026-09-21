@@ -94,37 +94,58 @@ export function ListaView({
 
       <ul className="mt-6 divide-y divide-border border-y border-border">
         {itensOrdenados.map((item) => (
-          <li key={item.id} className="group flex items-center gap-3 py-3">
-            <SeletorPrioridade
-              prioridade={item.prioridade}
-              onSelecionar={(prioridade) =>
-                onDefinirPrioridade(item.id, prioridade)
-              }
-              onTransferir={() => onTransferir(item)}
-            />
-            <Checkbox
-              id={item.id}
-              checked={item.concluido}
-              onCheckedChange={() => onAlternarItem(item.id)}
-            />
-            <label
-              htmlFor={item.id}
-              className={cn(
-                "flex-1 cursor-pointer text-sm leading-relaxed",
-                item.concluido && "text-muted-foreground line-through",
+          <li key={item.id} className="group py-3">
+            <div className="flex items-center gap-3">
+              <SeletorPrioridade
+                prioridade={item.prioridade}
+                onSelecionar={(prioridade) =>
+                  onDefinirPrioridade(item.id, prioridade)
+                }
+                onTransferir={() => onTransferir(item)}
+              />
+              <Checkbox
+                id={item.id}
+                checked={item.concluido}
+                onCheckedChange={() => onAlternarItem(item.id)}
+              />
+              <label
+                htmlFor={item.id}
+                className={cn(
+                  "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed",
+                  item.concluido && "text-muted-foreground line-through",
+                )}
+              >
+                {item.texto}
+              </label>
+
+              {modoCompras && (
+                <div className="hidden flex-row items-center gap-2 sm:flex">
+                  <CamposCompra
+                    item={item}
+                    onAtualizarValores={onAtualizarValores}
+                  />
+                </div>
               )}
-            >
-              {item.texto}
-            </label>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={`Excluir ${item.texto}`}
-              onClick={() => onRemoverItem(item.id)}
-              className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
-            >
-              <Trash2 className="size-4" />
-            </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`Excluir ${item.texto}`}
+                onClick={() => onRemoverItem(item.id)}
+                className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            </div>
+
+            {modoCompras && (
+              <div className="mt-2 flex flex-row items-center gap-2 pl-9 sm:hidden">
+                <CamposCompra
+                  item={item}
+                  onAtualizarValores={onAtualizarValores}
+                />
+              </div>
+            )}
           </li>
         ))}
         {subcategoria.itens.length === 0 && (
@@ -133,6 +154,71 @@ export function ListaView({
           </li>
         )}
       </ul>
+
+      {modoCompras && (
+        <div className="mt-4 flex items-center justify-between rounded-xl border border-border bg-secondary px-4 py-3">
+          <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+            Total da subcategoria
+          </span>
+          <span className="font-display text-lg font-semibold tracking-tight">
+            {formatarBRL(totalSubcategoria(subcategoria))}
+          </span>
+        </div>
+      )}
     </section>
+  );
+}
+
+function CamposCompra({
+  item,
+  onAtualizarValores,
+}: {
+  item: Item;
+  onAtualizarValores?: (
+    itemId: string,
+    valores: { precoUnitario?: number; quantidade?: number },
+  ) => void;
+}) {
+  const paraNumero = (valor: string) => {
+    const n = Number(valor.replace(",", "."));
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  };
+
+  return (
+    <>
+      <Input
+        type="number"
+        min={0}
+        step="0.01"
+        inputMode="decimal"
+        value={item.precoUnitario ?? ""}
+        onChange={(e) =>
+          onAtualizarValores?.(item.id, {
+            precoUnitario: paraNumero(e.target.value),
+          })
+        }
+        placeholder="Preço"
+        aria-label={`Preço unitário de ${item.texto}`}
+        className="h-8 w-20 px-2 text-right text-xs"
+      />
+      <span className="text-xs text-muted-foreground">×</span>
+      <Input
+        type="number"
+        min={1}
+        step="1"
+        inputMode="numeric"
+        value={item.quantidade ?? 1}
+        onChange={(e) =>
+          onAtualizarValores?.(item.id, {
+            quantidade: Math.max(1, Math.round(paraNumero(e.target.value))),
+          })
+        }
+        aria-label={`Quantidade de ${item.texto}`}
+        className="h-8 w-14 px-2 text-right text-xs"
+      />
+      <span className="w-20 shrink-0 text-right text-xs font-medium tabular-nums">
+        {formatarBRL(totalItem(item))}
+      </span>
+    </>
   );
 }
