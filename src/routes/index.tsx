@@ -233,6 +233,11 @@ function NirvanaPage() {
   const reordenarCategorias = (ativoId: string, sobreId: string) =>
     setCategorias((atual) => moverPorId(atual, ativoId, sobreId));
 
+  const alternarPastaCentral = (pastaId: string) =>
+    setPastasAbertasCentral((atual) =>
+      atual.includes(pastaId) ? atual.filter((id) => id !== pastaId) : [...atual, pastaId],
+    );
+
   const reordenarPastas = (ativoId: string, sobreId: string) =>
     setPastas((atual) => moverPorId(atual, ativoId, sobreId));
 
