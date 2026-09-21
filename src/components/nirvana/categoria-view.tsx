@@ -2,13 +2,19 @@ import { useState } from "react";
 import { ArrowLeft, Plus, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  IndicadorCorCategoria,
+  NomeCategoriaColorido,
+  TrocarCorCategoria,
+} from "./cores-categoria";
 import { SubcategoriasAccordion } from "./subcategorias-accordion";
 import { formatarBRL, totalCategoria } from "./types";
-import type { Categoria, Item, Prioridade } from "./types";
+import type { Categoria, CorCategoria, Item, Prioridade } from "./types";
 
 type Props = {
   categoria: Categoria;
   onVoltar: () => void;
+  onTrocarCor: (cor: CorCategoria) => void;
   onCriarSubcategoria: (nome: string) => void;
   onAlternarModoCompras: () => void;
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
@@ -37,6 +43,7 @@ type Props = {
 export function CategoriaView({
   categoria,
   onVoltar,
+  onTrocarCor,
   onCriarSubcategoria,
   onAlternarModoCompras,
   onReordenarSubcategorias,
@@ -78,7 +85,12 @@ export function CategoriaView({
 
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">{categoria.nome}</h1>
+          <h1 className="flex min-w-0 items-center gap-2 font-display text-3xl font-semibold tracking-tight">
+            <IndicadorCorCategoria cor={categoria.cor} className="size-4" />
+            <NomeCategoriaColorido cor={categoria.cor} className="truncate">
+              {categoria.nome}
+            </NomeCategoriaColorido>
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {categoria.subcategorias.length === 0
               ? "Crie uma subcategoria para começar."
@@ -88,6 +100,7 @@ export function CategoriaView({
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <TrocarCorCategoria corAtual={categoria.cor} onSelecionar={onTrocarCor} />
           <Button variant="outline" onClick={onAlternarModoCompras}>
             <ShoppingCart className="size-4" />
             {modoCompras ? "Desativar compras" : "Lista de Compras"}

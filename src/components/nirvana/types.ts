@@ -1,6 +1,38 @@
 export type Prioridade = "1" | "2" | "3" | "D";
 
+export type CorCategoria =
+  | "Red"
+  | "Green"
+  | "Blue"
+  | "Purple"
+  | "Yellow"
+  | "Orange"
+  | "Magenta"
+  | "Gold";
+
 export const PRIORIDADES: Prioridade[] = ["1", "2", "3", "D"];
+
+export const CORES_CATEGORIA: CorCategoria[] = [
+  "Red",
+  "Green",
+  "Blue",
+  "Purple",
+  "Yellow",
+  "Orange",
+  "Magenta",
+  "Gold",
+];
+
+export const ROTULOS_COR_CATEGORIA: Record<CorCategoria, string> = {
+  Red: "Vermelho",
+  Green: "Verde",
+  Blue: "Azul",
+  Purple: "Roxo",
+  Yellow: "Amarelo",
+  Orange: "Laranja",
+  Magenta: "Magenta",
+  Gold: "Dourado",
+};
 
 export const ROTULOS_PRIORIDADE: Record<Prioridade, string> = {
   "1": "Prioridade 1",
@@ -29,6 +61,7 @@ export type Subcategoria = {
 export type Categoria = {
   id: string;
   nome: string;
+  cor: CorCategoria;
   subcategorias: Subcategoria[];
   isShoppingList?: boolean;
 };
@@ -50,12 +83,31 @@ export const CATEGORIAS_PADRAO = [
 export const criarId = () =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
+export const corCategoriaAleatoria = (): CorCategoria => {
+  const indice = Math.floor(Math.random() * CORES_CATEGORIA.length);
+  return CORES_CATEGORIA[indice] ?? "Blue";
+};
+
+export const ehCorCategoria = (cor: unknown): cor is CorCategoria =>
+  typeof cor === "string" && CORES_CATEGORIA.includes(cor as CorCategoria);
+
 export const categoriasIniciais = (): Categoria[] =>
   CATEGORIAS_PADRAO.map((nome) => ({
     id: criarId(),
     nome,
+    cor: corCategoriaAleatoria(),
     subcategorias: [{ id: criarId(), nome: "Geral", itens: [] }],
   }));
+
+export const normalizarCategorias = (categorias: Categoria[]): Categoria[] =>
+  categorias.map((categoria) => {
+    const corExistente = (categoria as { cor?: unknown }).cor;
+    return {
+      ...categoria,
+      cor: ehCorCategoria(corExistente) ? corExistente : corCategoriaAleatoria(),
+      subcategorias: Array.isArray(categoria.subcategorias) ? categoria.subcategorias : [],
+    };
+  });
 
 const ORDEM_PRIORIDADE: Record<Prioridade, number> = {
   "1": 0,
@@ -92,7 +144,8 @@ export const moverPorId = <T extends { id: string }>(
   const para = lista.findIndex((x) => x.id === sobreId);
   if (de === -1 || para === -1) return lista;
   const copia = [...lista];
-  const movido = copia[de]!;
+  const movido = copia[de];
+  if (!movido) return lista;
   copia.splice(de, 1);
   copia.splice(para, 0, movido);
   return copia;
