@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bookmark, ChevronDown, ListChecks, Plus, Trash2 } from "lucide-react";
+import { Bookmark, ChevronDown, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -418,9 +418,13 @@ function NirvanaPage() {
               setCategoriaAtivaId(null);
               setSubcategoriaAtivaId(null);
             }}
-            className="flex items-center gap-2.5"
+            className="flex flex-row items-center gap-3"
           >
-            <ListChecks className="size-5" />
+            <img
+              src="/placeholder.svg"
+              alt="Nirvana"
+              className="h-10 w-10 rounded-md object-cover shadow-sm"
+            />
             <span className="font-display text-lg font-semibold tracking-tight">Nirvana</span>
           </button>
           <span className="text-xs uppercase tracking-[0.18em] text-primary-foreground/60">
