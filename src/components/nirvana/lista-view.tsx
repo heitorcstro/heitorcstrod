@@ -5,29 +5,41 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { SeletorPrioridade } from "./seletor-prioridade";
-import { ordenarItens } from "./types";
+import {
+  formatarBRL,
+  ordenarItens,
+  totalItem,
+  totalSubcategoria,
+} from "./types";
 import type { Item, Prioridade, Subcategoria } from "./types";
 
 type Props = {
   nomeCategoria: string;
   subcategoria: Subcategoria;
+  modoCompras?: boolean;
   onVoltar: () => void;
   onAdicionarItem: (texto: string) => void;
   onAlternarItem: (itemId: string) => void;
   onRemoverItem: (itemId: string) => void;
   onDefinirPrioridade: (itemId: string, prioridade: Prioridade) => void;
   onTransferir: (item: Item) => void;
+  onAtualizarValores?: (
+    itemId: string,
+    valores: { precoUnitario?: number; quantidade?: number },
+  ) => void;
 };
 
 export function ListaView({
   nomeCategoria,
   subcategoria,
+  modoCompras = false,
   onVoltar,
   onAdicionarItem,
   onAlternarItem,
   onRemoverItem,
   onDefinirPrioridade,
   onTransferir,
+  onAtualizarValores,
 }: Props) {
   const [texto, setTexto] = useState("");
   const itensOrdenados = ordenarItens(subcategoria.itens);
