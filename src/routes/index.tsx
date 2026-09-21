@@ -113,6 +113,11 @@ function NirvanaPage() {
   const [nomeNovaPasta, setNomeNovaPasta] = useState("");
   const [novaCorPasta, setNovaCorPasta] = useState<CorCategoria | null>(null);
   const [pastasAbertasCentral, setPastasAbertasCentral] = useState<string[]>([]);
+  const [pastaAtivaId, setPastaAtivaId] = useState<string | null>(null);
+  const [modalRemoverDaPastaAberto, setModalRemoverDaPastaAberto] = useState(false);
+  const [categoriaParaRemoverDaPasta, setCategoriaParaRemoverDaPasta] = useState<string | null>(
+    null,
+  );
   const [pendenteMoverPasta, setPendenteMoverPasta] = useState<{
     categoriaId: string;
     pastaId: string;
