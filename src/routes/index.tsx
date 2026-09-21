@@ -312,6 +312,8 @@ function NirvanaPage() {
             onReordenarSubcategorias={(ativoId, sobreId) =>
               reordenarSubcategorias(categoriaAtiva.id, ativoId, sobreId)
             }
+            onRenomearSubcategoria={renomearSubcategoria}
+            onExcluirSubcategoria={excluirSubcategoria}
           />
         ) : (
           <>
