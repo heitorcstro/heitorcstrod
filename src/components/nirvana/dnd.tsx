@@ -74,6 +74,11 @@ type ItemProps = {
    * apenas como rótulo acessível (aria-label).
    */
   alcaLetra?: string;
+  /**
+   * Classes opcionais para sobrescrever o estilo padrão da alça inline
+   * (apenas quando `alcaLetra` não é informado).
+   */
+  alcaClassName?: string;
   children: (alca: ReactNode) => ReactNode;
 };
 
