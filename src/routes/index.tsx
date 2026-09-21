@@ -122,6 +122,12 @@ function NirvanaPage() {
     } catch {
       setCategorias(categoriasIniciais());
     }
+    try {
+      const salvas = localStorage.getItem(CHAVE_PASTAS);
+      if (salvas) setPastas(normalizarPastas(JSON.parse(salvas)));
+    } catch {
+      setPastas([]);
+    }
     setCarregado(true);
   }, []);
 
@@ -129,6 +135,11 @@ function NirvanaPage() {
     if (!carregado) return;
     localStorage.setItem(CHAVE, JSON.stringify(categorias));
   }, [categorias, carregado]);
+
+  useEffect(() => {
+    if (!carregado) return;
+    localStorage.setItem(CHAVE_PASTAS, JSON.stringify(pastas));
+  }, [pastas, carregado]);
 
   const categoriaAtiva = categorias.find((c) => c.id === categoriaAtivaId) ?? null;
   const subcategoriaAtiva =
