@@ -89,6 +89,7 @@ export function ItemOrdenavel({
     <span
       ref={setActivatorNodeRef}
       suppressHydrationWarning
+      {...attributes}
       {...listeners}
       aria-label={textoAlca}
       tabIndex={0}
