@@ -35,6 +35,8 @@ type Props = {
   categoria: Categoria;
   modoCompras?: boolean;
   className?: string;
+  subcategoriasAbertas?: string[];
+  onSubcategoriasAbertasChange?: (subcategoriasAbertas: string[]) => void;
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
@@ -68,6 +70,8 @@ export function SubcategoriasAccordion({
   categoria,
   modoCompras = false,
   className,
+  subcategoriasAbertas,
+  onSubcategoriasAbertasChange,
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
@@ -87,6 +91,10 @@ export function SubcategoriasAccordion({
   const [novosItens, setNovosItens] = useState<Record<string, string>>({});
 
   const subExcluindo = categoria.subcategorias.find((s) => s.id === subParaExcluir) ?? null;
+  const accordionControle =
+    subcategoriasAbertas && onSubcategoriasAbertasChange
+      ? { value: subcategoriasAbertas, onValueChange: onSubcategoriasAbertasChange }
+      : {};
 
   const salvarRenomeacao = () => {
     if (!renomeandoId) return;
@@ -114,7 +122,11 @@ export function SubcategoriasAccordion({
         ids={categoria.subcategorias.map((s) => s.id)}
         onReordenar={onReordenarSubcategorias}
       >
-        <Accordion type="multiple" className={cn("grid gap-3 border-l border-border pl-3 sm:pl-4", className)}>
+        <Accordion
+          type="multiple"
+          {...accordionControle}
+          className={cn("grid gap-3 border-l border-border pl-3 sm:pl-4", className)}
+        >
           {categoria.subcategorias.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             const itensOrdenados = itensExibidos(sub);

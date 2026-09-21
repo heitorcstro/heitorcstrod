@@ -82,6 +82,10 @@ function NirvanaPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [categoriaAtivaId, setCategoriaAtivaId] = useState<string | null>(null);
   const [subcategoriaAtivaId, setSubcategoriaAtivaId] = useState<string | null>(null);
+  const [categoriasAbertas, setCategoriasAbertas] = useState<string[]>([]);
+  const [subcategoriasAbertasPorCategoria, setSubcategoriasAbertasPorCategoria] = useState<
+    Record<string, string[]>
+  >({});
   const [modalAberto, setModalAberto] = useState(false);
   const [modalDeletarAberto, setModalDeletarAberto] = useState(false);
   const [categoriaParaExcluir, setCategoriaParaExcluir] = useState<Categoria | null>(null);
@@ -186,8 +190,40 @@ function NirvanaPage() {
   const trocarCorCategoria = (categoriaId: string, cor: CorCategoria) =>
     setCategorias((atual) => atual.map((c) => (c.id === categoriaId ? { ...c, cor } : c)));
 
+  const atualizarCategoriasAbertas = (novasCategoriasAbertas: string[]) => {
+    const categoriasFechadas = categoriasAbertas.filter(
+      (categoriaId) => !novasCategoriasAbertas.includes(categoriaId),
+    );
+
+    if (categoriasFechadas.length > 0) {
+      setSubcategoriasAbertasPorCategoria((atual) => {
+        const proximo = { ...atual };
+        categoriasFechadas.forEach((categoriaId) => {
+          proximo[categoriaId] = [];
+        });
+        return proximo;
+      });
+    }
+
+    setCategoriasAbertas(novasCategoriasAbertas);
+  };
+
+  const atualizarSubcategoriasAbertas = (
+    categoriaId: string,
+    novasSubcategoriasAbertas: string[],
+  ) =>
+    setSubcategoriasAbertasPorCategoria((atual) => ({
+      ...atual,
+      [categoriaId]: novasSubcategoriasAbertas,
+    }));
+
   const excluirCategoria = (categoriaId: string) => {
     setCategorias((atual) => atual.filter((c) => c.id !== categoriaId));
+    setCategoriasAbertas((atual) => atual.filter((id) => id !== categoriaId));
+    setSubcategoriasAbertasPorCategoria((atual) => {
+      const { [categoriaId]: _removida, ...restante } = atual;
+      return restante;
+    });
     if (categoriaAtivaId === categoriaId) {
       setCategoriaAtivaId(null);
       setSubcategoriaAtivaId(null);
@@ -397,7 +433,12 @@ function NirvanaPage() {
               ids={categorias.map((c) => c.id)}
               onReordenar={reordenarCategorias}
             >
-              <Accordion type="multiple" className="mt-8 grid gap-3 lg:grid-cols-2">
+              <Accordion
+                type="multiple"
+                value={categoriasAbertas}
+                onValueChange={atualizarCategoriasAbertas}
+                className="mt-8 grid gap-3 lg:grid-cols-2"
+              >
                 {categorias.map((categoria) => {
                   const total = contarItens(categoria);
                   const pendentes = contarPendentes(categoria);
@@ -415,7 +456,7 @@ function NirvanaPage() {
                         >
                           <AccordionTrigger
                             showChevron={false}
-                            className="flex min-w-0 flex-1 items-start flex-col gap-1 py-1 pr-[260px] text-left hover:no-underline [&>svg]:text-muted-foreground"
+                            className="relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start gap-1 py-1 pb-8 pr-[260px] text-left hover:no-underline [&>svg]:text-muted-foreground"
                           >
                             <span className="flex min-w-0 flex-row items-center gap-2">
                               <IndicadorCorCategoria cor={categoria.cor} />
@@ -432,7 +473,11 @@ function NirvanaPage() {
                               {total > 0 &&
                                 ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
                             </span>
-                            <ChevronDown className="pointer-events-none absolute bottom-3 right-3 h-5 w-5 text-muted-foreground transition-transform duration-200" />
+                            <ChevronDown
+                              size={28}
+                              strokeWidth={3}
+                              className="pointer-events-none absolute bottom-0 right-0 h-7 w-7 text-muted-foreground transition-transform duration-200"
+                            />
                           </AccordionTrigger>
                           <div className="absolute right-3 top-3 z-10 flex flex-row items-center gap-2">
                             {alca}
@@ -447,6 +492,15 @@ function NirvanaPage() {
                                 <SubcategoriasAccordion
                                   categoria={categoria}
                                   modoCompras={categoria.isShoppingList === true}
+                                  subcategoriasAbertas={
+                                    subcategoriasAbertasPorCategoria[categoria.id] ?? []
+                                  }
+                                  onSubcategoriasAbertasChange={(subcategoriasAbertas) =>
+                                    atualizarSubcategoriasAbertas(
+                                      categoria.id,
+                                      subcategoriasAbertas,
+                                    )
+                                  }
                                   onReordenarSubcategorias={(ativoId, sobreId) =>
                                     reordenarSubcategorias(categoria.id, ativoId, sobreId)
                                   }
