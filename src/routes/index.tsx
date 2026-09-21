@@ -106,6 +106,7 @@ function NirvanaPage() {
   const [modalPastaAberto, setModalPastaAberto] = useState(false);
   const [modalDeletarPastaAberto, setModalDeletarPastaAberto] = useState(false);
   const [nomeNovaPasta, setNomeNovaPasta] = useState("");
+  const [novaCorPasta, setNovaCorPasta] = useState<CorCategoria | null>(null);
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
@@ -203,9 +204,10 @@ function NirvanaPage() {
   const criarPasta = (e: React.FormEvent) => {
     e.preventDefault();
     const nome = nomeNovaPasta.trim();
-    if (!nome) return;
-    setPastas((atual) => [...atual, { id: criarId(), nome }]);
+    if (!nome || !novaCorPasta) return;
+    setPastas((atual) => [...atual, { id: criarId(), nome, cor: novaCorPasta }]);
     setNomeNovaPasta("");
+    setNovaCorPasta(null);
     setModalPastaAberto(false);
   };
 
