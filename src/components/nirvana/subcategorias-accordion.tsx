@@ -303,7 +303,7 @@ export function SubcategoriasAccordion({
                         </DropdownMenu>
                         <button
                           type="button"
-                          className={`${estiloBaseAcao} text-green-600`}
+                          className={`${estiloBaseAcao} text-green-700 font-bold`}
                           disabled={sub.itens.length === 0}
                           onClick={() => onMarcarTodos(sub.id, true)}
                         >
@@ -311,7 +311,7 @@ export function SubcategoriasAccordion({
                         </button>
                         <button
                           type="button"
-                          className={`${estiloBaseAcao} text-red-600`}
+                          className={`${estiloBaseAcao} text-red-700 font-bold`}
                           disabled={sub.itens.length === 0}
                           onClick={() => onMarcarTodos(sub.id, false)}
                         >
