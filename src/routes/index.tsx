@@ -670,12 +670,14 @@ function NirvanaPage() {
           setModalPastaAberto(true);
         }}
         onDeletarPasta={() => setModalDeletarPastaAberto(true)}
+        onSelecionarPasta={abrirPasta}
         onMoverCategoriaParaPasta={moverCategoriaParaPasta}
         onSoltarHierarquia={aoSoltarHierarquia}
         onCriarCategoria={() => setModalAberto(true)}
         onDeletarCategoria={() => setModalDeletarAberto(true)}
         onSelecionarCategoria={(categoriaId) => {
           setMostrandoArquivados(false);
+          setPastaAtivaId(null);
           setCategoriaAtivaId(categoriaId);
           setSubcategoriaAtivaId(null);
         }}
@@ -692,6 +694,7 @@ function NirvanaPage() {
             type="button"
             onClick={() => {
               setMostrandoArquivados(false);
+              setPastaAtivaId(null);
               setCategoriaAtivaId(null);
               setSubcategoriaAtivaId(null);
             }}
