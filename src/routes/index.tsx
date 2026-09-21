@@ -448,9 +448,6 @@ function NirvanaPage() {
             </svg>
             <span className="font-display text-lg font-semibold tracking-tight">Nirvana</span>
           </button>
-          <span className="text-xs uppercase tracking-[0.18em] text-primary-foreground/60">
-            Suas listas
-          </span>
         </div>
       </header>
 
@@ -570,9 +567,6 @@ function NirvanaPage() {
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h1 className="font-display text-3xl font-semibold tracking-tight">Categorias</h1>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Escolha uma categoria para ver suas subcategorias.
-                </p>
               </div>
               <div className="flex flex-row items-center gap-3">
                 <Button size="lg" onClick={() => setModalAberto(true)}>
