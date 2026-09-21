@@ -948,6 +948,83 @@ function NirvanaPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <Dialog
+        open={modalPastaAberto}
+        onOpenChange={(aberto) => {
+          setModalPastaAberto(aberto);
+          if (!aberto) setNomeNovaPasta("");
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Criar Pasta</DialogTitle>
+            <DialogDescription>
+              Dê um nome para a pasta. Depois arraste categorias para dentro dela.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={criarPasta}>
+            <Input
+              autoFocus
+              value={nomeNovaPasta}
+              onChange={(e) => setNomeNovaPasta(e.target.value)}
+              placeholder="Nome da pasta"
+            />
+            <DialogFooter className="mt-4">
+              <Button type="button" variant="outline" onClick={() => setModalPastaAberto(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={!nomeNovaPasta.trim()}>
+                Criar
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={modalDeletarPastaAberto} onOpenChange={setModalDeletarPastaAberto}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Deletar Pasta</DialogTitle>
+            <DialogDescription>
+              As categorias dentro da pasta não são excluídas: elas voltam para a lista de
+              categorias.
+            </DialogDescription>
+          </DialogHeader>
+          {pastas.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Nenhuma pasta para excluir.</p>
+          ) : (
+            <div className="max-h-80 space-y-2 overflow-y-auto">
+              {pastas.map((pasta) => (
+                <div
+                  key={pasta.id}
+                  className="flex flex-row items-center justify-between gap-3 rounded-lg border border-border px-3 py-2"
+                >
+                  <span className="min-w-0 break-words text-sm font-medium">{pasta.nome}</span>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => excluirPasta(pasta.id)}
+                    className="bg-red-600 text-white hover:bg-red-700"
+                  >
+                    <Trash2 className="size-4" />
+                    Excluir
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setModalDeletarPastaAberto(false)}
+            >
+              Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       </main>
     </div>
   );
