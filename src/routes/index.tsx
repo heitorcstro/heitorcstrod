@@ -618,6 +618,10 @@ function NirvanaPage() {
                               >
                                 <Plus className="size-[18px]" strokeWidth={2.5} />
                               </button>
+                              <BotaoArquivar
+                                rotulo={`Arquivar ${categoria.nome}`}
+                                onArquivar={() => arquivarCategoria(categoria.id)}
+                              />
                               {alca}
                               <TrocarCorCategoria
                                 corAtual={categoria.cor}
