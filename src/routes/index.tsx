@@ -82,6 +82,7 @@ export const Route = createFileRoute("/")({
 });
 
 const CHAVE = "nirvana:categorias:v2";
+const CHAVE_PASTAS = "nirvana:pastas:v1";
 
 function NirvanaPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
