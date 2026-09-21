@@ -644,13 +644,13 @@ function NirvanaPage() {
                                 className="pointer-events-none absolute bottom-3 right-3 h-7 w-7 text-black transition-transform duration-200"
                               />
                             </AccordionTrigger>
-                            <div className="absolute top-3 right-3 z-10 flex flex-row items-center gap-6">
-                              <div className="flex flex-row items-center gap-2">
-                                {alca}
+                            <div className="absolute top-3 right-3 z-10 flex flex-row items-start gap-6">
+                              <div className="flex flex-col items-end gap-1.5">
                                 <TrocarCorCategoria
                                   corAtual={categoria.cor}
                                   onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
                                 />
+                                {alca}
                               </div>
                               <div className="flex flex-row items-center gap-1.5">
                                 <button
