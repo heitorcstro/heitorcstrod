@@ -135,9 +135,20 @@ export const normalizarCategorias = (categorias: Categoria[]): Categoria[] =>
       ...categoria,
       cor,
       isShoppingList: cor === "Gold",
+      pastaId: typeof categoria.pastaId === "string" ? categoria.pastaId : null,
       subcategorias: Array.isArray(categoria.subcategorias) ? categoria.subcategorias : [],
     };
   });
+
+export const normalizarPastas = (pastas: unknown): Pasta[] =>
+  Array.isArray(pastas)
+    ? pastas
+        .filter(
+          (p): p is Pasta =>
+            !!p && typeof (p as Pasta).id === "string" && typeof (p as Pasta).nome === "string",
+        )
+        .map((p) => ({ id: p.id, nome: p.nome }))
+    : [];
 
 const ORDEM_PRIORIDADE: Record<Prioridade, number> = {
   "1": 0,
