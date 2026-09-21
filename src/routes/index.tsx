@@ -13,10 +13,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ListaView } from "@/components/nirvana/lista-view";
+import { CategoriaView } from "@/components/nirvana/categoria-view";
+import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
 import {
   categoriasIniciais,
+  contarItens,
+  contarPendentes,
   criarId,
   type Categoria,
+  type Item,
+  type Prioridade,
 } from "@/components/nirvana/types";
 
 export const Route = createFileRoute("/")({
@@ -26,13 +32,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Nirvana é um aplicativo minimalista de listas para organizar tarefas do dia, compras e viagens.",
+          "Nirvana é um aplicativo minimalista de listas com categorias, subcategorias e prioridades para organizar tarefas, compras e viagens.",
       },
       { property: "og:title", content: "Nirvana — Suas listas organizadas" },
       {
         property: "og:description",
         content:
-          "Organize tarefas diárias, compras e viagens em listas simples e elegantes.",
+          "Organize tarefas diárias, compras e viagens em categorias, subcategorias e prioridades.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -41,14 +47,21 @@ export const Route = createFileRoute("/")({
   component: NirvanaPage,
 });
 
-const CHAVE = "nirvana:categorias";
+const CHAVE = "nirvana:categorias:v2";
 
 function NirvanaPage() {
   const [categorias, setCategorias] = useState<Categoria[]>(categoriasIniciais);
-  const [ativa, setAtiva] = useState<string | null>(null);
+  const [categoriaAtivaId, setCategoriaAtivaId] = useState<string | null>(null);
+  const [subcategoriaAtivaId, setSubcategoriaAtivaId] = useState<string | null>(
+    null,
+  );
   const [modalAberto, setModalAberto] = useState(false);
   const [novoNome, setNovoNome] = useState("");
   const [carregado, setCarregado] = useState(false);
+  const [itemTransferindo, setItemTransferindo] = useState<{
+    item: Item;
+    subcategoriaId: string;
+  } | null>(null);
 
   useEffect(() => {
     try {
@@ -65,32 +78,86 @@ function NirvanaPage() {
     localStorage.setItem(CHAVE, JSON.stringify(categorias));
   }, [categorias, carregado]);
 
-  const atualizarCategoria = (
-    id: string,
-    fn: (categoria: Categoria) => Categoria,
-  ) => setCategorias((atual) => atual.map((c) => (c.id === id ? fn(c) : c)));
+  const categoriaAtiva =
+    categorias.find((c) => c.id === categoriaAtivaId) ?? null;
+  const subcategoriaAtiva =
+    categoriaAtiva?.subcategorias.find((s) => s.id === subcategoriaAtivaId) ??
+    null;
+
+  const atualizarSubcategoria = (
+    subcategoriaId: string,
+    fn: (itens: Item[]) => Item[],
+  ) =>
+    setCategorias((atual) =>
+      atual.map((c) => ({
+        ...c,
+        subcategorias: c.subcategorias.map((s) =>
+          s.id === subcategoriaId ? { ...s, itens: fn(s.itens) } : s,
+        ),
+      })),
+    );
 
   const criarCategoria = (e: React.FormEvent) => {
     e.preventDefault();
     const nome = novoNome.trim();
     if (!nome) return;
-    setCategorias((atual) => [...atual, { id: criarId(), nome, itens: [] }]);
+    setCategorias((atual) => [
+      ...atual,
+      { id: criarId(), nome, subcategorias: [] },
+    ]);
     setNovoNome("");
     setModalAberto(false);
   };
 
-  const categoriaAtiva = categorias.find((c) => c.id === ativa) ?? null;
+  const criarSubcategoria = (categoriaId: string, nome: string) =>
+    setCategorias((atual) =>
+      atual.map((c) =>
+        c.id === categoriaId
+          ? {
+              ...c,
+              subcategorias: [
+                ...c.subcategorias,
+                { id: criarId(), nome, itens: [] },
+              ],
+            }
+          : c,
+      ),
+    );
+
+  const transferirItem = (destinoId: string) => {
+    if (!itemTransferindo) return;
+    const { item, subcategoriaId } = itemTransferindo;
+    setCategorias((atual) =>
+      atual.map((c) => ({
+        ...c,
+        subcategorias: c.subcategorias.map((s) => {
+          if (s.id === subcategoriaId)
+            return { ...s, itens: s.itens.filter((i) => i.id !== item.id) };
+          if (s.id === destinoId) return { ...s, itens: [...s.itens, item] };
+          return s;
+        }),
+      })),
+    );
+    setItemTransferindo(null);
+  };
 
   return (
     <main className="min-h-screen bg-background">
       <header className="border-b border-border bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-          <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => {
+              setCategoriaAtivaId(null);
+              setSubcategoriaAtivaId(null);
+            }}
+            className="flex items-center gap-2.5"
+          >
             <ListChecks className="size-5" />
             <span className="font-display text-lg font-semibold tracking-tight">
               Nirvana
             </span>
-          </div>
+          </button>
           <span className="text-xs uppercase tracking-[0.18em] text-primary-foreground/60">
             Suas listas
           </span>
@@ -98,29 +165,52 @@ function NirvanaPage() {
       </header>
 
       <div className="mx-auto max-w-5xl px-6 py-10">
-        {categoriaAtiva ? (
+        {categoriaAtiva && subcategoriaAtiva ? (
           <ListaView
-            categoria={categoriaAtiva}
-            onVoltar={() => setAtiva(null)}
+            nomeCategoria={categoriaAtiva.nome}
+            subcategoria={subcategoriaAtiva}
+            onVoltar={() => setSubcategoriaAtivaId(null)}
             onAdicionarItem={(texto) =>
-              atualizarCategoria(categoriaAtiva.id, (c) => ({
-                ...c,
-                itens: [...c.itens, { id: criarId(), texto, concluido: false }],
-              }))
+              atualizarSubcategoria(subcategoriaAtiva.id, (itens) => [
+                ...itens,
+                { id: criarId(), texto, concluido: false, prioridade: null },
+              ])
             }
             onAlternarItem={(itemId) =>
-              atualizarCategoria(categoriaAtiva.id, (c) => ({
-                ...c,
-                itens: c.itens.map((i) =>
+              atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
+                itens.map((i) =>
                   i.id === itemId ? { ...i, concluido: !i.concluido } : i,
                 ),
-              }))
+              )
             }
             onRemoverItem={(itemId) =>
-              atualizarCategoria(categoriaAtiva.id, (c) => ({
-                ...c,
-                itens: c.itens.filter((i) => i.id !== itemId),
-              }))
+              atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
+                itens.filter((i) => i.id !== itemId),
+              )
+            }
+            onDefinirPrioridade={(itemId, prioridade: Prioridade) =>
+              atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
+                itens.map((i) =>
+                  i.id === itemId
+                    ? {
+                        ...i,
+                        prioridade: i.prioridade === prioridade ? null : prioridade,
+                      }
+                    : i,
+                ),
+              )
+            }
+            onTransferir={(item) =>
+              setItemTransferindo({ item, subcategoriaId: subcategoriaAtiva.id })
+            }
+          />
+        ) : categoriaAtiva ? (
+          <CategoriaView
+            categoria={categoriaAtiva}
+            onVoltar={() => setCategoriaAtivaId(null)}
+            onAbrirSubcategoria={(id) => setSubcategoriaAtivaId(id)}
+            onCriarSubcategoria={(nome) =>
+              criarSubcategoria(categoriaAtiva.id, nome)
             }
           />
         ) : (
@@ -131,7 +221,7 @@ function NirvanaPage() {
                   Categorias
                 </h1>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Escolha uma categoria para ver e organizar seus itens.
+                  Escolha uma categoria para ver suas subcategorias.
                 </p>
               </div>
               <Button size="lg" onClick={() => setModalAberto(true)}>
@@ -142,13 +232,15 @@ function NirvanaPage() {
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {categorias.map((categoria) => {
-                const pendentes = categoria.itens.filter(
-                  (i) => !i.concluido,
-                ).length;
+                const total = contarItens(categoria);
+                const pendentes = contarPendentes(categoria);
                 return (
                   <button
                     key={categoria.id}
-                    onClick={() => setAtiva(categoria.id)}
+                    onClick={() => {
+                      setCategoriaAtivaId(categoria.id);
+                      setSubcategoriaAtivaId(null);
+                    }}
                     className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 text-left transition-colors hover:border-foreground/40 hover:bg-secondary"
                   >
                     <span>
@@ -156,11 +248,9 @@ function NirvanaPage() {
                         {categoria.nome}
                       </span>
                       <span className="mt-0.5 block text-xs text-muted-foreground">
-                        {categoria.itens.length === 0
-                          ? "Lista vazia"
-                          : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${categoria.itens.length} ${
-                              categoria.itens.length === 1 ? "item" : "itens"
-                            }`}
+                        {categoria.subcategorias.length} subcategoria
+                        {categoria.subcategorias.length === 1 ? "" : "s"}
+                        {total > 0 && ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
                       </span>
                     </span>
                     <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
@@ -177,7 +267,7 @@ function NirvanaPage() {
           <DialogHeader>
             <DialogTitle>Criar Categoria</DialogTitle>
             <DialogDescription>
-              Dê um nome para a sua nova lista.
+              Dê um nome para a sua nova categoria.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={criarCategoria} className="space-y-4">
@@ -204,6 +294,15 @@ function NirvanaPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <DialogoTransferir
+        aberto={itemTransferindo !== null}
+        categorias={categorias}
+        textoItem={itemTransferindo?.item.texto ?? ""}
+        subcategoriaAtual={itemTransferindo?.subcategoriaId ?? null}
+        onFechar={() => setItemTransferindo(null)}
+        onEscolher={transferirItem}
+      />
     </main>
   );
 }

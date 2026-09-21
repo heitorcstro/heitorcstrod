@@ -4,25 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import type { Categoria } from "./types";
+import { SeletorPrioridade } from "./seletor-prioridade";
+import type { Item, Prioridade, Subcategoria } from "./types";
 
 type Props = {
-  categoria: Categoria;
+  nomeCategoria: string;
+  subcategoria: Subcategoria;
   onVoltar: () => void;
   onAdicionarItem: (texto: string) => void;
   onAlternarItem: (itemId: string) => void;
   onRemoverItem: (itemId: string) => void;
+  onDefinirPrioridade: (itemId: string, prioridade: Prioridade) => void;
+  onTransferir: (item: Item) => void;
 };
 
 export function ListaView({
-  categoria,
+  nomeCategoria,
+  subcategoria,
   onVoltar,
   onAdicionarItem,
   onAlternarItem,
   onRemoverItem,
+  onDefinirPrioridade,
+  onTransferir,
 }: Props) {
   const [texto, setTexto] = useState("");
-  const concluidos = categoria.itens.filter((i) => i.concluido).length;
+  const concluidos = subcategoria.itens.filter((i) => i.concluido).length;
 
   const enviar = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,17 +47,20 @@ export function ListaView({
         className="-ml-3 mb-6 text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
-        Todas as categorias
+        {nomeCategoria}
       </Button>
 
       <header className="mb-8">
-        <h1 className="font-display text-3xl font-semibold tracking-tight">
-          {categoria.nome}
+        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+          {nomeCategoria}
+        </p>
+        <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight">
+          {subcategoria.nome}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {categoria.itens.length === 0
+          {subcategoria.itens.length === 0
             ? "Nenhum item por aqui ainda."
-            : `${concluidos} de ${categoria.itens.length} concluídos`}
+            : `${concluidos} de ${subcategoria.itens.length} concluídos`}
         </p>
       </header>
 
@@ -69,8 +79,15 @@ export function ListaView({
       </form>
 
       <ul className="mt-6 divide-y divide-border border-y border-border">
-        {categoria.itens.map((item) => (
+        {subcategoria.itens.map((item) => (
           <li key={item.id} className="group flex items-center gap-3 py-3">
+            <SeletorPrioridade
+              prioridade={item.prioridade}
+              onSelecionar={(prioridade) =>
+                onDefinirPrioridade(item.id, prioridade)
+              }
+              onTransferir={() => onTransferir(item)}
+            />
             <Checkbox
               id={item.id}
               checked={item.concluido}
@@ -96,7 +113,7 @@ export function ListaView({
             </Button>
           </li>
         ))}
-        {categoria.itens.length === 0 && (
+        {subcategoria.itens.length === 0 && (
           <li className="py-10 text-center text-sm text-muted-foreground">
             Comece adicionando o primeiro item da lista.
           </li>
