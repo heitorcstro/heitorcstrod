@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronRight, ListChecks, Plus } from "lucide-react";
+import { ListChecks, Plus } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -255,34 +261,85 @@ function NirvanaPage() {
               </Button>
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Accordion type="multiple" className="mt-8 grid gap-3 lg:grid-cols-2">
               {categorias.map((categoria) => {
                 const total = contarItens(categoria);
                 const pendentes = contarPendentes(categoria);
                 return (
-                  <button
+                  <AccordionItem
                     key={categoria.id}
-                    onClick={() => {
-                      setCategoriaAtivaId(categoria.id);
-                      setSubcategoriaAtivaId(null);
-                    }}
-                    className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 text-left transition-colors hover:border-foreground/40 hover:bg-secondary"
+                    value={categoria.id}
+                    className="rounded-xl border border-border bg-card px-5 transition-colors hover:border-foreground/40"
                   >
-                    <span>
-                      <span className="block font-medium tracking-tight">
-                        {categoria.nome}
+                    <AccordionTrigger className="py-5 text-left hover:no-underline [&>svg]:text-foreground">
+                      <span>
+                        <span className="block font-medium tracking-tight">
+                          {categoria.nome}
+                        </span>
+                        <span className="mt-0.5 block text-xs text-muted-foreground">
+                          {categoria.subcategorias.length} subcategoria
+                          {categoria.subcategorias.length === 1 ? "" : "s"}
+                          {total > 0 && ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
+                        </span>
                       </span>
-                      <span className="mt-0.5 block text-xs text-muted-foreground">
-                        {categoria.subcategorias.length} subcategoria
-                        {categoria.subcategorias.length === 1 ? "" : "s"}
-                        {total > 0 && ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
-                      </span>
-                    </span>
-                    <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                  </button>
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-5">
+                      <div className="space-y-4 border-t border-border pt-4">
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => {
+                            setCategoriaAtivaId(categoria.id);
+                            setSubcategoriaAtivaId(null);
+                          }}
+                        >
+                          Abrir categoria
+                        </Button>
+
+                        {categoria.subcategorias.length > 0 ? (
+                          <div className="space-y-2">
+                            {categoria.subcategorias.map((sub) => {
+                              const subPendentes = sub.itens.filter(
+                                (i) => !i.concluido,
+                              ).length;
+                              return (
+                                <Button
+                                  key={sub.id}
+                                  type="button"
+                                  variant="outline"
+                                  onClick={() => {
+                                    setCategoriaAtivaId(categoria.id);
+                                    setSubcategoriaAtivaId(sub.id);
+                                  }}
+                                  className="h-auto w-full justify-between whitespace-normal px-3 py-3 text-left"
+                                >
+                                  <span>
+                                    <span className="block font-medium">
+                                      {sub.nome}
+                                    </span>
+                                    <span className="block text-xs font-normal text-muted-foreground">
+                                      {sub.itens.length === 0
+                                        ? "Lista vazia"
+                                        : `${subPendentes} pendente${subPendentes === 1 ? "" : "s"} · ${
+                                            sub.itens.length
+                                          } ${sub.itens.length === 1 ? "item" : "itens"}`}
+                                    </span>
+                                  </span>
+                                </Button>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">
+                            Nenhuma subcategoria ainda.
+                          </p>
+                        )}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 );
               })}
-            </div>
+            </Accordion>
           </>
         )}
       </div>

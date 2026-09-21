@@ -1,8 +1,19 @@
 import { useState } from "react";
-import { ArrowLeft, ChevronRight, Plus, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Plus, ShoppingCart } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { formatarBRL, totalCategoria, totalSubcategoria } from "./types";
+import {
+  formatarBRL,
+  ordenarItens,
+  totalCategoria,
+  totalSubcategoria,
+} from "./types";
 import type { Categoria } from "./types";
 
 type Props = {
@@ -97,34 +108,74 @@ export function CategoriaView({
         </form>
       )}
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-2">
+      <Accordion type="multiple" className="mt-8 grid gap-3 sm:grid-cols-2">
         {categoria.subcategorias.map((sub) => {
           const pendentes = sub.itens.filter((i) => !i.concluido).length;
           return (
-            <button
+            <AccordionItem
               key={sub.id}
-              onClick={() => onAbrirSubcategoria(sub.id)}
-              className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 text-left transition-colors hover:border-foreground/40 hover:bg-secondary"
+              value={sub.id}
+              className="rounded-xl border border-border bg-card px-5 transition-colors hover:border-foreground/40"
             >
-              <span>
-                <span className="block font-medium tracking-tight">
-                  {sub.nome}
-                </span>
-                <span className="mt-0.5 block text-xs text-muted-foreground">
-                  {sub.itens.length === 0
-                    ? "Lista vazia"
-                    : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
-                        sub.itens.length
-                      } ${sub.itens.length === 1 ? "item" : "itens"}`}
-                </span>
-                {modoCompras && (
-                  <span className="mt-1 block text-xs font-medium tabular-nums">
-                    {formatarBRL(totalSubcategoria(sub))}
+              <AccordionTrigger className="py-5 text-left hover:no-underline [&>svg]:text-foreground">
+                <span>
+                  <span className="block font-medium tracking-tight">
+                    {sub.nome}
                   </span>
-                )}
-              </span>
-              <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-            </button>
+                  <span className="mt-0.5 block text-xs text-muted-foreground">
+                    {sub.itens.length === 0
+                      ? "Lista vazia"
+                      : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
+                          sub.itens.length
+                        } ${sub.itens.length === 1 ? "item" : "itens"}`}
+                  </span>
+                  {modoCompras && (
+                    <span className="mt-1 block text-xs font-medium tabular-nums">
+                      {formatarBRL(totalSubcategoria(sub))}
+                    </span>
+                  )}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-5">
+                <div className="space-y-4 border-t border-border pt-4">
+                  {sub.itens.length > 0 ? (
+                    <ul className="space-y-2">
+                      {ordenarItens(sub.itens).map((item) => (
+                        <li
+                          key={item.id}
+                          className="flex items-center justify-between gap-3 text-sm"
+                        >
+                          <span
+                            className={
+                              item.concluido
+                                ? "text-destructive no-underline"
+                                : "text-foreground"
+                            }
+                          >
+                            {item.texto}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {item.prioridade ?? "—"}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Nenhum item nesta subcategoria.
+                    </p>
+                  )}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => onAbrirSubcategoria(sub.id)}
+                    className="w-full"
+                  >
+                    Abrir lista
+                  </Button>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
           );
         })}
         {categoria.subcategorias.length === 0 && (
@@ -133,7 +184,7 @@ export function CategoriaView({
             primeira.
           </p>
         )}
-      </div>
+      </Accordion>
 
       {modoCompras && (
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-primary px-6 py-5 text-primary-foreground">
