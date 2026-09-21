@@ -9,11 +9,7 @@ type Props = {
   onTransferir: () => void;
 };
 
-export function SeletorPrioridade({
-  prioridade,
-  onSelecionar,
-  onTransferir,
-}: Props) {
+export function SeletorPrioridade({ prioridade, onSelecionar, onTransferir }: Props) {
   const [aberto, setAberto] = useState(false);
 
   const escolher = (opcao: Prioridade | "T") => {

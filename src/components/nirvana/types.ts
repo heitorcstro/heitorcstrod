@@ -22,6 +22,8 @@ export type Subcategoria = {
   id: string;
   nome: string;
   itens: Item[];
+  /** true quando o usuário reordenou manualmente (arrastando) os itens. */
+  ordemManual?: boolean;
 };
 
 export type Categoria = {
@@ -73,6 +75,28 @@ export const ordenarItens = (itens: Item[]): Item[] =>
     if (a.concluido !== b.concluido) return a.concluido ? 1 : -1;
     return rank(a) - rank(b);
   });
+
+/**
+ * Ordem exibida: a ordem manual (arrastada) sobrepõe a ordenação automática.
+ */
+export const itensExibidos = (sub: Subcategoria): Item[] =>
+  sub.ordemManual ? sub.itens : ordenarItens(sub.itens);
+
+/** Move um elemento identificado por id para a posição de outro. */
+export const moverPorId = <T extends { id: string }>(
+  lista: T[],
+  ativoId: string,
+  sobreId: string,
+): T[] => {
+  const de = lista.findIndex((x) => x.id === ativoId);
+  const para = lista.findIndex((x) => x.id === sobreId);
+  if (de === -1 || para === -1) return lista;
+  const copia = [...lista];
+  const movido = copia[de]!;
+  copia.splice(de, 1);
+  copia.splice(para, 0, movido);
+  return copia;
+};
 
 export const contarItens = (categoria: Categoria) =>
   categoria.subcategorias.reduce((total, s) => total + s.itens.length, 0);

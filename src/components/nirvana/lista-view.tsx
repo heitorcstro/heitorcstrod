@@ -11,12 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { SeletorPrioridade } from "./seletor-prioridade";
-import {
-  formatarBRL,
-  ordenarItens,
-  totalItem,
-  totalSubcategoria,
-} from "./types";
+import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
+import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
 import type { Item, Prioridade, Subcategoria } from "./types";
 
 type Props = {
@@ -29,6 +25,8 @@ type Props = {
   onRemoverItem: (itemId: string) => void;
   onDefinirPrioridade: (itemId: string, prioridade: Prioridade) => void;
   onTransferir: (item: Item) => void;
+  onReordenarItens: (ativoId: string, sobreId: string) => void;
+  onRestaurarOrdem: () => void;
   onAtualizarValores?: (
     itemId: string,
     valores: { precoUnitario?: number; quantidade?: number },
@@ -45,10 +43,12 @@ export function ListaView({
   onRemoverItem,
   onDefinirPrioridade,
   onTransferir,
+  onReordenarItens,
+  onRestaurarOrdem,
   onAtualizarValores,
 }: Props) {
   const [texto, setTexto] = useState("");
-  const itensOrdenados = ordenarItens(subcategoria.itens);
+  const itensOrdenados = itensExibidos(subcategoria);
   const concluidos = subcategoria.itens.filter((i) => i.concluido).length;
 
   const enviar = (e: React.FormEvent) => {
@@ -71,9 +71,7 @@ export function ListaView({
       </Button>
 
       <header className="mb-6">
-        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-          {nomeCategoria}
-        </p>
+        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">{nomeCategoria}</p>
       </header>
 
       <Accordion type="single" collapsible className="rounded-xl border border-border bg-card px-5">
@@ -105,61 +103,81 @@ export function ListaView({
               </Button>
             </form>
 
-            <ul className="mt-6 divide-y divide-border border-y border-border">
-              {itensOrdenados.map((item) => (
-                <li key={item.id} className="group py-3">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                    <SeletorPrioridade
-                      prioridade={item.prioridade}
-                      onSelecionar={(prioridade) =>
-                        onDefinirPrioridade(item.id, prioridade)
-                      }
-                      onTransferir={() => onTransferir(item)}
-                    />
-                    <Checkbox
-                      id={item.id}
-                      checked={item.concluido}
-                      onCheckedChange={() => onAlternarItem(item.id)}
-                    />
-                    <label
-                      htmlFor={item.id}
-                      className={cn(
-                        "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed",
-                        item.concluido
-                          ? "text-destructive no-underline"
-                          : "text-foreground",
-                      )}
-                    >
-                      {item.texto}
-                    </label>
+            {subcategoria.ordemManual && (
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-secondary px-3 py-2">
+                <span className="text-xs text-muted-foreground">
+                  Ordem manual ativa (arrastada por você).
+                </span>
+                <Button type="button" variant="outline" size="sm" onClick={onRestaurarOrdem}>
+                  Ordenar por prioridade
+                </Button>
+              </div>
+            )}
 
-                    {modoCompras && (
-                      <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
-                        <CamposCompra
-                          item={item}
-                          onAtualizarValores={onAtualizarValores}
-                        />
-                      </div>
+            <ListaOrdenavel
+              id={`itens-${subcategoria.id}`}
+              ids={itensOrdenados.map((i) => i.id)}
+              onReordenar={onReordenarItens}
+            >
+              <ul className="mt-6 divide-y divide-border border-y border-border">
+                {itensOrdenados.map((item) => (
+                  <ItemOrdenavel
+                    key={item.id}
+                    id={item.id}
+                    rotulo={item.texto}
+                    className="group border-b border-border last:border-b-0"
+                  >
+                    {(alca) => (
+                      <li className="list-none py-3">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                          {alca}
+                          <SeletorPrioridade
+                            prioridade={item.prioridade}
+                            onSelecionar={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
+                            onTransferir={() => onTransferir(item)}
+                          />
+                          <Checkbox
+                            id={item.id}
+                            checked={item.concluido}
+                            onCheckedChange={() => onAlternarItem(item.id)}
+                          />
+                          <label
+                            htmlFor={item.id}
+                            className={cn(
+                              "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed",
+                              item.concluido ? "text-destructive no-underline" : "text-foreground",
+                            )}
+                          >
+                            {item.texto}
+                          </label>
+
+                          {modoCompras && (
+                            <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
+                              <CamposCompra item={item} onAtualizarValores={onAtualizarValores} />
+                            </div>
+                          )}
+
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Excluir ${item.texto}`}
+                            onClick={() => onRemoverItem(item.id)}
+                            className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
+                          >
+                            <Trash2 className="size-4" />
+                          </Button>
+                        </div>
+                      </li>
                     )}
-
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={`Excluir ${item.texto}`}
-                      onClick={() => onRemoverItem(item.id)}
-                      className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
-                  </div>
-                </li>
-              ))}
-              {subcategoria.itens.length === 0 && (
-                <li className="py-10 text-center text-sm text-muted-foreground">
-                  Comece adicionando o primeiro item da lista.
-                </li>
-              )}
-            </ul>
+                  </ItemOrdenavel>
+                ))}
+                {subcategoria.itens.length === 0 && (
+                  <li className="py-10 text-center text-sm text-muted-foreground">
+                    Comece adicionando o primeiro item da lista.
+                  </li>
+                )}
+              </ul>
+            </ListaOrdenavel>
 
             {modoCompras && (
               <div className="mt-4 flex items-center justify-between rounded-xl border border-border bg-secondary px-4 py-3">
@@ -184,10 +202,7 @@ function CamposCompra({
 }: {
   item: Item;
   onAtualizarValores:
-    | ((
-        itemId: string,
-        valores: { precoUnitario?: number; quantidade?: number },
-      ) => void)
+    | ((itemId: string, valores: { precoUnitario?: number; quantidade?: number }) => void)
     | undefined;
 }) {
   const paraNumero = (valor: string) => {
