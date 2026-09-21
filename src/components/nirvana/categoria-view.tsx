@@ -118,7 +118,7 @@ export function CategoriaView({
                     value={sub.id}
                     className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                   >
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 [&>h3]:flex-1">
                       {alca}
                       <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
                         <span>
