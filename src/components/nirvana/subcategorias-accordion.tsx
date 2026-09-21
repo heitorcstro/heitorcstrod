@@ -117,6 +117,7 @@ export function SubcategoriasAccordion({
   const [subParaExcluir, setSubParaExcluir] = useState<string | null>(null);
   const [novosItens, setNovosItens] = useState<Record<string, string>>({});
 
+  const subcategoriasVisiveis = categoria.subcategorias.filter((s) => !s.arquivada);
   const subExcluindo = categoria.subcategorias.find((s) => s.id === subParaExcluir) ?? null;
   const accordionControle =
     subcategoriasAbertas && onSubcategoriasAbertasChange
