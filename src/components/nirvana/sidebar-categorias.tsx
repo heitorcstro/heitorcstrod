@@ -18,6 +18,8 @@ type Props = {
   onCriarPasta?: () => void;
   onDeletarPasta?: () => void;
   onMoverCategoriaParaPasta?: (categoriaId: string, pastaId: string | null) => void;
+  /** Handler unificado de arrasto (pastas + categorias). */
+  onSoltarHierarquia?: (ativoId: string, sobreId: string) => void;
   onCriarCategoria: () => void;
   onDeletarCategoria?: () => void;
   onSelecionarCategoria: (categoriaId: string) => void;
@@ -37,6 +39,7 @@ export function SidebarCategorias({
   onCriarPasta,
   onDeletarPasta,
   onMoverCategoriaParaPasta,
+  onSoltarHierarquia,
   onCriarCategoria,
   onDeletarCategoria,
   onSelecionarCategoria,
