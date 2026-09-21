@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { SeletorPrioridade } from "./seletor-prioridade";
+import { ordenarItens } from "./types";
 import type { Item, Prioridade, Subcategoria } from "./types";
 
 type Props = {
@@ -29,6 +30,7 @@ export function ListaView({
   onTransferir,
 }: Props) {
   const [texto, setTexto] = useState("");
+  const itensOrdenados = ordenarItens(subcategoria.itens);
   const concluidos = subcategoria.itens.filter((i) => i.concluido).length;
 
   const enviar = (e: React.FormEvent) => {
@@ -79,7 +81,7 @@ export function ListaView({
       </form>
 
       <ul className="mt-6 divide-y divide-border border-y border-border">
-        {subcategoria.itens.map((item) => (
+        {itensOrdenados.map((item) => (
           <li key={item.id} className="group flex items-center gap-3 py-3">
             <SeletorPrioridade
               prioridade={item.prioridade}
