@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ListChecks, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, ListChecks, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -411,36 +411,36 @@ function NirvanaPage() {
                       {(alca) => (
                         <AccordionItem
                           value={categoria.id}
-                          className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
+                          className="group relative flex min-h-[100px] flex-col rounded-xl border border-border bg-card p-4 transition-colors hover:border-foreground/40"
                         >
-                          <div className="flex flex-row items-start gap-2 py-2">
-                            <AccordionTrigger className="min-w-0 flex-1 py-3 text-left hover:no-underline [&>svg]:text-foreground">
-                              <span className="flex min-w-0 flex-1 flex-col gap-1">
-                                <span className="flex min-w-0 flex-row items-center gap-2">
-                                  <IndicadorCorCategoria cor={categoria.cor} />
-                                  <NomeCategoriaColorido
-                                    cor={categoria.cor}
-                                    className="truncate font-medium tracking-tight"
-                                  >
-                                    {categoria.nome}
-                                  </NomeCategoriaColorido>
-                                </span>
-                                <span className="text-xs text-muted-foreground">
-                                  {categoria.subcategorias.length} subcategoria
-                                  {categoria.subcategorias.length === 1 ? "" : "s"}
-                                  {total > 0 &&
-                                    ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
-                                </span>
-                              </span>
-                            </AccordionTrigger>
-                            <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center">
-                              {alca}
-                              <TrocarCorCategoria
-                                corAtual={categoria.cor}
-                                onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
-                              />
-                            </div>
+                          <AccordionTrigger
+                            showChevron={false}
+                            className="flex flex-1 flex-col gap-1 py-1 text-left hover:no-underline [&>svg]:text-foreground"
+                          >
+                            <span className="flex min-w-0 flex-row items-center gap-2">
+                              <IndicadorCorCategoria cor={categoria.cor} />
+                              <NomeCategoriaColorido
+                                cor={categoria.cor}
+                                className="truncate font-medium tracking-tight"
+                              >
+                                {categoria.nome}
+                              </NomeCategoriaColorido>
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {categoria.subcategorias.length} subcategoria
+                              {categoria.subcategorias.length === 1 ? "" : "s"}
+                              {total > 0 &&
+                                ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
+                            </span>
+                          </AccordionTrigger>
+                          <div className="absolute right-3 top-3 z-10 flex flex-row items-center gap-2">
+                            {alca}
+                            <TrocarCorCategoria
+                              corAtual={categoria.cor}
+                              onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
+                            />
                           </div>
+                          <ChevronDown className="pointer-events-none absolute bottom-3 right-3 h-5 w-5 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180" />
                           <AccordionContent className="pb-5">
                             <div className="space-y-4 border-t border-border pt-4">
                               {categoria.subcategorias.length > 0 ? (
