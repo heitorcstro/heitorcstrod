@@ -142,6 +142,7 @@ export const normalizarCategorias = (categorias: Categoria[]): Categoria[] =>
       cor,
       isShoppingList: cor === "Gold",
       pastaId: typeof categoria.pastaId === "string" ? categoria.pastaId : null,
+      manterEmCategorias: categoria.manterEmCategorias !== false,
       subcategorias: Array.isArray(categoria.subcategorias) ? categoria.subcategorias : [],
     };
   });
