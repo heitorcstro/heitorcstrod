@@ -127,7 +127,7 @@ export function SubcategoriasAccordion({
                     value={sub.id}
                     className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                   >
-                    <div className="flex flex-col gap-2 py-2 sm:flex-row sm:items-center">
+                    <div className="flex flex-col gap-2 py-2 xl:flex-row xl:items-center">
                       <AccordionTrigger className="min-w-0 flex-1 py-3 text-left hover:no-underline [&>svg]:text-foreground">
                         <span className="flex min-w-0 flex-1 flex-col gap-1">
                           {renomeandoId === sub.id ? (
@@ -150,7 +150,7 @@ export function SubcategoriasAccordion({
                         </span>
                       </AccordionTrigger>
 
-                      <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
+                      <div className="flex min-w-0 flex-wrap items-center gap-2 xl:justify-end">
                         {alca}
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
