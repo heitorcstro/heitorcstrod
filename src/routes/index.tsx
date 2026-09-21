@@ -646,7 +646,7 @@ function NirvanaPage() {
                       className="flex flex-row items-center gap-3 rounded-lg border border-black bg-white px-4 py-3 text-left"
                     >
                       <Folder
-                        className={cn("size-5 shrink-0", ESTILOS_COR_CATEGORIA[pasta.cor]?.texto)}
+                        className={`size-5 shrink-0 ${ESTILOS_COR_CATEGORIA[pasta.cor].texto}`}
                         strokeWidth={2.5}
                         fill="currentColor"
                       />
