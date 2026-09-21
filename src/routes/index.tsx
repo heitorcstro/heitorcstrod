@@ -862,6 +862,18 @@ function NirvanaPage() {
         </DialogContent>
       </Dialog>
       </main>
+      <SidebarCategorias
+        categorias={categoriasVisiveis}
+        onCriarCategoria={() => setModalAberto(true)}
+        onSelecionarCategoria={(categoriaId) => {
+          setMostrandoArquivados(false);
+          setCategoriaAtivaId(categoriaId);
+          setSubcategoriaAtivaId(null);
+        }}
+        onReordenarCategorias={reordenarCategorias}
+        onAbrirArquivados={abrirArquivados}
+        totalArquivados={totalArquivados}
+      />
     </div>
   );
 }
