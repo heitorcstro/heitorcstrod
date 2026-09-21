@@ -1,10 +1,9 @@
 # Roadmap
 
-## Done
-- Vertical thin black line divider on Category cards (right of title, full-height span, categories only).
+## Concluído
+- Divisor vertical preto nos cards de categoria: span full-height (top-to-bottom), aplicado estritamente a categorias (não a subcategorias). Texto ancorado à esquerda, botões à direita e seta bottom-right preservados.
+- Botão "Adicionar Subcategoria" no cluster superior direito de cada categoria. Ordem estrita [Adicionar Subcategoria] → [Mover categoria] → [Trocar de cor]. Estilo branco (bg-white border border-black text-black px-3 py-1.5 rounded-md text-sm font-medium). Abre modal com input para nomear; confirma cria a subcategoria e abre a categoria. Zero outras mudanças.
+- Cluster com flex-wrap para evitar sobrepor o título; título max-w-[40%], cluster max-w-[58%].
 
-## In progress
-- Divider full-height verification: header must stretch to card height.
-
-## TODO
-- "Adicionar Subcategoria" button in every Category top-right cluster, order [Adicionar Subcategoria] -> [Mover Categoria] -> [Trocar de cor], same white-border-black style, opens prompt to create subcategory. Zero other layout changes.
+## Aberto
+(nenhum)
