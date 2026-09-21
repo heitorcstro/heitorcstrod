@@ -106,6 +106,59 @@ function NirvanaPage() {
       })),
     );
 
+  const patchSubcategoria = (
+    subcategoriaId: string,
+    fn: (sub: Subcategoria) => Subcategoria,
+  ) =>
+    setCategorias((atual) =>
+      atual.map((c) => ({
+        ...c,
+        subcategorias: c.subcategorias.map((s) =>
+          s.id === subcategoriaId ? fn(s) : s,
+        ),
+      })),
+    );
+
+  // ===== Reordenação por arrastar-e-soltar =====
+  const reordenarCategorias = (ativoId: string, sobreId: string) =>
+    setCategorias((atual) => moverPorId(atual, ativoId, sobreId));
+
+  const reordenarSubcategorias = (
+    categoriaId: string,
+    ativoId: string,
+    sobreId: string,
+  ) =>
+    setCategorias((atual) =>
+      atual.map((c) =>
+        c.id === categoriaId
+          ? {
+              ...c,
+              subcategorias: moverPorId(c.subcategorias, ativoId, sobreId),
+            }
+          : c,
+      ),
+    );
+
+  // A ordem manual passa a valer sobre a ordenação automática por prioridade.
+  const reordenarItens = (
+    subcategoriaId: string,
+    itensVisiveis: Item[],
+    ativoId: string,
+    sobreId: string,
+  ) =>
+    patchSubcategoria(subcategoriaId, (sub) => ({
+      ...sub,
+      itens: moverPorId(itensVisiveis, ativoId, sobreId),
+      ordemManual: true,
+    }));
+
+  const restaurarOrdemAutomatica = (subcategoriaId: string) =>
+    patchSubcategoria(subcategoriaId, (sub) => ({
+      ...sub,
+      ordemManual: false,
+    }));
+
+
   const criarCategoria = (e: React.FormEvent) => {
     e.preventDefault();
     const nome = novoNome.trim();
