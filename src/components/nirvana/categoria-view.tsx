@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   IndicadorCorCategoria,
-  NomeCategoriaColorido,
   TrocarCorCategoria,
 } from "./cores-categoria";
 import { SubcategoriasAccordion } from "./subcategorias-accordion";
