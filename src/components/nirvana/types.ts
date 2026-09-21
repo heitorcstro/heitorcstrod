@@ -92,7 +92,8 @@ export const moverPorId = <T extends { id: string }>(
   const para = lista.findIndex((x) => x.id === sobreId);
   if (de === -1 || para === -1) return lista;
   const copia = [...lista];
-  const [movido] = copia.splice(de, 1);
+  const movido = copia[de]!;
+  copia.splice(de, 1);
   copia.splice(para, 0, movido);
   return copia;
 };
