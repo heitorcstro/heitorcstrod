@@ -78,39 +78,49 @@ export function SidebarCategorias({
     onReordenarCategorias(ativoId, sobreId);
   };
 
-  const linhaCategoria = (categoria: Categoria, dentroDePasta = false) => (
-    <ItemOrdenavel
-      key={dentroDePasta ? `pasta-${categoria.id}` : categoria.id}
-      id={categoria.id}
-      tipo="categoria"
-      textoAlca="Mover essa Categoria"
-      alcaLetra="M"
-      inline
-    >
-      {(alca) => (
-        <div
-          className={cn(
-            "flex flex-row items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 text-black",
-            dentroDePasta && "bg-slate-50 pl-9",
-          )}
-        >
-          <button
-            type="button"
-            onClick={() => onSelecionarCategoria(categoria.id)}
-            className="flex min-w-0 flex-1 items-center gap-2 pr-3 text-left"
-          >
-            <span
-              className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
-            />
-            <span className="whitespace-normal break-words text-sm font-medium">
-              {categoria.nome}
-            </span>
-          </button>
-          {alca}
-        </div>
+  const conteudoCategoria = (categoria: Categoria, dentroDePasta: boolean, alca: ReactNode) => (
+    <div
+      className={cn(
+        "flex flex-row items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 text-black",
+        dentroDePasta && "bg-slate-50 pl-9",
       )}
-    </ItemOrdenavel>
+    >
+      <button
+        type="button"
+        onClick={() => onSelecionarCategoria(categoria.id)}
+        className="flex min-w-0 flex-1 items-center gap-2 pr-3 text-left"
+      >
+        <span
+          className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
+        />
+        <span className="whitespace-normal break-words text-sm font-medium">{categoria.nome}</span>
+      </button>
+      {alca}
+    </div>
   );
+
+  const linhaCategoria = (categoria: Categoria, dentroDePasta = false) => {
+    // A categoria que vive numa pasta só é arrastável de dentro dela; o eco na
+    // lista principal (quando o usuário optou por manter) é apenas visual.
+    const eco = !dentroDePasta && !!categoria.pastaId;
+    if (eco) {
+      return (
+        <div key={`eco-${categoria.id}`}>{conteudoCategoria(categoria, false, null)}</div>
+      );
+    }
+    return (
+      <ItemOrdenavel
+        key={dentroDePasta ? `pasta-${categoria.id}` : categoria.id}
+        id={categoria.id}
+        tipo="categoria"
+        textoAlca="Mover essa Categoria"
+        alcaLetra="M"
+        inline
+      >
+        {(alca) => conteudoCategoria(categoria, dentroDePasta, alca)}
+      </ItemOrdenavel>
+    );
+  };
 
   return (
     <aside
@@ -222,6 +232,7 @@ export function SidebarCategorias({
                   <ItemOrdenavel
                     key={pasta.id}
                     id={`pasta:${pasta.id}`}
+                    tipo="pasta"
                     textoAlca="Mover essa Pasta"
                     alcaLetra="M"
                     inline
