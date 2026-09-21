@@ -842,6 +842,57 @@ function NirvanaPage() {
             onRestaurarOrdem={restaurarOrdemAutomatica}
             onAtualizarValores={atualizarValoresItem}
           />
+        ) : pastaAtiva ? (
+          <section>
+            <Button variant="ghost" size="sm" onClick={() => setPastaAtivaId(null)}>
+              Voltar
+            </Button>
+            <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
+              <div className="flex flex-row items-center gap-3">
+                <Folder
+                  className={`size-8 shrink-0 ${ESTILOS_COR_CATEGORIA[pastaAtiva.cor].texto}`}
+                  strokeWidth={2.5}
+                  fill="currentColor"
+                />
+                <div>
+                  <h1 className="font-display text-3xl font-semibold tracking-tight">
+                    {pastaAtiva.nome}
+                  </h1>
+                  <p className="text-sm text-black/60">
+                    {categoriasDaPastaAtiva.length}{" "}
+                    {categoriasDaPastaAtiva.length === 1 ? "categoria" : "categorias"}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalRemoverDaPastaAberto(true)}
+                className="rounded-md bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700"
+              >
+                Excluir Categoria da Pasta
+              </button>
+            </div>
+
+            {categoriasDaPastaAtiva.length > 0 ? (
+              <ContextoArrasto
+                ids={categoriasDaPastaAtiva.map((c) => c.id)}
+                onSoltar={aoSoltarHierarquia}
+              >
+                <Accordion
+                  type="multiple"
+                  value={categoriasAbertas}
+                  onValueChange={atualizarCategoriasAbertas}
+                  className="mt-8 grid gap-3 lg:grid-cols-2"
+                >
+                  {categoriasDaPastaAtiva.map((categoria) => cartaoCategoria(categoria))}
+                </Accordion>
+              </ContextoArrasto>
+            ) : (
+              <p className="mt-8 text-sm text-black/60">
+                Esta pasta ainda não tem categorias. Arraste uma categoria para dentro dela.
+              </p>
+            )}
+          </section>
         ) : (
           <>
             <div className="flex flex-wrap items-end justify-between gap-4">
