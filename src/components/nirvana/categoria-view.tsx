@@ -105,6 +105,7 @@ export function CategoriaView({
       )}
 
       <ListaOrdenavel
+        id={`subcategorias-${categoria.id}`}
         ids={categoria.subcategorias.map((s) => s.id)}
         onReordenar={onReordenarSubcategorias}
       >

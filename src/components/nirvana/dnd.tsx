@@ -20,13 +20,15 @@ import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 
 type ListaProps = {
+  /** Identificador estável: evita divergência de ids entre servidor e cliente. */
+  id: string;
   ids: string[];
   onReordenar: (ativoId: string, sobreId: string) => void;
   children: ReactNode;
 };
 
 /** Contexto de arrastar-e-soltar com suporte a toque (mobile) e teclado. */
-export function ListaOrdenavel({ ids, onReordenar, children }: ListaProps) {
+export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
   const sensores = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, {
