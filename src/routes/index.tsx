@@ -293,7 +293,11 @@ function NirvanaPage() {
               </Button>
             </div>
 
-            <ListaOrdenavel ids={categorias.map((c) => c.id)} onReordenar={reordenarCategorias}>
+            <ListaOrdenavel
+              id="categorias"
+              ids={categorias.map((c) => c.id)}
+              onReordenar={reordenarCategorias}
+            >
               <Accordion type="multiple" className="mt-8 grid gap-3 lg:grid-cols-2">
                 {categorias.map((categoria) => {
                   const total = contarItens(categoria);

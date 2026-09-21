@@ -114,7 +114,11 @@ export function ListaView({
               </div>
             )}
 
-            <ListaOrdenavel ids={itensOrdenados.map((i) => i.id)} onReordenar={onReordenarItens}>
+            <ListaOrdenavel
+              id={`itens-${subcategoria.id}`}
+              ids={itensOrdenados.map((i) => i.id)}
+              onReordenar={onReordenarItens}
+            >
               <ul className="mt-6 divide-y divide-border border-y border-border">
                 {itensOrdenados.map((item) => (
                   <ItemOrdenavel
