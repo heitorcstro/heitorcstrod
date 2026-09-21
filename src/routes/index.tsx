@@ -34,6 +34,7 @@ import { SubcategoriasAccordion } from "@/components/nirvana/subcategorias-accor
 import { SidebarCategorias } from "@/components/nirvana/sidebar-categorias";
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
 import { ItemOrdenavel, ListaOrdenavel } from "@/components/nirvana/dnd";
+import { BotaoArquivar } from "@/components/nirvana/botao-arquivar";
 import {
   ESTILOS_COR_CATEGORIA,
   GradeCoresCategoria,
@@ -96,6 +97,7 @@ function NirvanaPage() {
   const [carregado, setCarregado] = useState(false);
   const [categoriaCriandoSubId, setCategoriaCriandoSubId] = useState<string | null>(null);
   const [nomeNovaSub, setNomeNovaSub] = useState("");
+  const [mostrandoArquivados, setMostrandoArquivados] = useState(false);
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
@@ -124,6 +126,41 @@ function NirvanaPage() {
   const categoriaAtiva = categorias.find((c) => c.id === categoriaAtivaId) ?? null;
   const subcategoriaAtiva =
     categoriaAtiva?.subcategorias.find((s) => s.id === subcategoriaAtivaId) ?? null;
+
+  const categoriasVisiveis = categorias.filter((c) => !c.arquivada);
+  const categoriasArquivadas = categorias.filter((c) => c.arquivada);
+  const subcategoriasArquivadas = categorias.flatMap((c) =>
+    c.subcategorias.filter((s) => s.arquivada).map((s) => ({ categoria: c, sub: s })),
+  );
+  const totalArquivados = categoriasArquivadas.length + subcategoriasArquivadas.length;
+
+  const abrirArquivados = () => {
+    setCategoriaAtivaId(null);
+    setSubcategoriaAtivaId(null);
+    setMostrandoArquivados(true);
+  };
+
+  const arquivarCategoria = (categoriaId: string) => {
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, arquivada: true } : c)),
+    );
+    setCategoriasAbertas((atual) => atual.filter((id) => id !== categoriaId));
+    abrirArquivados();
+  };
+
+  const restaurarCategoria = (categoriaId: string) =>
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, arquivada: false } : c)),
+    );
+
+  const arquivarSubcategoria = (subcategoriaId: string) => {
+    patchSubcategoria(subcategoriaId, (sub) => ({ ...sub, arquivada: true }));
+    if (subcategoriaAtivaId === subcategoriaId) setSubcategoriaAtivaId(null);
+    abrirArquivados();
+  };
+
+  const restaurarSubcategoria = (subcategoriaId: string) =>
+    patchSubcategoria(subcategoriaId, (sub) => ({ ...sub, arquivada: false }));
 
   const atualizarSubcategoria = (subcategoriaId: string, fn: (itens: Item[]) => Item[]) =>
     setCategorias((atual) =>
@@ -357,13 +394,16 @@ function NirvanaPage() {
   return (
     <div className="flex h-screen w-full bg-white">
       <SidebarCategorias
-        categorias={categorias}
+        categorias={categoriasVisiveis}
         onCriarCategoria={() => setModalAberto(true)}
         onSelecionarCategoria={(categoriaId) => {
+          setMostrandoArquivados(false);
           setCategoriaAtivaId(categoriaId);
           setSubcategoriaAtivaId(null);
         }}
         onReordenarCategorias={reordenarCategorias}
+        onAbrirArquivados={abrirArquivados}
+        totalArquivados={totalArquivados}
       />
       <main className="flex-1 overflow-y-auto bg-background">
       <header className="border-b border-border bg-primary text-primary-foreground">
@@ -371,6 +411,7 @@ function NirvanaPage() {
           <button
             type="button"
             onClick={() => {
+              setMostrandoArquivados(false);
               setCategoriaAtivaId(null);
               setSubcategoriaAtivaId(null);
             }}
@@ -386,7 +427,68 @@ function NirvanaPage() {
       </header>
 
       <div className="mx-auto max-w-5xl px-6 py-10">
-        {categoriaAtiva && subcategoriaAtiva ? (
+        {mostrandoArquivados ? (
+          <section className="space-y-6">
+            <div>
+              <h1 className="font-display text-3xl font-semibold tracking-tight">Arquivados</h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Categorias e subcategorias guardadas aqui. Restaure quando quiser.
+              </p>
+            </div>
+
+            {totalArquivados === 0 ? (
+              <p className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
+                Nada arquivado ainda.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {categoriasArquivadas.map((categoria) => (
+                  <div
+                    key={categoria.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-black bg-white px-4 py-3"
+                  >
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span
+                        className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
+                      />
+                      <span className="text-sm font-medium text-black">{categoria.nome}</span>
+                      <span className="text-xs text-muted-foreground">Categoria</span>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => restaurarCategoria(categoria.id)}
+                    >
+                      Restaurar
+                    </Button>
+                  </div>
+                ))}
+                {subcategoriasArquivadas.map(({ categoria, sub }) => (
+                  <div
+                    key={sub.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-black bg-white px-4 py-3"
+                  >
+                    <span className="flex min-w-0 flex-col">
+                      <span className="text-sm font-medium text-black">{sub.nome}</span>
+                      <span className="text-xs text-muted-foreground">
+                        Subcategoria de {categoria.nome}
+                      </span>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => restaurarSubcategoria(sub.id)}
+                    >
+                      Restaurar
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        ) : categoriaAtiva && subcategoriaAtiva ? (
           <ListaView
             nomeCategoria={categoriaAtiva.nome}
             subcategoria={subcategoriaAtiva}
@@ -462,7 +564,7 @@ function NirvanaPage() {
 
             <ListaOrdenavel
               id="categorias"
-              ids={categorias.map((c) => c.id)}
+              ids={categoriasVisiveis.map((c) => c.id)}
               onReordenar={reordenarCategorias}
             >
               <Accordion
@@ -471,7 +573,7 @@ function NirvanaPage() {
                 onValueChange={atualizarCategoriasAbertas}
                 className="mt-8 grid gap-3 lg:grid-cols-2"
               >
-                {categorias.map((categoria) => {
+                {categoriasVisiveis.map((categoria) => {
                   const total = contarItens(categoria);
                   const pendentes = contarPendentes(categoria);
                   return (
@@ -516,6 +618,10 @@ function NirvanaPage() {
                               >
                                 <Plus className="size-[18px]" strokeWidth={2.5} />
                               </button>
+                              <BotaoArquivar
+                                rotulo={`Arquivar ${categoria.nome}`}
+                                onArquivar={() => arquivarCategoria(categoria.id)}
+                              />
                               {alca}
                               <TrocarCorCategoria
                                 corAtual={categoria.cor}
@@ -542,6 +648,7 @@ function NirvanaPage() {
                                   }
                                   onRenomearSubcategoria={renomearSubcategoria}
                                   onExcluirSubcategoria={excluirSubcategoria}
+                                  onArquivarSubcategoria={arquivarSubcategoria}
                                   onMarcarTodos={marcarTodosItens}
                                   onAdicionarItem={adicionarItem}
                                   onAlternarItem={alternarItem}

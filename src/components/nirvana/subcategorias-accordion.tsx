@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { BotaoArquivar } from "./botao-arquivar";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
 import { SeletorPrioridade } from "./seletor-prioridade";
 import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
@@ -40,6 +41,7 @@ type Props = {
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
+  onArquivarSubcategoria?: (subcategoriaId: string) => void;
   onMarcarTodos: (subcategoriaId: string, concluido: boolean) => void;
   onAdicionarItem: (subcategoriaId: string, texto: string) => void;
   onAlternarItem: (subcategoriaId: string, itemId: string) => void;
@@ -99,6 +101,7 @@ export function SubcategoriasAccordion({
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
+  onArquivarSubcategoria,
   onMarcarTodos,
   onAdicionarItem,
   onAlternarItem,
@@ -114,6 +117,7 @@ export function SubcategoriasAccordion({
   const [subParaExcluir, setSubParaExcluir] = useState<string | null>(null);
   const [novosItens, setNovosItens] = useState<Record<string, string>>({});
 
+  const subcategoriasVisiveis = categoria.subcategorias.filter((s) => !s.arquivada);
   const subExcluindo = categoria.subcategorias.find((s) => s.id === subParaExcluir) ?? null;
   const accordionControle =
     subcategoriasAbertas && onSubcategoriasAbertasChange
@@ -143,7 +147,7 @@ export function SubcategoriasAccordion({
     <>
       <ListaOrdenavel
         id={`subcategorias-${categoria.id}`}
-        ids={categoria.subcategorias.map((s) => s.id)}
+        ids={subcategoriasVisiveis.map((s) => s.id)}
         onReordenar={onReordenarSubcategorias}
       >
         <Accordion
@@ -151,7 +155,7 @@ export function SubcategoriasAccordion({
           {...accordionControle}
           className={cn("grid gap-3 border-l border-border pl-3 sm:pl-4", className)}
         >
-          {categoria.subcategorias.map((sub) => {
+          {subcategoriasVisiveis.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             const itensOrdenados = itensExibidos(sub);
             const itensAtivos = itensOrdenados.filter((item) => !item.concluido);
@@ -250,6 +254,15 @@ export function SubcategoriasAccordion({
                             </span>
                           )}
                         </span>
+                        {onArquivarSubcategoria && (
+                          <span className="ml-auto flex shrink-0 items-center pl-3">
+                            <BotaoArquivar
+                              comoSpan
+                              rotulo={`Arquivar ${sub.nome}`}
+                              onArquivar={() => onArquivarSubcategoria(sub.id)}
+                            />
+                          </span>
+                        )}
                       </AccordionTrigger>
 
                       <div className="flex min-w-0 flex-wrap items-center gap-2 xl:justify-end">
@@ -412,7 +425,7 @@ export function SubcategoriasAccordion({
               </ItemOrdenavel>
             );
           })}
-          {categoria.subcategorias.length === 0 && (
+          {subcategoriasVisiveis.length === 0 && (
             <p className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
               Nenhuma subcategoria ainda. Use “Nova Subcategoria” para criar a primeira.
             </p>

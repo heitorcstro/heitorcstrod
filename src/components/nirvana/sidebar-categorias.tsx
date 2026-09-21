@@ -8,6 +8,8 @@ type Props = {
   onCriarCategoria: () => void;
   onSelecionarCategoria: (categoriaId: string) => void;
   onReordenarCategorias: (ativoId: string, sobreId: string) => void;
+  onAbrirArquivados?: () => void;
+  totalArquivados?: number;
 };
 
 export function SidebarCategorias({
@@ -15,6 +17,8 @@ export function SidebarCategorias({
   onCriarCategoria,
   onSelecionarCategoria,
   onReordenarCategorias,
+  onAbrirArquivados,
+  totalArquivados = 0,
 }: Props) {
   return (
     <aside className="flex w-72 shrink-0 flex-col border-r border-black bg-white">
@@ -67,9 +71,16 @@ export function SidebarCategorias({
           ))}
         </ListaOrdenavel>
 
-        <div className="flex flex-row items-center justify-between border-b border-gray-200 px-4 py-3 text-black">
+        <button
+          type="button"
+          onClick={onAbrirArquivados}
+          className="flex w-full flex-row items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 text-left text-black transition-colors hover:bg-black/5"
+        >
           <span className="truncate text-sm font-medium">Arquivados</span>
-        </div>
+          {totalArquivados > 0 && (
+            <span className="shrink-0 text-xs text-black/60">{totalArquivados}</span>
+          )}
+        </button>
       </div>
     </aside>
   );

@@ -56,6 +56,8 @@ export type Subcategoria = {
   itens: Item[];
   /** true quando o usuário reordenou manualmente (arrastando) os itens. */
   ordemManual?: boolean;
+  /** true quando a subcategoria foi enviada para "Arquivados". */
+  arquivada?: boolean;
 };
 
 export type Categoria = {
@@ -64,6 +66,8 @@ export type Categoria = {
   cor: CorCategoria;
   subcategorias: Subcategoria[];
   isShoppingList?: boolean;
+  /** true quando a categoria foi enviada para "Arquivados". */
+  arquivada?: boolean;
 };
 
 export const CATEGORIAS_PADRAO = [
