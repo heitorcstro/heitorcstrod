@@ -91,8 +91,21 @@ export const corCategoriaAleatoria = (): CorCategoria => {
 export const ehCorCategoria = (cor: unknown): cor is CorCategoria =>
   typeof cor === "string" && CORES_CATEGORIA.includes(cor as CorCategoria);
 
+/** Embaralha uma lista (ordem aleatória no primeiro carregamento). */
+const embaralhar = <T,>(lista: T[]): T[] => {
+  const copia = [...lista];
+  for (let i = copia.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const a = copia[i] as T;
+    const b = copia[j] as T;
+    copia[i] = b;
+    copia[j] = a;
+  }
+  return copia;
+};
+
 export const categoriasIniciais = (): Categoria[] =>
-  CATEGORIAS_PADRAO.map((nome) => {
+  embaralhar(CATEGORIAS_PADRAO).map((nome) => {
     const cor = corCategoriaAleatoria();
     return {
       id: criarId(),

@@ -31,6 +31,7 @@ import {
 import { ListaView } from "@/components/nirvana/lista-view";
 import { CategoriaView } from "@/components/nirvana/categoria-view";
 import { SubcategoriasAccordion } from "@/components/nirvana/subcategorias-accordion";
+import { SidebarCategorias } from "@/components/nirvana/sidebar-categorias";
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
 import { ItemOrdenavel, ListaOrdenavel } from "@/components/nirvana/dnd";
 import {
@@ -354,7 +355,17 @@ function NirvanaPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background">
+    <div className="flex h-screen w-full bg-white">
+      <SidebarCategorias
+        categorias={categorias}
+        onCriarCategoria={() => setModalAberto(true)}
+        onSelecionarCategoria={(categoriaId) => {
+          setCategoriaAtivaId(categoriaId);
+          setSubcategoriaAtivaId(null);
+        }}
+        onReordenarCategorias={reordenarCategorias}
+      />
+      <main className="flex-1 overflow-y-auto bg-background">
       <header className="border-b border-border bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
           <button
@@ -743,6 +754,7 @@ function NirvanaPage() {
           </form>
         </DialogContent>
       </Dialog>
-    </main>
+      </main>
+    </div>
   );
 }
