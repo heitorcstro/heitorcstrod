@@ -164,6 +164,16 @@ function NirvanaPage() {
     setModalAberto(false);
   };
 
+  const excluirCategoria = (categoriaId: string) => {
+    setCategorias((atual) => atual.filter((c) => c.id !== categoriaId));
+    if (categoriaAtivaId === categoriaId) {
+      setCategoriaAtivaId(null);
+      setSubcategoriaAtivaId(null);
+    }
+    setCategoriaParaExcluir(null);
+    setModalDeletarAberto(false);
+  };
+
   const criarSubcategoria = (categoriaId: string, nome: string) =>
     setCategorias((atual) =>
       atual.map((c) =>
