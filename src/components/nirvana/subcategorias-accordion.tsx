@@ -91,6 +91,10 @@ export function SubcategoriasAccordion({
   const [novosItens, setNovosItens] = useState<Record<string, string>>({});
 
   const subExcluindo = categoria.subcategorias.find((s) => s.id === subParaExcluir) ?? null;
+  const accordionControle =
+    subcategoriasAbertas && onSubcategoriasAbertasChange
+      ? { value: subcategoriasAbertas, onValueChange: onSubcategoriasAbertasChange }
+      : {};
 
   const salvarRenomeacao = () => {
     if (!renomeandoId) return;
@@ -120,8 +124,7 @@ export function SubcategoriasAccordion({
       >
         <Accordion
           type="multiple"
-          value={subcategoriasAbertas}
-          onValueChange={onSubcategoriasAbertasChange}
+          {...accordionControle}
           className={cn("grid gap-3 border-l border-border pl-3 sm:pl-4", className)}
         >
           {categoria.subcategorias.map((sub) => {
