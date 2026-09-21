@@ -27,6 +27,7 @@ import {
   contarItens,
   contarPendentes,
   criarId,
+  itensExibidos,
   moverPorId,
   type Categoria,
   type Item,
@@ -309,6 +310,9 @@ function NirvanaPage() {
             }
             onAlternarModoCompras={() =>
               alternarModoCompras(categoriaAtiva.id)
+            }
+            onReordenarSubcategorias={(ativoId, sobreId) =>
+              reordenarSubcategorias(categoriaAtiva.id, ativoId, sobreId)
             }
           />
         ) : (
