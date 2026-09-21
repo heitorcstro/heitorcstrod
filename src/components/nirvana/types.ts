@@ -22,6 +22,8 @@ export type Subcategoria = {
   id: string;
   nome: string;
   itens: Item[];
+  /** true quando o usuário reordenou manualmente (arrastando) os itens. */
+  ordemManual?: boolean;
 };
 
 export type Categoria = {
