@@ -415,7 +415,7 @@ function NirvanaPage() {
                         >
                           <AccordionTrigger
                             showChevron={false}
-                            className="flex flex-1 flex-col gap-1 py-1 text-left hover:no-underline [&>svg]:text-foreground"
+                            className="flex flex-1 flex-col gap-1 py-1 text-left hover:no-underline [&>svg]:text-muted-foreground"
                           >
                             <span className="flex min-w-0 flex-row items-center gap-2">
                               <IndicadorCorCategoria cor={categoria.cor} />
@@ -432,6 +432,7 @@ function NirvanaPage() {
                               {total > 0 &&
                                 ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
                             </span>
+                            <ChevronDown className="pointer-events-none absolute bottom-3 right-3 h-5 w-5 text-muted-foreground transition-transform duration-200" />
                           </AccordionTrigger>
                           <div className="absolute right-3 top-3 z-10 flex flex-row items-center gap-2">
                             {alca}
@@ -440,7 +441,6 @@ function NirvanaPage() {
                               onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
                             />
                           </div>
-                          <ChevronDown className="pointer-events-none absolute bottom-3 right-3 h-5 w-5 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180" />
                           <AccordionContent className="pb-5">
                             <div className="space-y-4 border-t border-border pt-4">
                               {categoria.subcategorias.length > 0 ? (
