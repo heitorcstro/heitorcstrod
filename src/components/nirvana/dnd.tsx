@@ -6,6 +6,7 @@ import {
   TouchSensor,
   closestCenter,
   pointerWithin,
+  useDndContext,
   useDroppable,
   useSensor,
   useSensors,
@@ -198,7 +199,16 @@ export function ItemOrdenavel({
     transform,
     transition,
     isDragging,
+    isOver,
   } = useSortable({ id, data: { tipo } });
+  const { active } = useDndContext();
+  const tipoAtivo = tipoDe(active?.data.current);
+  /**
+   * Arrasto entre tipos diferentes (ex.: categoria sobre pasta): o item alvo
+   * age apenas como receptáculo estático — nunca desloca nem troca de lugar.
+   */
+  const alvoEstatico = Boolean(tipo && tipoAtivo && tipoAtivo !== tipo);
+  const destacado = alvoEstatico && isOver;
 
   const alca = inline ? (
     <span
@@ -236,11 +246,19 @@ export function ItemOrdenavel({
   return (
     <div
       ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-      }}
-      className={cn(className, isDragging && "relative z-20 opacity-80")}
+      style={
+        alvoEstatico
+          ? undefined
+          : {
+              transform: CSS.Transform.toString(transform),
+              transition,
+            }
+      }
+      className={cn(
+        className,
+        isDragging && "relative z-20 opacity-80",
+        destacado && "rounded-md ring-2 ring-blue-500",
+      )}
     >
       {children(alca)}
     </div>
