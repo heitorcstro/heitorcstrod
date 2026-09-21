@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { GripVertical } from "lucide-react";
 import {
   DndContext,
   KeyboardSensor,
@@ -17,6 +16,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type ListaProps = {
@@ -56,13 +56,13 @@ export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
 
 type ItemProps = {
   id: string;
-  rotulo: string;
+  textoAlca: "Mover categoria" | "Mover subcategoria" | "Mover item";
   className?: string;
   children: (alca: ReactNode) => ReactNode;
 };
 
 /** Item reordenável: expõe a alça de arraste para o conteúdo. */
-export function ItemOrdenavel({ id, rotulo, className, children }: ItemProps) {
+export function ItemOrdenavel({ id, textoAlca, className, children }: ItemProps) {
   const {
     attributes,
     listeners,
@@ -74,17 +74,19 @@ export function ItemOrdenavel({ id, rotulo, className, children }: ItemProps) {
   } = useSortable({ id });
 
   const alca = (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      size="sm"
       suppressHydrationWarning
       ref={setActivatorNodeRef}
       {...attributes}
       {...listeners}
-      aria-label={`Reordenar ${rotulo}`}
-      className="flex size-8 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing"
+      aria-label={textoAlca}
+      className="h-8 shrink-0 cursor-grab touch-none px-2 text-xs text-foreground active:cursor-grabbing"
     >
-      <GripVertical className="size-4" />
-    </button>
+      {textoAlca}
+    </Button>
   );
 
   return (

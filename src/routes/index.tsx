@@ -303,7 +303,11 @@ function NirvanaPage() {
                   const total = contarItens(categoria);
                   const pendentes = contarPendentes(categoria);
                   return (
-                    <ItemOrdenavel key={categoria.id} id={categoria.id} rotulo={categoria.nome}>
+                    <ItemOrdenavel
+                      key={categoria.id}
+                      id={categoria.id}
+                      textoAlca="Mover categoria"
+                    >
                       {(alca) => (
                         <AccordionItem
                           value={categoria.id}
