@@ -111,9 +111,34 @@ export function SidebarCategorias({
     >
       <div className="relative flex flex-row items-center justify-between gap-2 border-b border-black px-3 py-4">
         {expandido && (
-          <span className="font-display text-sm font-semibold uppercase tracking-[0.16em] text-black">
-            Categorias
-          </span>
+          <div className="flex min-w-0 flex-row items-center gap-3">
+            <svg
+              viewBox="0 0 40 40"
+              xmlns="http://www.w3.org/2000/svg"
+              className="size-10 shrink-0 rounded-md shadow-sm"
+              role="img"
+              aria-label="Nirvana"
+            >
+              <rect width="40" height="40" rx="9" fill="#FFFFFF" />
+              <path d="M8 8H14V22L26 8H32V32H26V18L14 32H8Z" fill="url(#nirvana-n-grad-sidebar)" />
+              <defs>
+                <linearGradient
+                  id="nirvana-n-grad-sidebar"
+                  x1="8"
+                  y1="8"
+                  x2="32"
+                  y2="32"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#0B192C" />
+                  <stop offset="1" stopColor="#112745" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <span className="font-display text-lg font-semibold tracking-tight text-black">
+              Nirvana
+            </span>
+          </div>
         )}
         {expandido ? (
           <button
@@ -140,6 +165,9 @@ export function SidebarCategorias({
         {expandido ? (
           <>
             {/* Seção 1: Pastas */}
+            <div className="px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider">
+              PASTAS
+            </div>
             <div>
               <div
                 role="button"
@@ -210,11 +238,11 @@ export function SidebarCategorias({
                 );
               })}
 
-              {/* Divisor entre Pastas e Categorias */}
-              <div className="mb-2 border-b-4 border-gray-100" />
-
               {/* Seção 2: Categorias */}
-              <div className="mb-2 border-b-4 border-gray-100">
+              <div className="px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider">
+                CATEGORIAS
+              </div>
+              <div>
                 <div
                   role="button"
                   tabIndex={0}
