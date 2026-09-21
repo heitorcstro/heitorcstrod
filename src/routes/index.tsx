@@ -479,8 +479,8 @@ function NirvanaPage() {
                               onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
                             />
                           </div>
-                          <AccordionContent className="pb-5">
-                            <div className="space-y-4 border-t border-border pt-4">
+                          <AccordionContent className="mt-3 rounded-lg bg-card p-4 pb-5">
+                            <div className="space-y-4">
                               {categoria.subcategorias.length > 0 ? (
                                 <SubcategoriasAccordion
                                   categoria={categoria}
