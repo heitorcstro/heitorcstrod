@@ -113,6 +113,10 @@ function NirvanaPage() {
   const [nomeNovaPasta, setNomeNovaPasta] = useState("");
   const [novaCorPasta, setNovaCorPasta] = useState<CorCategoria | null>(null);
   const [pastasAbertasCentral, setPastasAbertasCentral] = useState<string[]>([]);
+  const [pendenteMoverPasta, setPendenteMoverPasta] = useState<{
+    categoriaId: string;
+    pastaId: string;
+  } | null>(null);
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
@@ -249,7 +253,11 @@ function NirvanaPage() {
     const pastaAtiva = ativoId.startsWith("pasta:");
     const pastaAlvo = sobreId.startsWith("pasta:");
 
+    // Ecos (cópias visuais) nunca movem nada.
+    if (ativoId.startsWith("eco:") || sobreId.startsWith("eco:")) return;
+
     if (pastaAtiva) {
+      // Pasta só pode ser reordenada entre pastas.
       if (pastaAlvo) {
         reordenarPastas(ativoId.slice("pasta:".length), sobreId.slice("pasta:".length));
       }
@@ -257,7 +265,8 @@ function NirvanaPage() {
     }
 
     if (pastaAlvo) {
-      moverCategoriaParaPasta(ativoId, sobreId.slice("pasta:".length));
+      // Categoria solta numa pasta: pergunta antes de aplicar.
+      setPendenteMoverPasta({ categoriaId: ativoId, pastaId: sobreId.slice("pasta:".length) });
       return;
     }
 
@@ -271,9 +280,23 @@ function NirvanaPage() {
     if (!alvo || !ativa) return;
     const destino = alvo.pastaId ?? null;
     if ((ativa.pastaId ?? null) !== destino) {
-      moverCategoriaParaPasta(ativoId, destino);
+      if (destino) {
+        setPendenteMoverPasta({ categoriaId: ativoId, pastaId: destino });
+        return;
+      }
+      moverCategoriaParaPasta(ativoId, null);
     }
     reordenarCategorias(ativoId, sobreId);
+  };
+
+  /** Aplica a escolha do modal: a categoria sempre entra na pasta. */
+  const confirmarMoverParaPasta = (manterEmCategorias: boolean) => {
+    if (!pendenteMoverPasta) return;
+    const { categoriaId, pastaId } = pendenteMoverPasta;
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, pastaId, manterEmCategorias } : c)),
+    );
+    setPendenteMoverPasta(null);
   };
 
   const reordenarSubcategorias = (categoriaId: string, ativoId: string, sobreId: string) =>
