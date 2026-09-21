@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { BotaoArquivar } from "./botao-arquivar";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
 import { SeletorPrioridade } from "./seletor-prioridade";
 import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
@@ -100,6 +101,7 @@ export function SubcategoriasAccordion({
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
+  onArquivarSubcategoria,
   onMarcarTodos,
   onAdicionarItem,
   onAlternarItem,
