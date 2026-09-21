@@ -198,7 +198,16 @@ export function ItemOrdenavel({
     transform,
     transition,
     isDragging,
+    isOver,
   } = useSortable({ id, data: { tipo } });
+  const { active } = useDndContext();
+  const tipoAtivo = tipoDe(active?.data.current);
+  /**
+   * Arrasto entre tipos diferentes (ex.: categoria sobre pasta): o item alvo
+   * age apenas como receptáculo estático — nunca desloca nem troca de lugar.
+   */
+  const alvoEstatico = Boolean(tipo && tipoAtivo && tipoAtivo !== tipo);
+  const destacado = alvoEstatico && isOver;
 
   const alca = inline ? (
     <span
