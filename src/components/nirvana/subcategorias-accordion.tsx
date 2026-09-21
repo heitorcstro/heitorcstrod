@@ -118,7 +118,67 @@ export function SubcategoriasAccordion({
           {categoria.subcategorias.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             const itensOrdenados = itensExibidos(sub);
+            const itensAtivos = itensOrdenados.filter((item) => !item.concluido);
+            const itensMarcados = itensOrdenados.filter((item) => item.concluido);
             const concluidos = sub.itens.length - pendentes;
+            const renderizarItem = (item: Item) => (
+              <ItemOrdenavel
+                key={item.id}
+                id={item.id}
+                textoAlca="Mover item"
+                className="group border-b border-border last:border-b-0"
+              >
+                {(alcaItem) => (
+                  <li className="list-none py-3">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                      {alcaItem}
+                      <SeletorPrioridade
+                        prioridade={item.prioridade}
+                        onSelecionar={(prioridade) =>
+                          onDefinirPrioridade(sub.id, item.id, prioridade)
+                        }
+                        onTransferir={() => onTransferir(sub.id, item)}
+                      />
+                      <Checkbox
+                        id={`${sub.id}-${item.id}`}
+                        checked={item.concluido}
+                        onCheckedChange={() => onAlternarItem(sub.id, item.id)}
+                      />
+                      <label
+                        htmlFor={`${sub.id}-${item.id}`}
+                        className={cn(
+                          "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed no-underline",
+                          item.concluido ? "text-red-600" : "text-foreground",
+                        )}
+                      >
+                        {item.texto}
+                      </label>
+
+                      {modoCompras && (
+                        <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
+                          <CamposCompra
+                            item={item}
+                            onAtualizarValores={(itemId, valores) =>
+                              onAtualizarValores?.(sub.id, itemId, valores)
+                            }
+                          />
+                        </div>
+                      )}
+
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={`Excluir ${item.texto}`}
+                        onClick={() => onRemoverItem(sub.id, item.id)}
+                        className="text-muted-foreground hover:text-destructive"
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </div>
+                  </li>
+                )}
+              </ItemOrdenavel>
+            );
 
             return (
               <ItemOrdenavel key={sub.id} id={sub.id} textoAlca="Mover subcategoria" inline>
@@ -251,79 +311,47 @@ export function SubcategoriasAccordion({
 
                         <ListaOrdenavel
                           id={`itens-inline-${sub.id}`}
-                          ids={itensOrdenados.map((i) => i.id)}
+                          ids={itensAtivos.map((i) => i.id)}
                           onReordenar={(ativoId, sobreId) =>
                             onReordenarItens(sub.id, itensOrdenados, ativoId, sobreId)
                           }
                         >
                           <ul className="divide-y divide-border border-y border-border">
-                            {itensOrdenados.map((item) => (
-                              <ItemOrdenavel
-                                key={item.id}
-                                id={item.id}
-                                textoAlca="Mover item"
-                                className="group border-b border-border last:border-b-0"
-                              >
-                                {(alcaItem) => (
-                                  <li className="list-none py-3">
-                                    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                                      {alcaItem}
-                                      <SeletorPrioridade
-                                        prioridade={item.prioridade}
-                                        onSelecionar={(prioridade) =>
-                                          onDefinirPrioridade(sub.id, item.id, prioridade)
-                                        }
-                                        onTransferir={() => onTransferir(sub.id, item)}
-                                      />
-                                      <Checkbox
-                                        id={`${sub.id}-${item.id}`}
-                                        checked={item.concluido}
-                                        onCheckedChange={() => onAlternarItem(sub.id, item.id)}
-                                      />
-                                      <label
-                                        htmlFor={`${sub.id}-${item.id}`}
-                                        className={cn(
-                                          "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed",
-                                          item.concluido
-                                            ? "text-destructive no-underline"
-                                            : "text-foreground",
-                                        )}
-                                      >
-                                        {item.texto}
-                                      </label>
-
-                                      {modoCompras && (
-                                        <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
-                                          <CamposCompra
-                                            item={item}
-                                            onAtualizarValores={(itemId, valores) =>
-                                              onAtualizarValores?.(sub.id, itemId, valores)
-                                            }
-                                          />
-                                        </div>
-                                      )}
-
-                                      <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        aria-label={`Excluir ${item.texto}`}
-                                        onClick={() => onRemoverItem(sub.id, item.id)}
-                                        className="text-muted-foreground hover:text-destructive"
-                                      >
-                                        <Trash2 className="size-4" />
-                                      </Button>
-                                    </div>
-                                  </li>
-                                )}
-                              </ItemOrdenavel>
-                            ))}
+                            {itensAtivos.map(renderizarItem)}
                             {sub.itens.length === 0 && (
                               <li className="py-10 text-center text-sm text-muted-foreground">
                                 Comece adicionando o primeiro item da lista.
                               </li>
                             )}
+                            {sub.itens.length > 0 && itensAtivos.length === 0 && (
+                              <li className="py-8 text-center text-sm text-muted-foreground">
+                                Nenhum item ativo.
+                              </li>
+                            )}
                           </ul>
                         </ListaOrdenavel>
+
+                        {itensMarcados.length > 0 && (
+                          <section className="border-t border-border pt-4">
+                            <div className="mb-3 flex items-center gap-3">
+                              <h4 className="shrink-0 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                                Marcados
+                              </h4>
+                              <span className="h-px flex-1 bg-border" />
+                            </div>
+                            <ListaOrdenavel
+                              id={`itens-marcados-inline-${sub.id}`}
+                              ids={itensMarcados.map((i) => i.id)}
+                              onReordenar={(ativoId, sobreId) =>
+                                onReordenarItens(sub.id, itensOrdenados, ativoId, sobreId)
+                              }
+                            >
+                              <ul className="divide-y divide-border border-y border-border bg-secondary/40">
+                                {itensMarcados.map(renderizarItem)}
+                              </ul>
+                            </ListaOrdenavel>
+                          </section>
+                        )}
 
                         {modoCompras && (
                           <div className="flex items-center justify-between rounded-xl border border-border bg-secondary px-4 py-3">
