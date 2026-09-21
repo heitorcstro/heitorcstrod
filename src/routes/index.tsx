@@ -169,9 +169,32 @@ function NirvanaPage() {
   );
   const totalArquivados = categoriasArquivadas.length + subcategoriasArquivadas.length;
 
+  const pastaAtiva = pastas.find((p) => p.id === pastaAtivaId) ?? null;
+  const categoriasDaPastaAtiva = pastaAtiva
+    ? categoriasVisiveis.filter((c) => c.pastaId === pastaAtiva.id)
+    : [];
+
+  const abrirPasta = (pastaId: string) => {
+    setMostrandoArquivados(false);
+    setCategoriaAtivaId(null);
+    setSubcategoriaAtivaId(null);
+    setPastaAtivaId(pastaId);
+  };
+
+  /** Remove a categoria da pasta sem excluí-la: ela volta para a página principal. */
+  const removerCategoriaDaPasta = (categoriaId: string) => {
+    setCategorias((atual) =>
+      atual.map((c) =>
+        c.id === categoriaId ? { ...c, pastaId: null, manterEmCategorias: true } : c,
+      ),
+    );
+    setCategoriaParaRemoverDaPasta(null);
+  };
+
   const abrirArquivados = () => {
     setCategoriaAtivaId(null);
     setSubcategoriaAtivaId(null);
+    setPastaAtivaId(null);
     setMostrandoArquivados(true);
   };
 
