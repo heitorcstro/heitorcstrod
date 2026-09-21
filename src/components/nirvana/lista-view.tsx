@@ -49,6 +49,8 @@ export function ListaView({
 }: Props) {
   const [texto, setTexto] = useState("");
   const itensOrdenados = itensExibidos(subcategoria);
+  const itensAtivos = itensOrdenados.filter((item) => !item.concluido);
+  const itensMarcados = itensOrdenados.filter((item) => item.concluido);
   const concluidos = subcategoria.itens.filter((i) => i.concluido).length;
 
   const enviar = (e: React.FormEvent) => {
@@ -58,6 +60,58 @@ export function ListaView({
     onAdicionarItem(valor);
     setTexto("");
   };
+
+  const renderizarItem = (item: Item) => (
+    <ItemOrdenavel
+      key={item.id}
+      id={item.id}
+      textoAlca="Mover item"
+      className="group border-b border-border last:border-b-0"
+    >
+      {(alca) => (
+        <li className="list-none py-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            {alca}
+            <SeletorPrioridade
+              prioridade={item.prioridade}
+              onSelecionar={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
+              onTransferir={() => onTransferir(item)}
+            />
+            <Checkbox
+              id={item.id}
+              checked={item.concluido}
+              onCheckedChange={() => onAlternarItem(item.id)}
+            />
+            <label
+              htmlFor={item.id}
+              className={cn(
+                "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed no-underline",
+                item.concluido ? "text-red-600" : "text-foreground",
+              )}
+            >
+              {item.texto}
+            </label>
+
+            {modoCompras && (
+              <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
+                <CamposCompra item={item} onAtualizarValores={onAtualizarValores} />
+              </div>
+            )}
+
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={`Excluir ${item.texto}`}
+              onClick={() => onRemoverItem(item.id)}
+              className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
+            >
+              <Trash2 className="size-4" />
+            </Button>
+          </div>
+        </li>
+      )}
+    </ItemOrdenavel>
+  );
 
   return (
     <section className="mx-auto w-full max-w-2xl">
@@ -116,68 +170,43 @@ export function ListaView({
 
             <ListaOrdenavel
               id={`itens-${subcategoria.id}`}
-              ids={itensOrdenados.map((i) => i.id)}
+              ids={itensAtivos.map((i) => i.id)}
               onReordenar={onReordenarItens}
             >
               <ul className="mt-6 divide-y divide-border border-y border-border">
-                {itensOrdenados.map((item) => (
-                  <ItemOrdenavel
-                    key={item.id}
-                    id={item.id}
-                    textoAlca="Mover item"
-                    className="group border-b border-border last:border-b-0"
-                  >
-                    {(alca) => (
-                      <li className="list-none py-3">
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                          {alca}
-                          <SeletorPrioridade
-                            prioridade={item.prioridade}
-                            onSelecionar={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
-                            onTransferir={() => onTransferir(item)}
-                          />
-                          <Checkbox
-                            id={item.id}
-                            checked={item.concluido}
-                            onCheckedChange={() => onAlternarItem(item.id)}
-                          />
-                          <label
-                            htmlFor={item.id}
-                            className={cn(
-                              "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed",
-                              item.concluido ? "text-destructive no-underline" : "text-foreground",
-                            )}
-                          >
-                            {item.texto}
-                          </label>
-
-                          {modoCompras && (
-                            <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
-                              <CamposCompra item={item} onAtualizarValores={onAtualizarValores} />
-                            </div>
-                          )}
-
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label={`Excluir ${item.texto}`}
-                            onClick={() => onRemoverItem(item.id)}
-                            className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
-                          >
-                            <Trash2 className="size-4" />
-                          </Button>
-                        </div>
-                      </li>
-                    )}
-                  </ItemOrdenavel>
-                ))}
+                {itensAtivos.map(renderizarItem)}
                 {subcategoria.itens.length === 0 && (
                   <li className="py-10 text-center text-sm text-muted-foreground">
                     Comece adicionando o primeiro item da lista.
                   </li>
                 )}
+                {subcategoria.itens.length > 0 && itensAtivos.length === 0 && (
+                  <li className="py-8 text-center text-sm text-muted-foreground">
+                    Nenhum item ativo.
+                  </li>
+                )}
               </ul>
             </ListaOrdenavel>
+
+            {itensMarcados.length > 0 && (
+              <section className="mt-6 border-t border-border pt-4">
+                <div className="mb-3 flex items-center gap-3">
+                  <h3 className="shrink-0 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                    Marcados
+                  </h3>
+                  <span className="h-px flex-1 bg-border" />
+                </div>
+                <ListaOrdenavel
+                  id={`itens-marcados-${subcategoria.id}`}
+                  ids={itensMarcados.map((i) => i.id)}
+                  onReordenar={onReordenarItens}
+                >
+                  <ul className="divide-y divide-border border-y border-border bg-secondary/40">
+                    {itensMarcados.map(renderizarItem)}
+                  </ul>
+                </ListaOrdenavel>
+              </section>
+            )}
 
             {modoCompras && (
               <div className="mt-4 flex items-center justify-between rounded-xl border border-border bg-secondary px-4 py-3">

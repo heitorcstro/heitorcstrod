@@ -222,9 +222,11 @@ function NirvanaPage() {
     ]);
 
   const alternarItem = (subcategoriaId: string, itemId: string) =>
-    atualizarSubcategoria(subcategoriaId, (itens) =>
-      itens.map((i) => (i.id === itemId ? { ...i, concluido: !i.concluido } : i)),
-    );
+    patchSubcategoria(subcategoriaId, (sub) => ({
+      ...sub,
+      ordemManual: false,
+      itens: sub.itens.map((i) => (i.id === itemId ? { ...i, concluido: !i.concluido } : i)),
+    }));
 
   const removerItem = (subcategoriaId: string, itemId: string) =>
     atualizarSubcategoria(subcategoriaId, (itens) => itens.filter((i) => i.id !== itemId));
