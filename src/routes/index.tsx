@@ -41,6 +41,8 @@ import {
   TrocarCorCategoria,
 } from "@/components/nirvana/cores-categoria";
 import {
+  normalizarPastas,
+  type Pasta,
   categoriasIniciais,
   contarItens,
   contarPendentes,
@@ -80,6 +82,7 @@ export const Route = createFileRoute("/")({
 });
 
 const CHAVE = "nirvana:categorias:v2";
+const CHAVE_PASTAS = "nirvana:pastas:v1";
 
 function NirvanaPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -99,6 +102,10 @@ function NirvanaPage() {
   const [nomeNovaSub, setNomeNovaSub] = useState("");
   const [mostrandoArquivados, setMostrandoArquivados] = useState(false);
   const [sidebarExpandida, setSidebarExpandida] = useState(true);
+  const [pastas, setPastas] = useState<Pasta[]>([]);
+  const [modalPastaAberto, setModalPastaAberto] = useState(false);
+  const [modalDeletarPastaAberto, setModalDeletarPastaAberto] = useState(false);
+  const [nomeNovaPasta, setNomeNovaPasta] = useState("");
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
@@ -116,6 +123,12 @@ function NirvanaPage() {
     } catch {
       setCategorias(categoriasIniciais());
     }
+    try {
+      const salvas = localStorage.getItem(CHAVE_PASTAS);
+      if (salvas) setPastas(normalizarPastas(JSON.parse(salvas)));
+    } catch {
+      setPastas([]);
+    }
     setCarregado(true);
   }, []);
 
@@ -123,6 +136,11 @@ function NirvanaPage() {
     if (!carregado) return;
     localStorage.setItem(CHAVE, JSON.stringify(categorias));
   }, [categorias, carregado]);
+
+  useEffect(() => {
+    if (!carregado) return;
+    localStorage.setItem(CHAVE_PASTAS, JSON.stringify(pastas));
+  }, [pastas, carregado]);
 
   const categoriaAtiva = categorias.find((c) => c.id === categoriaAtivaId) ?? null;
   const subcategoriaAtiva =
@@ -179,6 +197,28 @@ function NirvanaPage() {
         ...c,
         subcategorias: c.subcategorias.map((s) => (s.id === subcategoriaId ? fn(s) : s)),
       })),
+    );
+
+  // ===== Pastas =====
+  const criarPasta = (e: React.FormEvent) => {
+    e.preventDefault();
+    const nome = nomeNovaPasta.trim();
+    if (!nome) return;
+    setPastas((atual) => [...atual, { id: criarId(), nome }]);
+    setNomeNovaPasta("");
+    setModalPastaAberto(false);
+  };
+
+  const excluirPasta = (pastaId: string) => {
+    setPastas((atual) => atual.filter((p) => p.id !== pastaId));
+    setCategorias((atual) =>
+      atual.map((c) => (c.pastaId === pastaId ? { ...c, pastaId: null } : c)),
+    );
+  };
+
+  const moverCategoriaParaPasta = (categoriaId: string, pastaId: string | null) =>
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, pastaId } : c)),
     );
 
   // ===== Reordenação por arrastar-e-soltar =====
@@ -396,6 +436,13 @@ function NirvanaPage() {
     <div className="flex h-screen w-full bg-white">
       <SidebarCategorias
         categorias={categoriasVisiveis}
+        pastas={pastas}
+        onCriarPasta={() => {
+          setNomeNovaPasta("");
+          setModalPastaAberto(true);
+        }}
+        onDeletarPasta={() => setModalDeletarPastaAberto(true)}
+        onMoverCategoriaParaPasta={moverCategoriaParaPasta}
         onCriarCategoria={() => setModalAberto(true)}
         onDeletarCategoria={() => setModalDeletarAberto(true)}
         onSelecionarCategoria={(categoriaId) => {
@@ -899,6 +946,83 @@ function NirvanaPage() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={modalPastaAberto}
+        onOpenChange={(aberto) => {
+          setModalPastaAberto(aberto);
+          if (!aberto) setNomeNovaPasta("");
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Criar Pasta</DialogTitle>
+            <DialogDescription>
+              Dê um nome para a pasta. Depois arraste categorias para dentro dela.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={criarPasta}>
+            <Input
+              autoFocus
+              value={nomeNovaPasta}
+              onChange={(e) => setNomeNovaPasta(e.target.value)}
+              placeholder="Nome da pasta"
+            />
+            <DialogFooter className="mt-4">
+              <Button type="button" variant="outline" onClick={() => setModalPastaAberto(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={!nomeNovaPasta.trim()}>
+                Criar
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={modalDeletarPastaAberto} onOpenChange={setModalDeletarPastaAberto}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Deletar Pasta</DialogTitle>
+            <DialogDescription>
+              As categorias dentro da pasta não são excluídas: elas voltam para a lista de
+              categorias.
+            </DialogDescription>
+          </DialogHeader>
+          {pastas.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Nenhuma pasta para excluir.</p>
+          ) : (
+            <div className="max-h-80 space-y-2 overflow-y-auto">
+              {pastas.map((pasta) => (
+                <div
+                  key={pasta.id}
+                  className="flex flex-row items-center justify-between gap-3 rounded-lg border border-border px-3 py-2"
+                >
+                  <span className="min-w-0 break-words text-sm font-medium">{pasta.nome}</span>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => excluirPasta(pasta.id)}
+                    className="bg-red-600 text-white hover:bg-red-700"
+                  >
+                    <Trash2 className="size-4" />
+                    Excluir
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setModalDeletarPastaAberto(false)}
+            >
+              Fechar
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
       </main>

@@ -5,6 +5,7 @@ import {
   PointerSensor,
   TouchSensor,
   closestCenter,
+  useDroppable,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -51,6 +52,60 @@ export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
         {children}
       </SortableContext>
     </DndContext>
+  );
+}
+
+type ContextoProps = {
+  ids: string[];
+  /** Recebe o id arrastado e o id do alvo (pode ser uma área soltável). */
+  onSoltar: (ativoId: string, sobreId: string) => void;
+  children: ReactNode;
+};
+
+/**
+ * Contexto de arrasto que aceita tanto reordenação (itens ordenáveis) quanto
+ * soltar dentro de áreas (pastas).
+ */
+export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
+  const sensores = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 8 },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const aoSoltar = (evento: DragEndEvent) => {
+    const { active, over } = evento;
+    if (!over || active.id === over.id) return;
+    onSoltar(String(active.id), String(over.id));
+  };
+
+  return (
+    <DndContext sensors={sensores} collisionDetection={closestCenter} onDragEnd={aoSoltar}>
+      <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+        {children}
+      </SortableContext>
+    </DndContext>
+  );
+}
+
+type AreaProps = {
+  id: string;
+  className?: string;
+  classNameAtiva?: string;
+  children: ReactNode;
+};
+
+/** Área que pode receber itens arrastados (ex.: uma Pasta). */
+export function AreaSoltavel({ id, className, classNameAtiva, children }: AreaProps) {
+  const { setNodeRef, isOver } = useDroppable({ id });
+  return (
+    <div ref={setNodeRef} className={cn(className, isOver && classNameAtiva)}>
+      {children}
+    </div>
   );
 }
 
