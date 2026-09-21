@@ -18,6 +18,8 @@ type Props = {
   onCriarPasta?: () => void;
   onDeletarPasta?: () => void;
   onMoverCategoriaParaPasta?: (categoriaId: string, pastaId: string | null) => void;
+  /** Handler unificado de arrasto (pastas + categorias). */
+  onSoltarHierarquia?: (ativoId: string, sobreId: string) => void;
   onCriarCategoria: () => void;
   onDeletarCategoria?: () => void;
   onSelecionarCategoria: (categoriaId: string) => void;
@@ -37,6 +39,7 @@ export function SidebarCategorias({
   onCriarPasta,
   onDeletarPasta,
   onMoverCategoriaParaPasta,
+  onSoltarHierarquia,
   onCriarCategoria,
   onDeletarCategoria,
   onSelecionarCategoria,
@@ -58,6 +61,10 @@ export function SidebarCategorias({
     categorias.filter((c) => c.pastaId === pastaId);
 
   const aoSoltar = (ativoId: string, sobreId: string) => {
+    if (onSoltarHierarquia) {
+      onSoltarHierarquia(ativoId, sobreId);
+      return;
+    }
     if (sobreId.startsWith("pasta:")) {
       onMoverCategoriaParaPasta?.(ativoId, sobreId.slice("pasta:".length));
       return;
@@ -198,53 +205,68 @@ export function SidebarCategorias({
               </div>
             </div>
 
-            <ContextoArrasto ids={categorias.map((c) => c.id)} onSoltar={aoSoltar}>
+            <ContextoArrasto
+              ids={[
+                ...pastas.map((p) => `pasta:${p.id}`),
+                ...categorias.map((c) => c.id),
+              ]}
+              onSoltar={aoSoltar}
+            >
               {pastas.map((pasta) => {
                 const aberta = pastasAbertas.includes(pasta.id);
                 const dentro = categoriasDaPasta(pasta.id);
                 return (
-                  <AreaSoltavel
+                  <ItemOrdenavel
                     key={pasta.id}
                     id={`pasta:${pasta.id}`}
-                    classNameAtiva="bg-blue-50 ring-2 ring-inset ring-blue-500"
+                    textoAlca="Mover essa Pasta"
+                    alcaLetra="M"
+                    inline
                   >
-                    <button
-                      type="button"
-                      onClick={() => alternarPasta(pasta.id)}
-                      className="flex w-full flex-row items-center gap-3 border-b border-gray-200 px-4 py-3 text-left text-black hover:bg-slate-100"
-                    >
-                      <Folder
-                        className={cn(
-                          "size-[18px] shrink-0",
-                          ESTILOS_COR_CATEGORIA[pasta.cor]?.texto,
-                        )}
-                        strokeWidth={2.5}
-                        fill="currentColor"
-                      />
-
-                      <span className="min-w-0 flex-1 whitespace-normal break-words text-sm font-medium">
-                        {pasta.nome}
-                      </span>
-                      <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
-                      <ChevronDown
-                        className={cn(
-                          "size-[18px] shrink-0 transition-transform duration-200",
-                          aberta && "rotate-180",
-                        )}
-                        strokeWidth={2.5}
-                      />
-                    </button>
-                    {aberta && dentro.length > 0
-                      ? dentro.map((categoria) => linhaCategoria(categoria, true))
-                      : null}
-                    {aberta && dentro.length === 0 ? (
-                      <p className="border-b border-gray-200 bg-slate-50 px-4 py-3 pl-9 text-xs text-black/50">
-                        Arraste uma categoria para cá.
-                      </p>
-                    ) : null}
-                  </AreaSoltavel>
+                    {(alca) => (
+                      <div>
+                        <div className="flex w-full flex-row items-center gap-3 border-b border-gray-200 px-4 py-3 text-left text-black hover:bg-slate-100">
+                          <Folder
+                            className={cn(
+                              "size-[18px] shrink-0",
+                              ESTILOS_COR_CATEGORIA[pasta.cor]?.texto,
+                            )}
+                            strokeWidth={2.5}
+                            fill="currentColor"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => alternarPasta(pasta.id)}
+                            className="flex min-w-0 flex-1 flex-row items-center gap-2 text-left"
+                          >
+                            <span className="min-w-0 flex-1 whitespace-normal break-words text-sm font-medium">
+                              {pasta.nome}
+                            </span>
+                            <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
+                            <ChevronDown
+                              className={cn(
+                                "size-[18px] shrink-0 transition-transform duration-200",
+                                aberta && "rotate-180",
+                              )}
+                              strokeWidth={2.5}
+                            />
+                          </button>
+                          {alca}
+                        </div>
+                        {aberta && dentro.length > 0
+                          ? dentro.map((categoria) => linhaCategoria(categoria, true))
+                          : null}
+                        {aberta && dentro.length === 0 ? (
+                          <p className="border-b border-gray-200 bg-slate-50 px-4 py-3 pl-9 text-xs text-black/50">
+                            Arraste uma categoria para cá.
+                          </p>
+                        ) : null}
+                      </div>
+                    )}
+                  </ItemOrdenavel>
                 );
               })}
+
 
               {/* Seção 2: Categorias */}
               <div className="px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider">

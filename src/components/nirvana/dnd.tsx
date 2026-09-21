@@ -5,6 +5,7 @@ import {
   PointerSensor,
   TouchSensor,
   closestCenter,
+  pointerWithin,
   useDroppable,
   useSensor,
   useSensors,
@@ -83,8 +84,18 @@ export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
     onSoltar(String(active.id), String(over.id));
   };
 
+  /**
+   * O ponteiro manda: garante que soltar sobre uma pasta use a pasta como
+   * alvo, e não o cartão arrastado (que é bem maior que o cursor).
+   */
+  const deteccao = (args: Parameters<typeof closestCenter>[0]) => {
+    const porPonteiro = pointerWithin(args);
+    if (porPonteiro.length > 0) return porPonteiro;
+    return closestCenter(args);
+  };
+
   return (
-    <DndContext sensors={sensores} collisionDetection={closestCenter} onDragEnd={aoSoltar}>
+    <DndContext sensors={sensores} collisionDetection={deteccao} onDragEnd={aoSoltar}>
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
         {children}
       </SortableContext>
@@ -115,7 +126,9 @@ type ItemProps = {
     | "Mover categoria"
     | "Mover subcategoria"
     | "Mover item"
-    | "Mover essa Categoria";
+    | "Mover essa Categoria"
+    | "Mover pasta"
+    | "Mover essa Pasta";
   className?: string;
   /**
    * Quando verdadeiro, renderiza a alça como um texto sutil embutido ao lado
