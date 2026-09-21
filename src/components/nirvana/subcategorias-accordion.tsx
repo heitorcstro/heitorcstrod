@@ -218,7 +218,13 @@ export function SubcategoriasAccordion({
             );
 
             return (
-              <ItemOrdenavel key={sub.id} id={sub.id} textoAlca="Mover subcategoria" inline>
+              <ItemOrdenavel
+                key={sub.id}
+                id={sub.id}
+                textoAlca="Mover subcategoria"
+                inline
+                alcaClassName={`${estiloBaseAcao} cursor-grab touch-none text-black active:cursor-grabbing`}
+              >
                 {(alca) => (
                   <AccordionItem
                     value={sub.id}
