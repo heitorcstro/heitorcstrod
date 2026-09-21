@@ -66,6 +66,30 @@ const estiloLink =
 const estiloBotao =
   "inline-flex shrink-0 select-none items-center rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5";
 
+function BarraProgressoSubcategoria({
+  total,
+  concluidos,
+}: {
+  total: number;
+  concluidos: number;
+}) {
+  const progressPercentage = total === 0 ? 0 : (concluidos / total) * 100;
+  return (
+    <span
+      className="flex shrink-0 items-center"
+      aria-label={`${concluidos} de ${total} concluídos`}
+    >
+      <span className="h-2.5 w-24 overflow-hidden rounded-sm border border-black bg-gray-200">
+        <span
+          className="block h-full bg-blue-600 transition-all duration-300 ease-in-out"
+          style={{ width: `${progressPercentage}%` }}
+        />
+      </span>
+    </span>
+  );
+}
+
+
 export function SubcategoriasAccordion({
   categoria,
   modoCompras = false,
@@ -205,7 +229,13 @@ export function SubcategoriasAccordion({
                           {renomeandoId === sub.id ? (
                             <span className="text-sm text-muted-foreground">Renomeando…</span>
                           ) : (
-                            <span className="truncate font-medium tracking-tight">{sub.nome}</span>
+                            <span className="flex min-w-0 flex-row items-center gap-3">
+                              <span className="truncate font-medium tracking-tight">{sub.nome}</span>
+                              <BarraProgressoSubcategoria
+                                total={sub.itens.length}
+                                concluidos={concluidos}
+                              />
+                            </span>
                           )}
                           <span className="text-xs text-muted-foreground">
                             {sub.itens.length === 0
