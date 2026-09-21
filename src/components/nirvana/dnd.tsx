@@ -58,11 +58,23 @@ type ItemProps = {
   id: string;
   textoAlca: "Mover categoria" | "Mover subcategoria" | "Mover item";
   className?: string;
+  /**
+   * Quando verdadeiro, renderiza a alça como um texto sutil embutido ao lado
+   * do título (em vez de um botão destacado). Usado para categorias e
+   * subcategorias.
+   */
+  inline?: boolean;
   children: (alca: ReactNode) => ReactNode;
 };
 
 /** Item reordenável: expõe a alça de arraste para o conteúdo. */
-export function ItemOrdenavel({ id, textoAlca, className, children }: ItemProps) {
+export function ItemOrdenavel({
+  id,
+  textoAlca,
+  className,
+  inline = false,
+  children,
+}: ItemProps) {
   const {
     attributes,
     listeners,
@@ -73,7 +85,18 @@ export function ItemOrdenavel({ id, textoAlca, className, children }: ItemProps)
     isDragging,
   } = useSortable({ id });
 
-  const alca = (
+  const alca = inline ? (
+    <span
+      ref={setActivatorNodeRef}
+      suppressHydrationWarning
+      {...listeners}
+      aria-label={textoAlca}
+      tabIndex={0}
+      className="cursor-grab touch-none select-none text-xs font-normal text-slate-500 transition-colors hover:text-slate-700 active:cursor-grabbing"
+    >
+      {textoAlca}
+    </span>
+  ) : (
     <Button
       type="button"
       variant="outline"
