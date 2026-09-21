@@ -864,18 +864,22 @@ function NirvanaPage() {
                               />
                               <button
                                 type="button"
-                                onClick={() => alternarPastaCentral(pasta.id)}
-                                className="flex min-w-0 flex-1 flex-row items-center gap-3 text-left"
+                                onClick={() => abrirPasta(pasta.id)}
+                                className="min-w-0 flex-1 text-left"
                               >
-                                <span className="min-w-0 flex-1">
-                                  <span className="block truncate text-sm font-semibold text-black">
-                                    {pasta.nome}
-                                  </span>
-                                  <span className="block text-xs text-black/60">
-                                    {dentro.length}{" "}
-                                    {dentro.length === 1 ? "categoria" : "categorias"}
-                                  </span>
+                                <span className="block truncate text-sm font-semibold text-black">
+                                  {pasta.nome}
                                 </span>
+                                <span className="block text-xs text-black/60">
+                                  {dentro.length} {dentro.length === 1 ? "categoria" : "categorias"}
+                                </span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => alternarPastaCentral(pasta.id)}
+                                aria-label={`Expandir ${pasta.nome}`}
+                                className="shrink-0"
+                              >
                                 <ChevronDown
                                   className={`size-5 shrink-0 text-black transition-transform duration-200 ${aberta ? "rotate-180" : ""}`}
                                   strokeWidth={3}
