@@ -43,6 +43,7 @@ import {
   contarItens,
   contarPendentes,
   criarId,
+  formatarBRL,
   itensExibidos,
   moverPorId,
   normalizarCategorias,
