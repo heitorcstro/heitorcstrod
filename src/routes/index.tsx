@@ -451,6 +451,74 @@ function NirvanaPage() {
         </DialogContent>
       </Dialog>
 
+      <Dialog open={modalDeletarAberto} onOpenChange={setModalDeletarAberto}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Deletar Categoria</DialogTitle>
+            <DialogDescription>
+              Escolha a categoria que você deseja excluir.
+            </DialogDescription>
+          </DialogHeader>
+          {categorias.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Nenhuma categoria para excluir.</p>
+          ) : (
+            <div className="max-h-80 space-y-2 overflow-y-auto">
+              {categorias.map((categoria) => (
+                <Button
+                  key={categoria.id}
+                  type="button"
+                  variant="outline"
+                  onClick={() => setCategoriaParaExcluir(categoria)}
+                  className="h-auto w-full justify-between whitespace-normal px-3 py-3 text-left"
+                >
+                  <span className="font-medium">{categoria.nome}</span>
+                  <span className="text-xs font-normal text-muted-foreground">
+                    {categoria.subcategorias.length} subcategoria
+                    {categoria.subcategorias.length === 1 ? "" : "s"}
+                  </span>
+                </Button>
+              ))}
+            </div>
+          )}
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setModalDeletarAberto(false)}>
+              Cancelar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={categoriaParaExcluir !== null}
+        onOpenChange={(aberto) => {
+          if (!aberto) setCategoriaParaExcluir(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Tem certeza que deseja excluir esta categoria e todo o seu conteúdo?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {categoriaParaExcluir
+                ? `A categoria "${categoriaParaExcluir.nome}", suas subcategorias e todos os itens serão removidos permanentemente.`
+                : ""}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (categoriaParaExcluir) excluirCategoria(categoriaParaExcluir.id);
+              }}
+              className="bg-red-600 text-white hover:bg-red-700"
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <DialogoTransferir
         aberto={itemTransferindo !== null}
         categorias={categorias}
