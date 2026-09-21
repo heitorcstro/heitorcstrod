@@ -644,24 +644,28 @@ function NirvanaPage() {
                                 className="pointer-events-none absolute bottom-3 right-3 h-7 w-7 text-black transition-transform duration-200"
                               />
                             </AccordionTrigger>
-                            <div className="absolute right-3 top-3 z-10 flex flex-row flex-wrap items-center justify-end gap-2 lg:max-w-[58%]">
-                              <button
-                                type="button"
-                                onClick={() => abrirCriarSubcategoria(categoria.id)}
-                                aria-label="Adicionar Subcategoria"
-                                className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white p-0 text-black transition-colors hover:bg-black/5"
-                              >
-                                <Plus className="size-[18px]" strokeWidth={2.5} />
-                              </button>
-                              <BotaoArquivar
-                                rotulo={`Arquivar ${categoria.nome}`}
-                                onArquivar={() => arquivarCategoria(categoria.id)}
-                              />
-                              {alca}
-                              <TrocarCorCategoria
-                                corAtual={categoria.cor}
-                                onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
-                              />
+                            <div className="absolute top-3 right-3 z-10 flex flex-row items-center gap-6">
+                              <div className="flex flex-row items-center gap-2">
+                                {alca}
+                                <TrocarCorCategoria
+                                  corAtual={categoria.cor}
+                                  onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
+                                />
+                              </div>
+                              <div className="flex flex-row items-center gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => abrirCriarSubcategoria(categoria.id)}
+                                  aria-label="Adicionar Subcategoria"
+                                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white p-0 text-black transition-colors hover:bg-black/5"
+                                >
+                                  <Plus className="size-[18px]" strokeWidth={2.5} />
+                                </button>
+                                <BotaoArquivar
+                                  rotulo={`Arquivar ${categoria.nome}`}
+                                  onArquivar={() => arquivarCategoria(categoria.id)}
+                                />
+                              </div>
                             </div>
                             <AccordionContent className="mb-4 mx-4 mt-3 rounded-lg bg-card p-4 pb-5">
                             <div className="space-y-4">
