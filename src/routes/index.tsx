@@ -115,6 +115,8 @@ function NirvanaPage() {
   const [pastasAbertasCentral, setPastasAbertasCentral] = useState<string[]>([]);
   const [pastaAtivaId, setPastaAtivaId] = useState<string | null>(null);
   const [modalRemoverDaPastaAberto, setModalRemoverDaPastaAberto] = useState(false);
+  const [modalImportarAberto, setModalImportarAberto] = useState(false);
+  const [categoriasParaImportar, setCategoriasParaImportar] = useState<string[]>([]);
   const [categoriaParaRemoverDaPasta, setCategoriaParaRemoverDaPasta] = useState<string | null>(
     null,
   );
@@ -190,6 +192,17 @@ function NirvanaPage() {
     );
     setCategoriaParaRemoverDaPasta(null);
     setModalRemoverDaPastaAberto(false);
+  };
+
+  const importarCategoriasParaPasta = () => {
+    if (!pastaAtivaId || categoriasParaImportar.length === 0) return;
+    setCategorias((atual) =>
+      atual.map((c) =>
+        categoriasParaImportar.includes(c.id) ? { ...c, pastaId: pastaAtivaId } : c,
+      ),
+    );
+    setCategoriasParaImportar([]);
+    setModalImportarAberto(false);
   };
 
   const abrirArquivados = () => {
@@ -865,13 +878,25 @@ function NirvanaPage() {
                   </p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setModalRemoverDaPastaAberto(true)}
-                className="rounded-md bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700"
-              >
-                Excluir Categoria da Pasta
-              </button>
+              <div className="flex flex-row items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategoriasParaImportar([]);
+                    setModalImportarAberto(true);
+                  }}
+                  className="rounded-md bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                >
+                  Importar Categorias
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalRemoverDaPastaAberto(true)}
+                  className="rounded-md bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700"
+                >
+                  Excluir Categoria da Pasta
+                </button>
+              </div>
             </div>
 
             {categoriasDaPastaAtiva.length > 0 ? (
@@ -1364,6 +1389,66 @@ function NirvanaPage() {
               onClick={() => setModalRemoverDaPastaAberto(false)}
             >
               Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={modalImportarAberto} onOpenChange={setModalImportarAberto}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Importar Categorias</DialogTitle>
+            <DialogDescription>
+              Selecione as categorias fora desta pasta que você quer trazer para dentro dela.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            {categoriasVisiveis.filter((c) => c.pastaId !== pastaAtivaId).length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Nenhuma categoria disponível fora desta pasta.
+              </p>
+            ) : (
+              categoriasVisiveis
+                .filter((c) => c.pastaId !== pastaAtivaId)
+                .map((categoria) => (
+                  <label
+                    key={categoria.id}
+                    className="flex cursor-pointer flex-row items-center gap-3 rounded-md border border-black bg-white px-3 py-2"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={categoriasParaImportar.includes(categoria.id)}
+                      onChange={(e) =>
+                        setCategoriasParaImportar((atual) =>
+                          e.target.checked
+                            ? [...atual, categoria.id]
+                            : atual.filter((id) => id !== categoria.id),
+                        )
+                      }
+                      className="size-4 accent-blue-600"
+                    />
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-black">
+                      {categoria.nome}
+                    </span>
+                  </label>
+                ))
+            )}
+          </div>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setModalImportarAberto(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              onClick={importarCategoriasParaPasta}
+              disabled={categoriasParaImportar.length === 0}
+              className="bg-blue-600 text-white hover:bg-blue-700"
+            >
+              Importar
             </Button>
           </DialogFooter>
         </DialogContent>
