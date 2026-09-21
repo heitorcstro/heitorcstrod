@@ -81,7 +81,7 @@ function BarraProgressoSubcategoria({
       className="flex shrink-0 items-center"
       aria-label={`${concluidos} de ${total} concluídos`}
     >
-      <span className="h-2.5 w-24 overflow-hidden rounded-sm border border-black bg-gray-200">
+      <span className="h-3 w-28 overflow-hidden rounded-sm border border-black bg-gray-200">
         <span
           className="block h-full bg-blue-600 transition-all duration-300 ease-in-out"
           style={{ width: `${progressPercentage}%` }}
