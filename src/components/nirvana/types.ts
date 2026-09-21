@@ -76,6 +76,11 @@ export type Categoria = {
   arquivada?: boolean;
   /** Quando preenchido, a categoria pertence a esta Pasta. */
   pastaId?: string | null;
+  /**
+   * Quando a categoria está dentro de uma Pasta: define se ela continua
+   * aparecendo também na lista principal "Categorias".
+   */
+  manterEmCategorias?: boolean;
 };
 
 export const CATEGORIAS_PADRAO = [
