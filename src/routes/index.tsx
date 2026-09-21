@@ -603,12 +603,13 @@ function NirvanaPage() {
                                     ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
                                 </span>
                                 {categoria.nome.includes("Urgente") && (
-                                  <span className="mt-1 flex flex-row items-center gap-1.5">
+                                  <span className="mt-1 flex flex-row items-center gap-1.5 animate-heartbeat">
                                     <Bookmark
-                                      className="size-4 text-red-500 fill-red-500 drop-shadow-[0_0_1px_rgba(255,255,255,0.9)]"
-                                      strokeWidth={2}
+                                      size={38}
+                                      strokeWidth={2.5}
+                                      className="shrink-0 text-red-600 fill-red-600 drop-shadow-[0_0_10px_rgba(220,38,38,0.9)]"
                                     />
-                                    <span className="text-sm text-white font-bold tabular-nums">
+                                    <span className="text-2xl font-black text-red-600 tabular-nums drop-shadow-[0_0_10px_rgba(220,38,38,0.9)]">
                                       {pendentes}
                                     </span>
                                   </span>
