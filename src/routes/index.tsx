@@ -280,6 +280,17 @@ function NirvanaPage() {
             onTransferir={(item) =>
               setItemTransferindo({ item, subcategoriaId: subcategoriaAtiva.id })
             }
+            onReordenarItens={(ativoId, sobreId) =>
+              reordenarItens(
+                subcategoriaAtiva.id,
+                itensExibidos(subcategoriaAtiva),
+                ativoId,
+                sobreId,
+              )
+            }
+            onRestaurarOrdem={() =>
+              restaurarOrdemAutomatica(subcategoriaAtiva.id)
+            }
             onAtualizarValores={(itemId, valores) =>
               atualizarSubcategoria(subcategoriaAtiva.id, (itens) =>
                 itens.map((i) =>
