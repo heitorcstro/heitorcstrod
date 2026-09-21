@@ -55,6 +55,7 @@ export function CategoriaView({
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
+  onMarcarTodos,
 }: Props) {
   const modoCompras = categoria.isShoppingList === true;
   const [criando, setCriando] = useState(false);
