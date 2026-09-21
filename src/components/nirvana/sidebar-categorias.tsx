@@ -61,20 +61,38 @@ export function SidebarCategorias({
         )}
       </div>
 
-      {expandido && (
-        <div className="border-b border-gray-200 px-3 py-3">
-          <button
-            type="button"
-            onClick={onCriarCategoria}
-            aria-label="Criar Categoria"
-            className="flex h-8 w-full items-center justify-center rounded-md border border-black bg-white text-lg text-black transition-colors hover:bg-black/5"
-          >
-            <Plus className="size-[18px]" strokeWidth={2.5} />
-          </button>
-        </div>
-      )}
-
       <div className="flex-1 overflow-y-auto">
+        {expandido ? (
+          <div className="mb-2 border-b-4 border-gray-100">
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={onCriarCategoria}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") onCriarCategoria();
+              }}
+              className="flex cursor-pointer flex-row items-center gap-3 border-b border-gray-200 px-4 py-3 text-black hover:bg-slate-100"
+            >
+              <Plus className="size-[18px] shrink-0" strokeWidth={2.5} />
+              <span className="text-sm font-medium">Criar Categoria</span>
+            </div>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={onDeletarCategoria}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") onDeletarCategoria?.();
+              }}
+              className="group flex cursor-pointer flex-row items-center gap-3 border-b border-gray-200 px-4 py-3 text-black hover:bg-slate-100"
+            >
+              <Trash2
+                className="size-[18px] shrink-0 text-gray-500 transition-colors group-hover:text-red-500"
+                strokeWidth={2.5}
+              />
+              <span className="text-sm font-medium">Deletar Categoria</span>
+            </div>
+          </div>
+        ) : null}
         {expandido ? (
           <ListaOrdenavel
             id="sidebar-categorias"
