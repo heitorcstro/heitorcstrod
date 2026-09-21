@@ -113,7 +113,7 @@ export function CategoriaView({
           {categoria.subcategorias.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             return (
-              <ItemOrdenavel key={sub.id} id={sub.id} rotulo={sub.nome}>
+              <ItemOrdenavel key={sub.id} id={sub.id} textoAlca="Mover subcategoria">
                 {(alca) => (
                   <AccordionItem
                     value={sub.id}

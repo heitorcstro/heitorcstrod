@@ -124,7 +124,7 @@ export function ListaView({
                   <ItemOrdenavel
                     key={item.id}
                     id={item.id}
-                    rotulo={item.texto}
+                    textoAlca="Mover item"
                     className="group border-b border-border last:border-b-0"
                   >
                     {(alca) => (
