@@ -43,6 +43,7 @@ export function SidebarCategorias({
               key={categoria.id}
               id={categoria.id}
               textoAlca="Mover essa Categoria"
+              alcaLetra="M"
               inline
             >
               {(alca) => (
@@ -50,16 +51,16 @@ export function SidebarCategorias({
                   <button
                     type="button"
                     onClick={() => onSelecionarCategoria(categoria.id)}
-                    className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                    className="flex min-w-0 flex-1 items-center gap-2 pr-3 text-left"
                   >
                     <span
                       className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
                     />
-                    <span className="truncate text-sm font-medium">{categoria.nome}</span>
+                    <span className="whitespace-normal break-words text-sm font-medium">
+                      {categoria.nome}
+                    </span>
                   </button>
-                  <span className="shrink-0 [&>*]:ml-0 [&>*]:px-2 [&>*]:py-1 [&>*]:text-xs">
-                    {alca}
-                  </span>
+                  {alca}
                 </div>
               )}
             </ItemOrdenavel>
