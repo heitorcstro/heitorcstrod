@@ -694,6 +694,55 @@ function NirvanaPage() {
         onFechar={() => setItemTransferindo(null)}
         onEscolher={transferirItem}
       />
+
+      <Dialog
+        open={categoriaCriandoSubId !== null}
+        onOpenChange={(aberto) => {
+          if (!aberto) {
+            setCategoriaCriandoSubId(null);
+            setNomeNovaSub("");
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Adicionar Subcategoria</DialogTitle>
+            <DialogDescription>
+              {categoriaCriandoSubId
+                ? `Nova subcategoria em "${categorias.find((c) => c.id === categoriaCriandoSubId)?.nome ?? ""}".`
+                : ""}
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              confirmarCriarSubcategoria();
+            }}
+          >
+            <Input
+              autoFocus
+              value={nomeNovaSub}
+              onChange={(e) => setNomeNovaSub(e.target.value)}
+              placeholder="Nome da subcategoria"
+            />
+            <DialogFooter className="mt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setCategoriaCriandoSubId(null);
+                  setNomeNovaSub("");
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={!nomeNovaSub.trim()}>
+                Criar
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
