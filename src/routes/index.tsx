@@ -397,6 +397,7 @@ function NirvanaPage() {
       <SidebarCategorias
         categorias={categoriasVisiveis}
         onCriarCategoria={() => setModalAberto(true)}
+        onDeletarCategoria={() => setModalDeletarAberto(true)}
         onSelecionarCategoria={(categoriaId) => {
           setMostrandoArquivados(false);
           setCategoriaAtivaId(categoriaId);
