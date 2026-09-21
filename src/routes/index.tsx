@@ -34,13 +34,21 @@ import { SubcategoriasAccordion } from "@/components/nirvana/subcategorias-accor
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
 import { ItemOrdenavel, ListaOrdenavel } from "@/components/nirvana/dnd";
 import {
+  GradeCoresCategoria,
+  IndicadorCorCategoria,
+  NomeCategoriaColorido,
+  TrocarCorCategoria,
+} from "@/components/nirvana/cores-categoria";
+import {
   categoriasIniciais,
   contarItens,
   contarPendentes,
   criarId,
   itensExibidos,
   moverPorId,
+  normalizarCategorias,
   type Categoria,
+  type CorCategoria,
   type Item,
   type Prioridade,
   type Subcategoria,
@@ -71,13 +79,14 @@ export const Route = createFileRoute("/")({
 const CHAVE = "nirvana:categorias:v2";
 
 function NirvanaPage() {
-  const [categorias, setCategorias] = useState<Categoria[]>(categoriasIniciais);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [categoriaAtivaId, setCategoriaAtivaId] = useState<string | null>(null);
   const [subcategoriaAtivaId, setSubcategoriaAtivaId] = useState<string | null>(null);
   const [modalAberto, setModalAberto] = useState(false);
   const [modalDeletarAberto, setModalDeletarAberto] = useState(false);
   const [categoriaParaExcluir, setCategoriaParaExcluir] = useState<Categoria | null>(null);
   const [novoNome, setNovoNome] = useState("");
+  const [novaCorCategoria, setNovaCorCategoria] = useState<CorCategoria | null>(null);
   const [carregado, setCarregado] = useState(false);
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
@@ -87,9 +96,14 @@ function NirvanaPage() {
   useEffect(() => {
     try {
       const salvo = localStorage.getItem(CHAVE);
-      if (salvo) setCategorias(JSON.parse(salvo) as Categoria[]);
+      if (salvo) {
+        const categoriasSalvas = JSON.parse(salvo) as Categoria[];
+        setCategorias(normalizarCategorias(categoriasSalvas));
+      } else {
+        setCategorias(categoriasIniciais());
+      }
     } catch {
-      /* ignora dados inválidos */
+      setCategorias(categoriasIniciais());
     }
     setCarregado(true);
   }, []);
@@ -159,11 +173,18 @@ function NirvanaPage() {
   const criarCategoria = (e: React.FormEvent) => {
     e.preventDefault();
     const nome = novoNome.trim();
-    if (!nome) return;
-    setCategorias((atual) => [...atual, { id: criarId(), nome, subcategorias: [] }]);
+    if (!nome || !novaCorCategoria) return;
+    setCategorias((atual) => [
+      ...atual,
+      { id: criarId(), nome, cor: novaCorCategoria, subcategorias: [] },
+    ]);
     setNovoNome("");
+    setNovaCorCategoria(null);
     setModalAberto(false);
   };
+
+  const trocarCorCategoria = (categoriaId: string, cor: CorCategoria) =>
+    setCategorias((atual) => atual.map((c) => (c.id === categoriaId ? { ...c, cor } : c)));
 
   const excluirCategoria = (categoriaId: string) => {
     setCategorias((atual) => atual.filter((c) => c.id !== categoriaId));
@@ -328,6 +349,7 @@ function NirvanaPage() {
           <CategoriaView
             categoria={categoriaAtiva}
             onVoltar={() => setCategoriaAtivaId(null)}
+            onTrocarCor={(cor) => trocarCorCategoria(categoriaAtiva.id, cor)}
             onCriarSubcategoria={(nome) => criarSubcategoria(categoriaAtiva.id, nome)}
             onAlternarModoCompras={() => alternarModoCompras(categoriaAtiva.id)}
             onReordenarSubcategorias={(ativoId, sobreId) =>
@@ -391,22 +413,34 @@ function NirvanaPage() {
                           value={categoria.id}
                           className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                         >
-                          <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
-                            <span className="flex flex-1 flex-col gap-1">
-                              <span className="flex flex-row items-center gap-3">
-                                <span className="font-medium tracking-tight">
-                                  {categoria.nome}
+                          <div className="flex flex-row items-start gap-2 py-2">
+                            <AccordionTrigger className="min-w-0 flex-1 py-3 text-left hover:no-underline [&>svg]:text-foreground">
+                              <span className="flex min-w-0 flex-1 flex-col gap-1">
+                                <span className="flex min-w-0 flex-row items-center gap-2">
+                                  <IndicadorCorCategoria cor={categoria.cor} />
+                                  <NomeCategoriaColorido
+                                    cor={categoria.cor}
+                                    className="truncate font-medium tracking-tight"
+                                  >
+                                    {categoria.nome}
+                                  </NomeCategoriaColorido>
                                 </span>
-                                {alca}
+                                <span className="text-xs text-muted-foreground">
+                                  {categoria.subcategorias.length} subcategoria
+                                  {categoria.subcategorias.length === 1 ? "" : "s"}
+                                  {total > 0 &&
+                                    ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
+                                </span>
                               </span>
-                              <span className="text-xs text-muted-foreground">
-                                {categoria.subcategorias.length} subcategoria
-                                {categoria.subcategorias.length === 1 ? "" : "s"}
-                                {total > 0 &&
-                                  ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
-                              </span>
-                            </span>
-                          </AccordionTrigger>
+                            </AccordionTrigger>
+                            <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center">
+                              {alca}
+                              <TrocarCorCategoria
+                                corAtual={categoria.cor}
+                                onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
+                              />
+                            </div>
+                          </div>
                           <AccordionContent className="pb-5">
                             <div className="space-y-4 border-t border-border pt-4">
                               {categoria.subcategorias.length > 0 ? (
@@ -448,11 +482,22 @@ function NirvanaPage() {
         )}
       </div>
 
-      <Dialog open={modalAberto} onOpenChange={setModalAberto}>
+      <Dialog
+        open={modalAberto}
+        onOpenChange={(aberto) => {
+          setModalAberto(aberto);
+          if (!aberto) {
+            setNovoNome("");
+            setNovaCorCategoria(null);
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Criar Categoria</DialogTitle>
-            <DialogDescription>Dê um nome para a sua nova categoria.</DialogDescription>
+            <DialogDescription>
+              Dê um nome e selecione uma cor para a sua nova categoria.
+            </DialogDescription>
           </DialogHeader>
           <form onSubmit={criarCategoria} className="space-y-4">
             <div className="space-y-2">
@@ -465,11 +510,20 @@ function NirvanaPage() {
                 autoFocus
               />
             </div>
+            <div className="space-y-2">
+              <Label>Cor da categoria</Label>
+              <GradeCoresCategoria
+                selecionada={novaCorCategoria}
+                onSelecionar={setNovaCorCategoria}
+              />
+            </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setModalAberto(false)}>
                 Cancelar
               </Button>
-              <Button type="submit">Criar</Button>
+              <Button type="submit" disabled={!novoNome.trim() || !novaCorCategoria}>
+                Criar
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
