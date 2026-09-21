@@ -497,6 +497,14 @@ function NirvanaPage() {
                               />
                             </AccordionTrigger>
                             <div className="absolute right-3 top-3 z-10 flex flex-row items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => abrirCriarSubcategoria(categoria.id)}
+                                className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5"
+                              >
+                                <Plus className="size-4" />
+                                Adicionar Subcategoria
+                              </button>
                               {alca}
                               <TrocarCorCategoria
                                 corAtual={categoria.cor}
