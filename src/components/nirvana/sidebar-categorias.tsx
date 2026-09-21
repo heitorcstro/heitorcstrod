@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Trash2 } from "lucide-react";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
 import { ESTILOS_COR_CATEGORIA } from "./cores-categoria";
 import { cn } from "@/lib/utils";
@@ -7,6 +7,7 @@ import type { Categoria } from "./types";
 type Props = {
   categorias: Categoria[];
   onCriarCategoria: () => void;
+  onDeletarCategoria?: () => void;
   onSelecionarCategoria: (categoriaId: string) => void;
   onReordenarCategorias: (ativoId: string, sobreId: string) => void;
   onAbrirArquivados?: () => void;
@@ -18,6 +19,7 @@ type Props = {
 export function SidebarCategorias({
   categorias,
   onCriarCategoria,
+  onDeletarCategoria,
   onSelecionarCategoria,
   onReordenarCategorias,
   onAbrirArquivados,
