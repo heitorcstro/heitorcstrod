@@ -14,6 +14,8 @@ export type Item = {
   texto: string;
   concluido: boolean;
   prioridade: Prioridade | null;
+  precoUnitario?: number;
+  quantidade?: number;
 };
 
 export type Subcategoria = {
@@ -26,6 +28,7 @@ export type Categoria = {
   id: string;
   nome: string;
   subcategorias: Subcategoria[];
+  isShoppingList?: boolean;
 };
 
 export const CATEGORIAS_PADRAO = [
@@ -76,3 +79,20 @@ export const contarPendentes = (categoria: Categoria) =>
     (total, s) => total + s.itens.filter((i) => !i.concluido).length,
     0,
   );
+
+// ===== Modo compras =====
+
+export const totalItem = (item: Item) =>
+  (item.precoUnitario ?? 0) * (item.quantidade ?? 1);
+
+export const totalSubcategoria = (sub: Subcategoria) =>
+  sub.itens.reduce((total, i) => total + totalItem(i), 0);
+
+export const totalCategoria = (categoria: Categoria) =>
+  categoria.subcategorias.reduce(
+    (total, s) => total + totalSubcategoria(s),
+    0,
+  );
+
+export const formatarBRL = (valor: number) =>
+  valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
