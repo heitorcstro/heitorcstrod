@@ -280,7 +280,7 @@ export function SubcategoriasAccordion({
                         {alca}
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <button type="button" className={estiloBotao}>
+                            <button type="button" className={`${estiloBaseAcao} text-black`}>
                               Editar Subcategoria
                             </button>
                           </DropdownMenuTrigger>
