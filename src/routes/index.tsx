@@ -41,6 +41,8 @@ import {
   TrocarCorCategoria,
 } from "@/components/nirvana/cores-categoria";
 import {
+  normalizarPastas,
+  type Pasta,
   categoriasIniciais,
   contarItens,
   contarPendentes,
