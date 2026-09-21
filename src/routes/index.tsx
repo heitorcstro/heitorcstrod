@@ -500,10 +500,10 @@ function NirvanaPage() {
                               <button
                                 type="button"
                                 onClick={() => abrirCriarSubcategoria(categoria.id)}
-                                className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5"
+                                aria-label="Adicionar Subcategoria"
+                                className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white p-0 text-black transition-colors hover:bg-black/5"
                               >
-                                <Plus className="size-4" />
-                                Adicionar Subcategoria
+                                <Plus className="size-[18px]" strokeWidth={2.5} />
                               </button>
                               {alca}
                               <TrocarCorCategoria
