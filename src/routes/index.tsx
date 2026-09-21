@@ -411,6 +411,7 @@ function NirvanaPage() {
           <button
             type="button"
             onClick={() => {
+              setMostrandoArquivados(false);
               setCategoriaAtivaId(null);
               setSubcategoriaAtivaId(null);
             }}
