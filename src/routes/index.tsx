@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, ListChecks, Plus, Trash2 } from "lucide-react";
+import { Bookmark, ChevronDown, ListChecks, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -602,6 +602,17 @@ function NirvanaPage() {
                                   {total > 0 &&
                                     ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
                                 </span>
+                                {categoria.nome.includes("Urgente") && (
+                                  <span className="mt-1 flex flex-row items-center gap-1.5">
+                                    <Bookmark
+                                      className="size-4 text-red-500 fill-red-500 drop-shadow-[0_0_1px_rgba(255,255,255,0.9)]"
+                                      strokeWidth={2}
+                                    />
+                                    <span className="text-sm text-white font-bold tabular-nums">
+                                      {pendentes}
+                                    </span>
+                                  </span>
+                                )}
                               </div>
                               <ChevronDown
                                 size={28}
