@@ -113,32 +113,32 @@ export function CategoriaView({
           {categoria.subcategorias.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             return (
-              <ItemOrdenavel key={sub.id} id={sub.id} textoAlca="Mover subcategoria">
+              <ItemOrdenavel key={sub.id} id={sub.id} textoAlca="Mover subcategoria" inline>
                 {(alca) => (
                   <AccordionItem
                     value={sub.id}
                     className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                   >
-                    <div className="flex items-center gap-1 [&>h3]:flex-1">
-                      {alca}
-                      <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
-                        <span>
-                          <span className="block font-medium tracking-tight">{sub.nome}</span>
-                          <span className="mt-0.5 block text-xs text-muted-foreground">
-                            {sub.itens.length === 0
-                              ? "Lista vazia"
-                              : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
-                                  sub.itens.length
-                                } ${sub.itens.length === 1 ? "item" : "itens"}`}
-                          </span>
-                          {modoCompras && (
-                            <span className="mt-1 block text-xs font-medium tabular-nums">
-                              {formatarBRL(totalSubcategoria(sub))}
-                            </span>
-                          )}
+                    <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
+                      <span>
+                        <span className="flex flex-row items-center gap-3">
+                          <span className="font-medium tracking-tight">{sub.nome}</span>
+                          {alca}
                         </span>
-                      </AccordionTrigger>
-                    </div>
+                        <span className="mt-0.5 block text-xs text-muted-foreground">
+                          {sub.itens.length === 0
+                            ? "Lista vazia"
+                            : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
+                                sub.itens.length
+                              } ${sub.itens.length === 1 ? "item" : "itens"}`}
+                        </span>
+                        {modoCompras && (
+                          <span className="mt-1 block text-xs font-medium tabular-nums">
+                            {formatarBRL(totalSubcategoria(sub))}
+                          </span>
+                        )}
+                      </span>
+                    </AccordionTrigger>
                     <AccordionContent className="pb-5">
                       <div className="space-y-4 border-t border-border pt-4">
                         {sub.itens.length > 0 ? (

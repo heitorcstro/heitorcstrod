@@ -307,28 +307,29 @@ function NirvanaPage() {
                       key={categoria.id}
                       id={categoria.id}
                       textoAlca="Mover categoria"
+                      inline
                     >
                       {(alca) => (
                         <AccordionItem
                           value={categoria.id}
                           className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                         >
-                          <div className="flex items-center gap-1 [&>h3]:flex-1">
-                            {alca}
-                            <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
-                              <span>
-                                <span className="block font-medium tracking-tight">
+                          <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
+                            <span>
+                              <span className="flex flex-row items-center gap-3">
+                                <span className="font-medium tracking-tight">
                                   {categoria.nome}
                                 </span>
-                                <span className="mt-0.5 block text-xs text-muted-foreground">
-                                  {categoria.subcategorias.length} subcategoria
-                                  {categoria.subcategorias.length === 1 ? "" : "s"}
-                                  {total > 0 &&
-                                    ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
-                                </span>
+                                {alca}
                               </span>
-                            </AccordionTrigger>
-                          </div>
+                              <span className="mt-0.5 block text-xs text-muted-foreground">
+                                {categoria.subcategorias.length} subcategoria
+                                {categoria.subcategorias.length === 1 ? "" : "s"}
+                                {total > 0 &&
+                                  ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
+                              </span>
+                            </span>
+                          </AccordionTrigger>
                           <AccordionContent className="pb-5">
                             <div className="space-y-4 border-t border-border pt-4">
                               <Button
