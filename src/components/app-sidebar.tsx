@@ -43,7 +43,6 @@ export function AppSidebar() {
 
   const isActive = (path: string) =>
     path === "/" ? currentPath === "/" : currentPath.startsWith(path);
-  const isExpanded = main.some((item) => isActive(item.url));
 
   return (
     <Sidebar collapsible="icon" className="border-sidebar-border">
