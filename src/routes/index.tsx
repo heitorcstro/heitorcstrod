@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bookmark, ChevronDown, Plus, Trash2 } from "lucide-react";
+import { Bookmark, ChevronDown, Folder, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -633,6 +633,41 @@ function NirvanaPage() {
                 </Button>
               </div>
             </div>
+
+            {pastas.length > 0 ? (
+              <div className="mt-6 grid gap-3 lg:grid-cols-2">
+                {pastas.map((pasta) => {
+                  const dentro = categorias.filter(
+                    (c) => c.pastaId === pasta.id && !c.arquivada,
+                  );
+                  return (
+                    <div
+                      key={pasta.id}
+                      className="flex flex-row items-center gap-3 rounded-lg border border-black bg-white px-4 py-3 text-left"
+                    >
+                      <Folder
+                        className={cn("size-5 shrink-0", ESTILOS_COR_CATEGORIA[pasta.cor]?.texto)}
+                        strokeWidth={2.5}
+                        fill="currentColor"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-black">{pasta.nome}</p>
+                        <p className="text-xs text-black/60">
+                          {dentro.length}{" "}
+                          {dentro.length === 1 ? "categoria" : "categorias"}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="mt-6 text-sm text-black/60">
+                Nenhuma pasta ainda. Crie uma pasta para agrupar categorias.
+              </p>
+            )}
+
+
 
             <div className="mt-10 flex flex-wrap items-end justify-between gap-4">
               <div>
