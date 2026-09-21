@@ -89,6 +89,7 @@ export function ItemOrdenavel({
   className,
   inline = false,
   alcaLetra,
+  alcaClassName,
   children,
 }: ItemProps) {
   const {
