@@ -1210,6 +1210,34 @@ function NirvanaPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog
+        open={!!pendenteMoverPasta}
+        onOpenChange={(aberto) => {
+          if (!aberto) setPendenteMoverPasta(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Mover para a pasta</DialogTitle>
+            <DialogDescription>
+              Você deseja manter apenas na pasta ou também em Categorias?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col gap-2 sm:flex-row">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => confirmarMoverParaPasta(true)}
+            >
+              Manter também em Categorias
+            </Button>
+            <Button type="button" onClick={() => confirmarMoverParaPasta(false)}>
+              Apenas na pasta
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       </main>
     </div>
   );
