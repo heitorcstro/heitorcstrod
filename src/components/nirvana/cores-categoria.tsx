@@ -17,6 +17,8 @@ type EstiloCorCategoria = {
   indicador: string;
   texto: string;
   anel: string;
+  /** Fundo sólido usado no cartão da categoria (contraste com texto branco). */
+  fundo: string;
 };
 
 export const ESTILOS_COR_CATEGORIA: Record<CorCategoria, EstiloCorCategoria> = {
@@ -24,41 +26,49 @@ export const ESTILOS_COR_CATEGORIA: Record<CorCategoria, EstiloCorCategoria> = {
     indicador: "bg-red-600",
     texto: "text-red-600",
     anel: "ring-red-600",
+    fundo: "bg-red-600",
   },
   Green: {
     indicador: "bg-green-600",
     texto: "text-green-700",
     anel: "ring-green-600",
+    fundo: "bg-green-600",
   },
   Blue: {
     indicador: "bg-blue-700",
     texto: "text-blue-700",
     anel: "ring-blue-700",
+    fundo: "bg-blue-700",
   },
   Purple: {
     indicador: "bg-purple-600",
     texto: "text-purple-700",
     anel: "ring-purple-600",
+    fundo: "bg-purple-600",
   },
   Yellow: {
     indicador: "bg-yellow-400",
     texto: "text-yellow-700",
     anel: "ring-yellow-500",
+    fundo: "bg-yellow-500",
   },
   Orange: {
     indicador: "bg-orange-500",
     texto: "text-orange-700",
     anel: "ring-orange-500",
+    fundo: "bg-orange-500",
   },
   Magenta: {
     indicador: "bg-fuchsia-600",
     texto: "text-fuchsia-700",
     anel: "ring-fuchsia-600",
+    fundo: "bg-fuchsia-600",
   },
   Gold: {
     indicador: "bg-amber-500",
     texto: "text-amber-700",
     anel: "ring-amber-500",
+    fundo: "bg-amber-500",
   },
 };
 
