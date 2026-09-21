@@ -420,9 +420,12 @@ function NirvanaPage() {
                       </div>
                     </AccordionContent>
                   </AccordionItem>
+                    )}
+                  </ItemOrdenavel>
                 );
               })}
             </Accordion>
+            </ListaOrdenavel>
           </>
         )}
       </div>
