@@ -8,6 +8,8 @@ type Props = {
   onCriarCategoria: () => void;
   onSelecionarCategoria: (categoriaId: string) => void;
   onReordenarCategorias: (ativoId: string, sobreId: string) => void;
+  onAbrirArquivados?: () => void;
+  totalArquivados?: number;
 };
 
 export function SidebarCategorias({
@@ -15,6 +17,8 @@ export function SidebarCategorias({
   onCriarCategoria,
   onSelecionarCategoria,
   onReordenarCategorias,
+  onAbrirArquivados,
+  totalArquivados = 0,
 }: Props) {
   return (
     <aside className="flex w-72 shrink-0 flex-col border-r border-black bg-white">

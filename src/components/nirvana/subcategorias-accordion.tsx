@@ -425,7 +425,7 @@ export function SubcategoriasAccordion({
               </ItemOrdenavel>
             );
           })}
-          {categoria.subcategorias.length === 0 && (
+          {subcategoriasVisiveis.length === 0 && (
             <p className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
               Nenhuma subcategoria ainda. Use “Nova Subcategoria” para criar a primeira.
             </p>
