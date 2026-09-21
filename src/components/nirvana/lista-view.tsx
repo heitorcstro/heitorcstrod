@@ -95,7 +95,7 @@ export function ListaView({
       <ul className="mt-6 divide-y divide-border border-y border-border">
         {itensOrdenados.map((item) => (
           <li key={item.id} className="group py-3">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
               <SeletorPrioridade
                 prioridade={item.prioridade}
                 onSelecionar={(prioridade) =>
@@ -119,7 +119,7 @@ export function ListaView({
               </label>
 
               {modoCompras && (
-                <div className="hidden flex-row items-center gap-2 sm:flex">
+                <div className="order-last ml-9 flex flex-row items-center gap-2 sm:order-none sm:ml-0">
                   <CamposCompra
                     item={item}
                     onAtualizarValores={onAtualizarValores}
@@ -137,15 +137,6 @@ export function ListaView({
                 <Trash2 className="size-4" />
               </Button>
             </div>
-
-            {modoCompras && (
-              <div className="mt-2 flex flex-row items-center gap-2 pl-9 sm:hidden">
-                <CamposCompra
-                  item={item}
-                  onAtualizarValores={onAtualizarValores}
-                />
-              </div>
-            )}
           </li>
         ))}
         {subcategoria.itens.length === 0 && (
