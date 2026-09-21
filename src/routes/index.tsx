@@ -34,6 +34,7 @@ import { SubcategoriasAccordion } from "@/components/nirvana/subcategorias-accor
 import { SidebarCategorias } from "@/components/nirvana/sidebar-categorias";
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
 import { ItemOrdenavel, ListaOrdenavel } from "@/components/nirvana/dnd";
+import { BotaoArquivar } from "@/components/nirvana/botao-arquivar";
 import {
   ESTILOS_COR_CATEGORIA,
   GradeCoresCategoria,
