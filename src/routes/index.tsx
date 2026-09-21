@@ -1324,6 +1324,78 @@ function NirvanaPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={modalRemoverDaPastaAberto} onOpenChange={setModalRemoverDaPastaAberto}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir Categoria da Pasta</DialogTitle>
+            <DialogDescription>
+              Escolha qual categoria você quer remover desta pasta. A categoria não é apagada.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            {categoriasDaPastaAtiva.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Nenhuma categoria nesta pasta.</p>
+            ) : (
+              categoriasDaPastaAtiva.map((categoria) => (
+                <div
+                  key={categoria.id}
+                  className="flex flex-row items-center justify-between gap-3 rounded-md border border-black bg-white px-3 py-2"
+                >
+                  <span className="min-w-0 flex-1 truncate text-sm font-medium text-black">
+                    {categoria.nome}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setCategoriaParaRemoverDaPasta(categoria.id)}
+                    className="rounded-md bg-red-600 px-3 py-1 text-xs font-bold text-white hover:bg-red-700"
+                  >
+                    Remover
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setModalRemoverDaPastaAberto(false)}
+            >
+              Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={!!categoriaParaRemoverDaPasta}
+        onOpenChange={(aberto) => {
+          if (!aberto) setCategoriaParaRemoverDaPasta(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover da pasta?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja remover esta categoria da pasta? Ela voltará para a página
+              principal.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 text-white hover:bg-red-700"
+              onClick={() => {
+                if (categoriaParaRemoverDaPasta)
+                  removerCategoriaDaPasta(categoriaParaRemoverDaPasta);
+              }}
+            >
+              Remover da pasta
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       </main>
     </div>
   );
