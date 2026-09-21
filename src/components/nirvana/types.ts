@@ -60,6 +60,11 @@ export type Subcategoria = {
   arquivada?: boolean;
 };
 
+export type Pasta = {
+  id: string;
+  nome: string;
+};
+
 export type Categoria = {
   id: string;
   nome: string;
@@ -68,6 +73,8 @@ export type Categoria = {
   isShoppingList?: boolean;
   /** true quando a categoria foi enviada para "Arquivados". */
   arquivada?: boolean;
+  /** Quando preenchido, a categoria pertence a esta Pasta. */
+  pastaId?: string | null;
 };
 
 export const CATEGORIAS_PADRAO = [
