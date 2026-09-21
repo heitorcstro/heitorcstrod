@@ -461,7 +461,7 @@ function NirvanaPage() {
                               showChevron={false}
                               className={`relative flex min-h-[68px] min-w-0 flex-1 flex-row items-stretch pr-[260px] text-left text-white hover:no-underline ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
                             >
-                              <div className="flex min-w-0 max-w-[60%] flex-col items-start gap-1 self-stretch border-r border-black py-4 pl-4 pr-6">
+                              <div className="flex min-w-0 max-w-[60%] flex-col items-start gap-1 self-stretch border-r border-black py-4 pl-4 pr-6 h-full">
                                 <span className="w-full truncate font-medium tracking-tight text-white">
                                   {categoria.nome}
                                 </span>
