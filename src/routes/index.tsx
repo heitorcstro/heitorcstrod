@@ -1,165 +1,209 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { DashboardShell } from "@/components/dashboard-shell";
+import { useEffect, useState } from "react";
+import { ChevronRight, ListChecks, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { TrendingUp, TrendingDown, Activity, DollarSign } from "lucide-react";
-
-const stats = [
-  {
-    label: "Total Revenue",
-    value: "$48,260",
-    delta: "+12.4%",
-    trend: "up" as const,
-    icon: DollarSign,
-  },
-  {
-    label: "Active Sessions",
-    value: "2,840",
-    delta: "+5.2%",
-    trend: "up" as const,
-    icon: Activity,
-  },
-  {
-    label: "Conversion Rate",
-    value: "3.8%",
-    delta: "-0.6%",
-    trend: "down" as const,
-    icon: TrendingDown,
-  },
-  {
-    label: "Avg. Order Value",
-    value: "$126",
-    delta: "+8.1%",
-    trend: "up" as const,
-    icon: TrendingUp,
-  },
-];
-
-const activity = [
-  { id: 1, text: "New project “Onboarding Flow” was created", time: "2m ago" },
-  { id: 2, text: "Payment of $1,240 received from Acme Inc.", time: "1h ago" },
-  { id: 3, text: "Heitorito updated billing settings", time: "3h ago" },
-  { id: 4, text: "Weekly analytics report generated", time: "5h ago" },
-];
-
-// Simple inline bar chart rendered with divs — no chart dependency needed.
-const bars = [40, 65, 52, 78, 60, 88, 72, 95, 68, 82, 58, 90];
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ListaView } from "@/components/nirvana/lista-view";
+import {
+  categoriasIniciais,
+  criarId,
+  type Categoria,
+} from "@/components/nirvana/types";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Nirvana — Dashboard" },
+      { title: "Nirvana — Suas listas organizadas" },
       {
         name: "description",
         content:
-          "Nirvana dashboard — a sleek, minimalist control center for your workspace.",
+          "Nirvana é um aplicativo minimalista de listas para organizar tarefas do dia, compras e viagens.",
       },
-      { property: "og:title", content: "Nirvana — Dashboard" },
+      { property: "og:title", content: "Nirvana — Suas listas organizadas" },
       {
         property: "og:description",
-        content: "A sleek, minimalist control center for your workspace.",
+        content:
+          "Organize tarefas diárias, compras e viagens em listas simples e elegantes.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Index,
+  component: NirvanaPage,
 });
 
-function Index() {
+const CHAVE = "nirvana:categorias";
+
+function NirvanaPage() {
+  const [categorias, setCategorias] = useState<Categoria[]>(categoriasIniciais);
+  const [ativa, setAtiva] = useState<string | null>(null);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [novoNome, setNovoNome] = useState("");
+  const [carregado, setCarregado] = useState(false);
+
+  useEffect(() => {
+    try {
+      const salvo = localStorage.getItem(CHAVE);
+      if (salvo) setCategorias(JSON.parse(salvo) as Categoria[]);
+    } catch {
+      /* ignora dados inválidos */
+    }
+    setCarregado(true);
+  }, []);
+
+  useEffect(() => {
+    if (!carregado) return;
+    localStorage.setItem(CHAVE, JSON.stringify(categorias));
+  }, [categorias, carregado]);
+
+  const atualizarCategoria = (
+    id: string,
+    fn: (categoria: Categoria) => Categoria,
+  ) => setCategorias((atual) => atual.map((c) => (c.id === id ? fn(c) : c)));
+
+  const criarCategoria = (e: React.FormEvent) => {
+    e.preventDefault();
+    const nome = novoNome.trim();
+    if (!nome) return;
+    setCategorias((atual) => [...atual, { id: criarId(), nome, itens: [] }]);
+    setNovoNome("");
+    setModalAberto(false);
+  };
+
+  const categoriaAtiva = categorias.find((c) => c.id === ativa) ?? null;
+
   return (
-    <DashboardShell
-      title="Dashboard"
-      description="Welcome back, Heitorito. Here's what's happening today."
-    >
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.label} className="rounded-xl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.label}
-              </CardTitle>
-              <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <stat.icon className="size-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold tracking-tight text-foreground">
-                {stat.value}
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                <span
-                  className={
-                    stat.trend === "up"
-                      ? "font-medium text-primary"
-                      : "font-medium text-muted-foreground"
-                  }
-                >
-                  {stat.delta}
-                </span>{" "}
-                from last month
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+    <main className="min-h-screen bg-background">
+      <header className="border-b border-border bg-primary text-primary-foreground">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+          <div className="flex items-center gap-2.5">
+            <ListChecks className="size-5" />
+            <span className="font-display text-lg font-semibold tracking-tight">
+              Nirvana
+            </span>
+          </div>
+          <span className="text-xs uppercase tracking-[0.18em] text-primary-foreground/60">
+            Suas listas
+          </span>
+        </div>
+      </header>
 
-      {/* Chart + activity */}
-      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card className="rounded-xl lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Revenue Overview</CardTitle>
-            <CardDescription>Monthly performance for the year</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex h-56 items-end justify-between gap-2">
-              {bars.map((h, i) => (
-                <div
-                  key={i}
-                  className="group flex-1 rounded-t-md bg-primary/80 transition-all hover:bg-primary"
-                  style={{ height: `${h}%` }}
-                  title={`Month ${i + 1}`}
-                />
-              ))}
-            </div>
-            <div className="mt-3 flex justify-between text-[10px] text-muted-foreground">
-              {["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"].map(
-                (m, i) => (
-                  <span key={i}>{m}</span>
+      <div className="mx-auto max-w-5xl px-6 py-10">
+        {categoriaAtiva ? (
+          <ListaView
+            categoria={categoriaAtiva}
+            onVoltar={() => setAtiva(null)}
+            onAdicionarItem={(texto) =>
+              atualizarCategoria(categoriaAtiva.id, (c) => ({
+                ...c,
+                itens: [...c.itens, { id: criarId(), texto, concluido: false }],
+              }))
+            }
+            onAlternarItem={(itemId) =>
+              atualizarCategoria(categoriaAtiva.id, (c) => ({
+                ...c,
+                itens: c.itens.map((i) =>
+                  i.id === itemId ? { ...i, concluido: !i.concluido } : i,
                 ),
-              )}
+              }))
+            }
+            onRemoverItem={(itemId) =>
+              atualizarCategoria(categoriaAtiva.id, (c) => ({
+                ...c,
+                itens: c.itens.filter((i) => i.id !== itemId),
+              }))
+            }
+          />
+        ) : (
+          <>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h1 className="font-display text-3xl font-semibold tracking-tight">
+                  Categorias
+                </h1>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Escolha uma categoria para ver e organizar seus itens.
+                </p>
+              </div>
+              <Button size="lg" onClick={() => setModalAberto(true)}>
+                <Plus className="size-4" />
+                Criar Categoria
+              </Button>
             </div>
-          </CardContent>
-        </Card>
 
-        <Card className="rounded-xl">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest events in your workspace</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-4">
-              {activity.map((item) => (
-                <li key={item.id} className="flex gap-3">
-                  <span className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />
-                  <div>
-                    <p className="text-sm leading-snug text-foreground">
-                      {item.text}
-                    </p>
-                    <p className="text-xs text-muted-foreground">{item.time}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {categorias.map((categoria) => {
+                const pendentes = categoria.itens.filter(
+                  (i) => !i.concluido,
+                ).length;
+                return (
+                  <button
+                    key={categoria.id}
+                    onClick={() => setAtiva(categoria.id)}
+                    className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 text-left transition-colors hover:border-foreground/40 hover:bg-secondary"
+                  >
+                    <span>
+                      <span className="block font-medium tracking-tight">
+                        {categoria.nome}
+                      </span>
+                      <span className="mt-0.5 block text-xs text-muted-foreground">
+                        {categoria.itens.length === 0
+                          ? "Lista vazia"
+                          : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${categoria.itens.length} ${
+                              categoria.itens.length === 1 ? "item" : "itens"
+                            }`}
+                      </span>
+                    </span>
+                    <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
-    </DashboardShell>
+
+      <Dialog open={modalAberto} onOpenChange={setModalAberto}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Criar Categoria</DialogTitle>
+            <DialogDescription>
+              Dê um nome para a sua nova lista.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={criarCategoria} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="nome-categoria">Nome da categoria</Label>
+              <Input
+                id="nome-categoria"
+                value={novoNome}
+                onChange={(e) => setNovoNome(e.target.value)}
+                placeholder="Ex.: Mercado da semana"
+                autoFocus
+              />
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setModalAberto(false)}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit">Criar</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </main>
   );
 }
