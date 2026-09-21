@@ -427,7 +427,68 @@ function NirvanaPage() {
       </header>
 
       <div className="mx-auto max-w-5xl px-6 py-10">
-        {categoriaAtiva && subcategoriaAtiva ? (
+        {mostrandoArquivados ? (
+          <section className="space-y-6">
+            <div>
+              <h1 className="font-display text-3xl font-semibold tracking-tight">Arquivados</h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Categorias e subcategorias guardadas aqui. Restaure quando quiser.
+              </p>
+            </div>
+
+            {totalArquivados === 0 ? (
+              <p className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
+                Nada arquivado ainda.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {categoriasArquivadas.map((categoria) => (
+                  <div
+                    key={categoria.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-black bg-white px-4 py-3"
+                  >
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span
+                        className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
+                      />
+                      <span className="text-sm font-medium text-black">{categoria.nome}</span>
+                      <span className="text-xs text-muted-foreground">Categoria</span>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => restaurarCategoria(categoria.id)}
+                    >
+                      Restaurar
+                    </Button>
+                  </div>
+                ))}
+                {subcategoriasArquivadas.map(({ categoria, sub }) => (
+                  <div
+                    key={sub.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-black bg-white px-4 py-3"
+                  >
+                    <span className="flex min-w-0 flex-col">
+                      <span className="text-sm font-medium text-black">{sub.nome}</span>
+                      <span className="text-xs text-muted-foreground">
+                        Subcategoria de {categoria.nome}
+                      </span>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => restaurarSubcategoria(sub.id)}
+                    >
+                      Restaurar
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        ) : categoriaAtiva && subcategoriaAtiva ? (
           <ListaView
             nomeCategoria={categoriaAtiva.nome}
             subcategoria={subcategoriaAtiva}
