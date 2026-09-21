@@ -483,20 +483,26 @@ function NirvanaPage() {
     setItemTransferindo(null);
   };
 
-  const cartaoCategoria = (categoria: Categoria) => {
+  /**
+   * `eco` = cópia apenas visual da categoria que vive dentro de uma pasta mas
+   * que o usuário optou por manter também na lista principal: não arrasta.
+   */
+  const cartaoCategoria = (categoria: Categoria, eco = false) => {
     const total = contarItens(categoria);
     const pendentes = contarPendentes(categoria);
+    const idArrasto = eco ? `eco:${categoria.id}` : categoria.id;
     return (
       <ItemOrdenavel
-        key={categoria.id}
-        id={categoria.id}
+        key={idArrasto}
+        id={idArrasto}
+        tipo={eco ? undefined : "categoria"}
         textoAlca="Mover categoria"
         inline
         alcaClassName="ml-auto inline-flex shrink-0 cursor-grab touch-none select-none items-center whitespace-nowrap rounded-md border border-blue-500 bg-white px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 active:cursor-grabbing"
       >
         {(alca) => (
           <AccordionItem
-            value={categoria.id}
+            value={idArrasto}
             className="group relative flex min-h-[100px] flex-col overflow-hidden rounded-xl border border-black bg-white transition-colors hover:border-foreground/40 lg:min-h-[132px]"
           >
             <AccordionTrigger
