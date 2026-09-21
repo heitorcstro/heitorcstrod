@@ -229,7 +229,13 @@ export function SubcategoriasAccordion({
                           {renomeandoId === sub.id ? (
                             <span className="text-sm text-muted-foreground">Renomeando…</span>
                           ) : (
-                            <span className="truncate font-medium tracking-tight">{sub.nome}</span>
+                            <span className="flex min-w-0 flex-row items-center gap-3">
+                              <span className="truncate font-medium tracking-tight">{sub.nome}</span>
+                              <BarraProgressoSubcategoria
+                                total={sub.itens.length}
+                                concluidos={concluidos}
+                              />
+                            </span>
                           )}
                           <span className="text-xs text-muted-foreground">
                             {sub.itens.length === 0
