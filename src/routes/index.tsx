@@ -255,6 +255,22 @@ function NirvanaPage() {
       ),
     );
 
+  const abrirCriarSubcategoria = (categoriaId: string) => {
+    setNomeNovaSub("");
+    setCategoriaCriandoSubId(categoriaId);
+    if (!categoriasAbertas.includes(categoriaId)) {
+      setCategoriasAbertas((abertas) => [...abertas, categoriaId]);
+    }
+  };
+
+  const confirmarCriarSubcategoria = () => {
+    const nome = nomeNovaSub.trim();
+    if (!categoriaCriandoSubId || !nome) return;
+    criarSubcategoria(categoriaCriandoSubId, nome);
+    setCategoriaCriandoSubId(null);
+    setNomeNovaSub("");
+  };
+
   // Marca/desmarca apenas os itens desta subcategoria e volta à ordenação automática.
   const marcarTodosItens = (subcategoriaId: string, concluido: boolean) =>
     patchSubcategoria(subcategoriaId, (sub) => ({
