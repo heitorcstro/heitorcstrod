@@ -6,6 +6,7 @@ import {
   TouchSensor,
   closestCenter,
   pointerWithin,
+  useDndContext,
   useDroppable,
   useSensor,
   useSensors,
