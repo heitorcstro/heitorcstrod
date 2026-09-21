@@ -81,7 +81,7 @@ function BarraProgressoSubcategoria({
       className="flex shrink-0 items-center"
       aria-label={`${concluidos} de ${total} concluídos`}
     >
-      <span className="h-2.5 w-24 overflow-hidden rounded-sm border border-black bg-gray-200">
+      <span className="h-3 w-28 overflow-hidden rounded-sm border border-black bg-gray-200">
         <span
           className="block h-full bg-blue-600 transition-all duration-300 ease-in-out"
           style={{ width: `${progressPercentage}%` }}
@@ -225,23 +225,23 @@ export function SubcategoriasAccordion({
                 {(alca) => (
                   <AccordionItem
                     value={sub.id}
-                    className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
+                    className="rounded-xl border border-border bg-card px-6 transition-colors hover:border-foreground/40"
                   >
-                    <div className="flex flex-col gap-2 py-2 xl:flex-row xl:items-center">
-                      <AccordionTrigger className="min-w-0 flex-1 py-3 text-left hover:no-underline [&>svg]:text-foreground">
-                        <span className="flex min-w-0 flex-1 flex-col gap-1">
+                    <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-center">
+                      <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
+                        <span className="flex min-w-0 flex-1 flex-col gap-1.5">
                           {renomeandoId === sub.id ? (
-                            <span className="text-sm text-muted-foreground">Renomeando…</span>
+                            <span className="text-base text-muted-foreground">Renomeando…</span>
                           ) : (
                             <span className="flex min-w-0 flex-row items-center gap-3">
-                              <span className="truncate font-medium tracking-tight">{sub.nome}</span>
+                              <span className="truncate text-2xl font-bold tracking-tight">{sub.nome}</span>
                               <BarraProgressoSubcategoria
                                 total={sub.itens.length}
                                 concluidos={concluidos}
                               />
                             </span>
                           )}
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-sm text-muted-foreground">
                             {sub.itens.length === 0
                               ? "Lista vazia"
                               : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
@@ -249,7 +249,7 @@ export function SubcategoriasAccordion({
                                 } ${sub.itens.length === 1 ? "item" : "itens"}`}
                           </span>
                           {modoCompras && (
-                            <span className="block text-xs font-medium tabular-nums">
+                            <span className="block text-sm font-medium tabular-nums">
                               {formatarBRL(totalSubcategoria(sub))}
                             </span>
                           )}

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   IndicadorCorCategoria,
-  NomeCategoriaColorido,
   TrocarCorCategoria,
 } from "./cores-categoria";
 import { SubcategoriasAccordion } from "./subcategorias-accordion";
@@ -71,7 +70,7 @@ export function CategoriaView({
   };
 
   return (
-    <section className="mx-auto w-full max-w-2xl">
+    <section className="mx-auto w-full max-w-3xl">
       <Button
         variant="ghost"
         onClick={onVoltar}
@@ -81,29 +80,26 @@ export function CategoriaView({
         Todas as categorias
       </Button>
 
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="flex min-w-0 items-center gap-2 font-display text-3xl font-semibold tracking-tight">
-            <IndicadorCorCategoria cor={categoria.cor} className="size-4" />
-            <NomeCategoriaColorido cor={categoria.cor} className="truncate">
-              {categoria.nome}
-            </NomeCategoriaColorido>
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {categoria.subcategorias.length === 0
-              ? "Crie uma subcategoria para começar."
-              : `${categoria.subcategorias.length} subcategoria${
-                  categoria.subcategorias.length === 1 ? "" : "s"
-                }`}
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <TrocarCorCategoria corAtual={categoria.cor} onSelecionar={onTrocarCor} />
-          <Button onClick={() => setCriando((v) => !v)}>
-            <Plus className="size-4" />
-            Nova Subcategoria
-          </Button>
-        </div>
+      <div className="relative mb-8 flex justify-end gap-2">
+        <TrocarCorCategoria corAtual={categoria.cor} onSelecionar={onTrocarCor} />
+        <Button onClick={() => setCriando((v) => !v)}>
+          <Plus className="size-4" />
+          Nova Subcategoria
+        </Button>
+      </div>
+
+      <div className="mb-8 flex flex-col items-center text-center">
+        <h1 className="flex min-w-0 items-center justify-center gap-3 text-5xl font-black tracking-tight text-blue-800 sm:text-6xl">
+          <IndicadorCorCategoria cor={categoria.cor} className="size-8 shrink-0" />
+          <span className="truncate">{categoria.nome}</span>
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {categoria.subcategorias.length === 0
+            ? "Crie uma subcategoria para começar."
+            : `${categoria.subcategorias.length} subcategoria${
+                categoria.subcategorias.length === 1 ? "" : "s"
+              }`}
+        </p>
       </div>
 
       {criando && (

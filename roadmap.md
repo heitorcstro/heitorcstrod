@@ -1,12 +1,14 @@
-# Roadmap
+# Roadmap — Nirvana
 
 ## Concluído
-- Divisor vertical preto full-height nos cards de categoria (só categorias).
-- Botão "+" (Adicionar Subcategoria) no cluster superior direito, ordem [+] → [Mover categoria] → [Trocar de cor].
-- Fundo dividido (cor à esquerda, branco à direita), chevron preto.
-- Barra de progresso azul ao lado do nome da subcategoria.
-- Sidebar esquerda (w-72, borda preta) com header "+" que abre a criação de categoria, lista empilhada sincronizada com o estado global, alça "M" por categoria, linha "Arquivados" clicável com contador, e ordem aleatória no primeiro carregamento.
-- Botão de arquivamento (ícone enviado pelo usuário) em categorias (à direita do "+") e em subcategorias (à esquerda da seta); leva direto para "Arquivados", com opção Restaurar. Itens continuam apenas excluíveis.
+- Divisor vertical preto full-height nos cards de categoria.
+- Botão "+" (Adicionar Subcategoria) quadrado no cluster superior direito.
+- Fundo dividido (colorido à esquerda, branco à direita).
+- Badge "Urgente" (bookmark vermelho + contador) na categoria com "Urgente".
+- Badge "Urgente" ampliado: ícone size 38, text-2xl font-black, red-600 com glow e animação heartbeat.
+- Sidebar movida para a DIREITA (border-l border-black).
+- Cabeçalho gigante centralizado na Focused View (text-5xl/6xl font-black text-blue-800).
+- Subcategorias ampliadas: títulos text-2xl font-bold, padding py-4 px-6, barra de progresso h-3 w-28.
 
 ## Aberto
-(nenhum)
+(nada)
