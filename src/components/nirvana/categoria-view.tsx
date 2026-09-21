@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Plus, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,7 +16,6 @@ type Props = {
   onVoltar: () => void;
   onTrocarCor: (cor: CorCategoria) => void;
   onCriarSubcategoria: (nome: string) => void;
-  onAlternarModoCompras: () => void;
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
@@ -45,7 +44,6 @@ export function CategoriaView({
   onVoltar,
   onTrocarCor,
   onCriarSubcategoria,
-  onAlternarModoCompras,
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
@@ -59,7 +57,7 @@ export function CategoriaView({
   onRestaurarOrdem,
   onAtualizarValores,
 }: Props) {
-  const modoCompras = categoria.isShoppingList === true;
+  const modoCompras = categoria.cor === "Gold";
   const [criando, setCriando] = useState(false);
   const [nome, setNome] = useState("");
 
@@ -101,10 +99,6 @@ export function CategoriaView({
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <TrocarCorCategoria corAtual={categoria.cor} onSelecionar={onTrocarCor} />
-          <Button variant="outline" onClick={onAlternarModoCompras}>
-            <ShoppingCart className="size-4" />
-            {modoCompras ? "Desativar compras" : "Lista de Compras"}
-          </Button>
           <Button onClick={() => setCriando((v) => !v)}>
             <Plus className="size-4" />
             Nova Subcategoria
@@ -161,7 +155,7 @@ export function CategoriaView({
       {modoCompras && (
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-primary px-6 py-5 text-primary-foreground">
           <span className="text-xs uppercase tracking-[0.18em] text-primary-foreground/70">
-            Valor Total da Categoria
+            Resultado
           </span>
           <span className="font-display text-2xl font-semibold tracking-tight tabular-nums">
             {formatarBRL(totalCategoria(categoria))}

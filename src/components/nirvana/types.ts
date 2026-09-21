@@ -92,19 +92,25 @@ export const ehCorCategoria = (cor: unknown): cor is CorCategoria =>
   typeof cor === "string" && CORES_CATEGORIA.includes(cor as CorCategoria);
 
 export const categoriasIniciais = (): Categoria[] =>
-  CATEGORIAS_PADRAO.map((nome) => ({
-    id: criarId(),
-    nome,
-    cor: corCategoriaAleatoria(),
-    subcategorias: [{ id: criarId(), nome: "Geral", itens: [] }],
-  }));
+  CATEGORIAS_PADRAO.map((nome) => {
+    const cor = corCategoriaAleatoria();
+    return {
+      id: criarId(),
+      nome,
+      cor,
+      isShoppingList: cor === "Gold",
+      subcategorias: [{ id: criarId(), nome: "Geral", itens: [] }],
+    };
+  });
 
 export const normalizarCategorias = (categorias: Categoria[]): Categoria[] =>
   categorias.map((categoria) => {
     const corExistente = (categoria as { cor?: unknown }).cor;
+    const cor = ehCorCategoria(corExistente) ? corExistente : corCategoriaAleatoria();
     return {
       ...categoria,
-      cor: ehCorCategoria(corExistente) ? corExistente : corCategoriaAleatoria(),
+      cor,
+      isShoppingList: cor === "Gold",
       subcategorias: Array.isArray(categoria.subcategorias) ? categoria.subcategorias : [],
     };
   });
