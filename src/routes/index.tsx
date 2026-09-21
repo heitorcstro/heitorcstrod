@@ -189,6 +189,7 @@ function NirvanaPage() {
       ),
     );
     setCategoriaParaRemoverDaPasta(null);
+    setModalRemoverDaPastaAberto(false);
   };
 
   const abrirArquivados = () => {
