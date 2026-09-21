@@ -68,6 +68,12 @@ type ItemProps = {
    * subcategorias.
    */
   inline?: boolean;
+  /**
+   * Quando informado, renderiza a alça inline como um pequeno quadrado com
+   * esta letra/ símbolo (em vez do texto completo). O `textoAlca` é usado
+   * apenas como rótulo acessível (aria-label).
+   */
+  alcaLetra?: string;
   children: (alca: ReactNode) => ReactNode;
 };
 
