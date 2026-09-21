@@ -1,6 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ListChecks, Plus } from "lucide-react";
+import { ListChecks, Plus, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Accordion,
   AccordionContent,
@@ -64,6 +74,8 @@ function NirvanaPage() {
   const [categoriaAtivaId, setCategoriaAtivaId] = useState<string | null>(null);
   const [subcategoriaAtivaId, setSubcategoriaAtivaId] = useState<string | null>(null);
   const [modalAberto, setModalAberto] = useState(false);
+  const [modalDeletarAberto, setModalDeletarAberto] = useState(false);
+  const [categoriaParaExcluir, setCategoriaParaExcluir] = useState<Categoria | null>(null);
   const [novoNome, setNovoNome] = useState("");
   const [carregado, setCarregado] = useState(false);
   const [itemTransferindo, setItemTransferindo] = useState<{
@@ -287,10 +299,20 @@ function NirvanaPage() {
                   Escolha uma categoria para ver suas subcategorias.
                 </p>
               </div>
-              <Button size="lg" onClick={() => setModalAberto(true)}>
-                <Plus className="size-4" />
-                Criar Categoria
-              </Button>
+              <div className="flex flex-row items-center gap-3">
+                <Button size="lg" onClick={() => setModalAberto(true)}>
+                  <Plus className="size-4" />
+                  Criar Categoria
+                </Button>
+                <Button
+                  size="lg"
+                  onClick={() => setModalDeletarAberto(true)}
+                  className="bg-red-600 text-white hover:bg-red-700"
+                >
+                  <Trash2 className="size-4" />
+                  Deletar Categoria
+                </Button>
+              </div>
             </div>
 
             <ListaOrdenavel
