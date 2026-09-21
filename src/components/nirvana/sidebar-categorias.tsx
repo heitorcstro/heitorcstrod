@@ -61,6 +61,10 @@ export function SidebarCategorias({
     categorias.filter((c) => c.pastaId === pastaId);
 
   const aoSoltar = (ativoId: string, sobreId: string) => {
+    if (onSoltarHierarquia) {
+      onSoltarHierarquia(ativoId, sobreId);
+      return;
+    }
     if (sobreId.startsWith("pasta:")) {
       onMoverCategoriaParaPasta?.(ativoId, sobreId.slice("pasta:".length));
       return;
