@@ -97,6 +97,7 @@ function NirvanaPage() {
   const [carregado, setCarregado] = useState(false);
   const [categoriaCriandoSubId, setCategoriaCriandoSubId] = useState<string | null>(null);
   const [nomeNovaSub, setNomeNovaSub] = useState("");
+  const [mostrandoArquivados, setMostrandoArquivados] = useState(false);
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
