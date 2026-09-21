@@ -180,6 +180,7 @@ type ItemProps = {
 /** Item reordenável: expõe a alça de arraste para o conteúdo. */
 export function ItemOrdenavel({
   id,
+  tipo,
   textoAlca,
   className,
   inline = false,
@@ -195,7 +196,7 @@ export function ItemOrdenavel({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ id, data: { tipo } });
 
   const alca = inline ? (
     <span
