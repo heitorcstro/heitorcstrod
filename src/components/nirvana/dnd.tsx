@@ -246,11 +246,19 @@ export function ItemOrdenavel({
   return (
     <div
       ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-      }}
-      className={cn(className, isDragging && "relative z-20 opacity-80")}
+      style={
+        alvoEstatico
+          ? undefined
+          : {
+              transform: CSS.Transform.toString(transform),
+              transition,
+            }
+      }
+      className={cn(
+        className,
+        isDragging && "relative z-20 opacity-80",
+        destacado && "rounded-md ring-2 ring-blue-500",
+      )}
     >
       {children(alca)}
     </div>
