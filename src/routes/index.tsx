@@ -472,6 +472,126 @@ function NirvanaPage() {
     setItemTransferindo(null);
   };
 
+  const cartaoCategoria = (categoria: Categoria) => {
+    const total = contarItens(categoria);
+    const pendentes = contarPendentes(categoria);
+    return (
+      <ItemOrdenavel
+        key={categoria.id}
+        id={categoria.id}
+        textoAlca="Mover categoria"
+        inline
+        alcaClassName="ml-auto inline-flex shrink-0 cursor-grab touch-none select-none items-center whitespace-nowrap rounded-md border border-blue-500 bg-white px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 active:cursor-grabbing"
+      >
+        {(alca) => (
+          <AccordionItem
+            value={categoria.id}
+            className="group relative flex min-h-[100px] flex-col overflow-hidden rounded-xl border border-black bg-white transition-colors hover:border-foreground/40 lg:min-h-[132px]"
+          >
+            <AccordionTrigger
+              showChevron={false}
+              className="relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start pr-[260px] text-left text-white hover:no-underline"
+            >
+              <div className={`absolute inset-y-0 left-0 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}>
+                <span className="w-full truncate font-medium tracking-tight text-white">
+                  {categoria.nome}
+                </span>
+                <span className="text-xs text-white/80">
+                  {categoria.subcategorias.length} subcategoria
+                  {categoria.subcategorias.length === 1 ? "" : "s"}
+                  {total > 0 && ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
+                </span>
+                {categoria.nome.includes("Urgente") && (
+                  <span className="mt-1 flex flex-row items-center gap-1.5 animate-heartbeat">
+                    <Bookmark
+                      size={38}
+                      strokeWidth={2.5}
+                      className="shrink-0 text-red-600 fill-red-600 drop-shadow-[0_0_10px_rgba(220,38,38,0.9)]"
+                    />
+                    <span className="text-2xl font-black text-red-600 tabular-nums drop-shadow-[0_0_10px_rgba(220,38,38,0.9)]">
+                      {pendentes}
+                    </span>
+                  </span>
+                )}
+              </div>
+              <ChevronDown
+                size={28}
+                strokeWidth={3}
+                className="pointer-events-none absolute bottom-3 right-3 h-7 w-7 text-black transition-transform duration-200"
+              />
+            </AccordionTrigger>
+            <div className="absolute top-3 right-3 z-10 flex flex-row items-start gap-6">
+              <div className="flex flex-col items-end gap-1.5">
+                <TrocarCorCategoria
+                  corAtual={categoria.cor}
+                  onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
+                />
+                {alca}
+              </div>
+              <div className="flex flex-row items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => abrirCriarSubcategoria(categoria.id)}
+                  aria-label="Adicionar Subcategoria"
+                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white p-0 text-black transition-colors hover:bg-black/5"
+                >
+                  <Plus className="size-[18px]" strokeWidth={2.5} />
+                </button>
+                <BotaoArquivar
+                  rotulo={`Arquivar ${categoria.nome}`}
+                  onArquivar={() => arquivarCategoria(categoria.id)}
+                />
+              </div>
+            </div>
+            <AccordionContent className="mb-4 mx-4 mt-3 rounded-lg bg-card p-4 pb-5">
+              <div className="space-y-4">
+                {categoria.subcategorias.length > 0 ? (
+                  <SubcategoriasAccordion
+                    categoria={categoria}
+                    modoCompras={categoria.cor === "Gold"}
+                    subcategoriasAbertas={subcategoriasAbertasPorCategoria[categoria.id] ?? []}
+                    onSubcategoriasAbertasChange={(subcategoriasAbertas) =>
+                      atualizarSubcategoriasAbertas(categoria.id, subcategoriasAbertas)
+                    }
+                    onReordenarSubcategorias={(ativoId, sobreId) =>
+                      reordenarSubcategorias(categoria.id, ativoId, sobreId)
+                    }
+                    onRenomearSubcategoria={renomearSubcategoria}
+                    onExcluirSubcategoria={excluirSubcategoria}
+                    onArquivarSubcategoria={arquivarSubcategoria}
+                    onMarcarTodos={marcarTodosItens}
+                    onAdicionarItem={adicionarItem}
+                    onAlternarItem={alternarItem}
+                    onRemoverItem={removerItem}
+                    onDefinirPrioridade={definirPrioridade}
+                    onTransferir={(subcategoriaId, item) =>
+                      setItemTransferindo({ item, subcategoriaId })
+                    }
+                    onReordenarItens={reordenarItens}
+                    onRestaurarOrdem={restaurarOrdemAutomatica}
+                    onAtualizarValores={atualizarValoresItem}
+                  />
+                ) : (
+                  <p className="text-sm text-muted-foreground">Nenhuma subcategoria ainda.</p>
+                )}
+                {categoria.cor === "Gold" && (
+                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-secondary px-4 py-3">
+                    <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                      Resultado
+                    </span>
+                    <span className="font-display text-lg font-semibold tracking-tight tabular-nums">
+                      {formatarBRL(totalCategoria(categoria))}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
+      </ItemOrdenavel>
+    );
+  };
+
   return (
     <div className="flex h-screen w-full bg-white">
       <SidebarCategorias
