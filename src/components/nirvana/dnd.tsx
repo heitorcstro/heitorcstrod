@@ -56,6 +56,9 @@ export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
   );
 }
 
+/** Tipos permitidos no arrasto da hierarquia. */
+export type TipoArrasto = "pasta" | "categoria";
+
 type ContextoProps = {
   ids: string[];
   /** Recebe o id arrastado e o id do alvo (pode ser uma área soltável). */
@@ -63,9 +66,21 @@ type ContextoProps = {
   children: ReactNode;
 };
 
+const tipoDe = (dados: unknown): TipoArrasto | null => {
+  const tipo = (dados as { tipo?: unknown } | null)?.tipo;
+  return tipo === "pasta" || tipo === "categoria" ? tipo : null;
+};
+
+/** Alvos válidos para cada tipo arrastado. */
+const alvoValido = (tipoAtivo: TipoArrasto | null, tipoAlvo: TipoArrasto | null) => {
+  if (tipoAtivo === "pasta") return tipoAlvo === "pasta";
+  if (tipoAtivo === "categoria") return tipoAlvo === "categoria" || tipoAlvo === "pasta";
+  return false;
+};
+
 /**
  * Contexto de arrasto que aceita tanto reordenação (itens ordenáveis) quanto
- * soltar dentro de áreas (pastas).
+ * soltar dentro de áreas (pastas), respeitando os tipos permitidos.
  */
 export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
   const sensores = useSensors(
@@ -81,17 +96,27 @@ export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
   const aoSoltar = (evento: DragEndEvent) => {
     const { active, over } = evento;
     if (!over || active.id === over.id) return;
+    // Rejeita combinações inválidas (ex.: pasta solta na lista de categorias).
+    if (!alvoValido(tipoDe(active.data.current), tipoDe(over.data.current))) return;
     onSoltar(String(active.id), String(over.id));
   };
 
   /**
    * O ponteiro manda: garante que soltar sobre uma pasta use a pasta como
-   * alvo, e não o cartão arrastado (que é bem maior que o cursor).
+   * alvo, e não o cartão arrastado (que é bem maior que o cursor). Também
+   * descarta alvos de tipo incompatível com o que está sendo arrastado.
    */
   const deteccao = (args: Parameters<typeof closestCenter>[0]) => {
-    const porPonteiro = pointerWithin(args);
+    const tipoAtivo = tipoDe(args.active.data.current);
+    const permitidos = {
+      ...args,
+      droppableContainers: args.droppableContainers.filter((container) =>
+        alvoValido(tipoAtivo, tipoDe(container.data.current)),
+      ),
+    };
+    const porPonteiro = pointerWithin(permitidos);
     if (porPonteiro.length > 0) return porPonteiro;
-    return closestCenter(args);
+    return closestCenter(permitidos);
   };
 
   return (
@@ -105,14 +130,16 @@ export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
 
 type AreaProps = {
   id: string;
+  /** Tipo aceito por esta área (usado nas restrições de arrasto). */
+  tipo?: TipoArrasto | undefined;
   className?: string;
   classNameAtiva?: string;
   children: ReactNode;
 };
 
 /** Área que pode receber itens arrastados (ex.: uma Pasta). */
-export function AreaSoltavel({ id, className, classNameAtiva, children }: AreaProps) {
-  const { setNodeRef, isOver } = useDroppable({ id });
+export function AreaSoltavel({ id, tipo, className, classNameAtiva, children }: AreaProps) {
+  const { setNodeRef, isOver } = useDroppable({ id, data: { tipo } });
   return (
     <div ref={setNodeRef} className={cn(className, isOver && classNameAtiva)}>
       {children}
@@ -122,6 +149,8 @@ export function AreaSoltavel({ id, className, classNameAtiva, children }: AreaPr
 
 type ItemProps = {
   id: string;
+  /** Tipo arrastado: define quais alvos aceitam este item. */
+  tipo?: TipoArrasto | undefined;
   textoAlca:
     | "Mover categoria"
     | "Mover subcategoria"
@@ -153,6 +182,7 @@ type ItemProps = {
 /** Item reordenável: expõe a alça de arraste para o conteúdo. */
 export function ItemOrdenavel({
   id,
+  tipo,
   textoAlca,
   className,
   inline = false,
@@ -168,7 +198,7 @@ export function ItemOrdenavel({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ id, data: { tipo } });
 
   const alca = inline ? (
     <span

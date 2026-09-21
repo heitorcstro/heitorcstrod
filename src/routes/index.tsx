@@ -113,6 +113,10 @@ function NirvanaPage() {
   const [nomeNovaPasta, setNomeNovaPasta] = useState("");
   const [novaCorPasta, setNovaCorPasta] = useState<CorCategoria | null>(null);
   const [pastasAbertasCentral, setPastasAbertasCentral] = useState<string[]>([]);
+  const [pendenteMoverPasta, setPendenteMoverPasta] = useState<{
+    categoriaId: string;
+    pastaId: string;
+  } | null>(null);
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
@@ -249,7 +253,11 @@ function NirvanaPage() {
     const pastaAtiva = ativoId.startsWith("pasta:");
     const pastaAlvo = sobreId.startsWith("pasta:");
 
+    // Ecos (cópias visuais) nunca movem nada.
+    if (ativoId.startsWith("eco:") || sobreId.startsWith("eco:")) return;
+
     if (pastaAtiva) {
+      // Pasta só pode ser reordenada entre pastas.
       if (pastaAlvo) {
         reordenarPastas(ativoId.slice("pasta:".length), sobreId.slice("pasta:".length));
       }
@@ -257,7 +265,8 @@ function NirvanaPage() {
     }
 
     if (pastaAlvo) {
-      moverCategoriaParaPasta(ativoId, sobreId.slice("pasta:".length));
+      // Categoria solta numa pasta: pergunta antes de aplicar.
+      setPendenteMoverPasta({ categoriaId: ativoId, pastaId: sobreId.slice("pasta:".length) });
       return;
     }
 
@@ -271,9 +280,23 @@ function NirvanaPage() {
     if (!alvo || !ativa) return;
     const destino = alvo.pastaId ?? null;
     if ((ativa.pastaId ?? null) !== destino) {
-      moverCategoriaParaPasta(ativoId, destino);
+      if (destino) {
+        setPendenteMoverPasta({ categoriaId: ativoId, pastaId: destino });
+        return;
+      }
+      moverCategoriaParaPasta(ativoId, null);
     }
     reordenarCategorias(ativoId, sobreId);
+  };
+
+  /** Aplica a escolha do modal: a categoria sempre entra na pasta. */
+  const confirmarMoverParaPasta = (manterEmCategorias: boolean) => {
+    if (!pendenteMoverPasta) return;
+    const { categoriaId, pastaId } = pendenteMoverPasta;
+    setCategorias((atual) =>
+      atual.map((c) => (c.id === categoriaId ? { ...c, pastaId, manterEmCategorias } : c)),
+    );
+    setPendenteMoverPasta(null);
   };
 
   const reordenarSubcategorias = (categoriaId: string, ativoId: string, sobreId: string) =>
@@ -483,20 +506,26 @@ function NirvanaPage() {
     setItemTransferindo(null);
   };
 
-  const cartaoCategoria = (categoria: Categoria) => {
+  /**
+   * `eco` = cópia apenas visual da categoria que vive dentro de uma pasta mas
+   * que o usuário optou por manter também na lista principal: não arrasta.
+   */
+  const cartaoCategoria = (categoria: Categoria, eco = false) => {
     const total = contarItens(categoria);
     const pendentes = contarPendentes(categoria);
+    const idArrasto = eco ? `eco:${categoria.id}` : categoria.id;
     return (
       <ItemOrdenavel
-        key={categoria.id}
-        id={categoria.id}
+        key={idArrasto}
+        id={idArrasto}
+        tipo={eco ? undefined : "categoria"}
         textoAlca="Mover categoria"
         inline
         alcaClassName="ml-auto inline-flex shrink-0 cursor-grab touch-none select-none items-center whitespace-nowrap rounded-md border border-blue-500 bg-white px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 active:cursor-grabbing"
       >
         {(alca) => (
           <AccordionItem
-            value={categoria.id}
+            value={idArrasto}
             className="group relative flex min-h-[100px] flex-col overflow-hidden rounded-xl border border-black bg-white transition-colors hover:border-foreground/40 lg:min-h-[132px]"
           >
             <AccordionTrigger
@@ -820,6 +849,7 @@ function NirvanaPage() {
                       <ItemOrdenavel
                         key={pasta.id}
                         id={`pasta:${pasta.id}`}
+                        tipo="pasta"
                         textoAlca="Mover pasta"
                         inline
                         alcaClassName="inline-flex shrink-0 cursor-grab touch-none select-none items-center whitespace-nowrap rounded-md border border-blue-500 bg-white px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 active:cursor-grabbing"
@@ -903,7 +933,11 @@ function NirvanaPage() {
                 </div>
               </div>
 
-              <AreaSoltavel id="raiz" classNameAtiva="rounded-xl ring-2 ring-blue-500">
+              <AreaSoltavel
+                id="raiz"
+                tipo="categoria"
+                classNameAtiva="rounded-xl ring-2 ring-blue-500"
+              >
                 <Accordion
                   type="multiple"
                   value={categoriasAbertas}
@@ -911,8 +945,8 @@ function NirvanaPage() {
                   className="mt-8 grid gap-3 lg:grid-cols-2"
                 >
                   {categoriasVisiveis
-                    .filter((c) => !c.pastaId)
-                    .map((categoria) => cartaoCategoria(categoria))}
+                    .filter((c) => !c.pastaId || c.manterEmCategorias !== false)
+                    .map((categoria) => cartaoCategoria(categoria, !!categoria.pastaId))}
                 </Accordion>
               </AreaSoltavel>
             </ContextoArrasto>
@@ -1172,6 +1206,34 @@ function NirvanaPage() {
               onClick={() => setModalDeletarPastaAberto(false)}
             >
               Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={!!pendenteMoverPasta}
+        onOpenChange={(aberto) => {
+          if (!aberto) setPendenteMoverPasta(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Mover para a pasta</DialogTitle>
+            <DialogDescription>
+              Você deseja manter apenas na pasta ou também em Categorias?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col gap-2 sm:flex-row">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => confirmarMoverParaPasta(true)}
+            >
+              Manter também em Categorias
+            </Button>
+            <Button type="button" onClick={() => confirmarMoverParaPasta(false)}>
+              Apenas na pasta
             </Button>
           </DialogFooter>
         </DialogContent>

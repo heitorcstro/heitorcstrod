@@ -76,6 +76,11 @@ export type Categoria = {
   arquivada?: boolean;
   /** Quando preenchido, a categoria pertence a esta Pasta. */
   pastaId?: string | null;
+  /**
+   * Quando a categoria está dentro de uma Pasta: define se ela continua
+   * aparecendo também na lista principal "Categorias".
+   */
+  manterEmCategorias?: boolean;
 };
 
 export const CATEGORIAS_PADRAO = [
@@ -137,6 +142,7 @@ export const normalizarCategorias = (categorias: Categoria[]): Categoria[] =>
       cor,
       isShoppingList: cor === "Gold",
       pastaId: typeof categoria.pastaId === "string" ? categoria.pastaId : null,
+      manterEmCategorias: categoria.manterEmCategorias !== false,
       subcategorias: Array.isArray(categoria.subcategorias) ? categoria.subcategorias : [],
     };
   });
