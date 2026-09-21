@@ -92,7 +92,7 @@ export function ItemOrdenavel({
       {...listeners}
       aria-label={textoAlca}
       tabIndex={0}
-      className="cursor-grab touch-none select-none text-xs font-normal text-slate-500 transition-colors hover:text-slate-700 active:cursor-grabbing"
+      className="ml-auto inline-flex shrink-0 cursor-grab touch-none select-none items-center rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
     >
       {textoAlca}
     </span>
