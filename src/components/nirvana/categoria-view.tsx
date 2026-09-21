@@ -109,7 +109,7 @@ export function CategoriaView({
         ids={categoria.subcategorias.map((s) => s.id)}
         onReordenar={onReordenarSubcategorias}
       >
-        <Accordion type="multiple" className="mt-8 grid gap-3 sm:grid-cols-2">
+        <Accordion type="multiple" className="mt-8 grid gap-3 border-l border-border pl-3 sm:grid-cols-2 sm:pl-4">
           {categoria.subcategorias.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             return (
