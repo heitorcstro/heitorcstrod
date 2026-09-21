@@ -76,6 +76,7 @@ export function ItemOrdenavel({ id, rotulo, className, children }: ItemProps) {
   const alca = (
     <button
       type="button"
+      suppressHydrationWarning
       ref={setActivatorNodeRef}
       {...attributes}
       {...listeners}
