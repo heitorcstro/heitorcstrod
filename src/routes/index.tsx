@@ -614,6 +614,7 @@ function NirvanaPage() {
         }}
         onDeletarPasta={() => setModalDeletarPastaAberto(true)}
         onMoverCategoriaParaPasta={moverCategoriaParaPasta}
+        onSoltarHierarquia={aoSoltarHierarquia}
         onCriarCategoria={() => setModalAberto(true)}
         onDeletarCategoria={() => setModalDeletarAberto(true)}
         onSelecionarCategoria={(categoriaId) => {
