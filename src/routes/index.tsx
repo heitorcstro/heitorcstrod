@@ -307,6 +307,7 @@ function NirvanaPage() {
                       key={categoria.id}
                       id={categoria.id}
                       textoAlca="Mover categoria"
+                      inline
                     >
                       {(alca) => (
                         <AccordionItem
