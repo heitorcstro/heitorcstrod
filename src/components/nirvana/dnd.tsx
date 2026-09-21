@@ -149,6 +149,8 @@ export function AreaSoltavel({ id, tipo, className, classNameAtiva, children }: 
 
 type ItemProps = {
   id: string;
+  /** Tipo arrastado: define quais alvos aceitam este item. */
+  tipo?: TipoArrasto;
   textoAlca:
     | "Mover categoria"
     | "Mover subcategoria"
