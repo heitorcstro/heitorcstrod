@@ -473,11 +473,11 @@ function NirvanaPage() {
                       {(alca) => (
                           <AccordionItem
                             value={categoria.id}
-                            className={`group relative flex min-h-[100px] flex-col rounded-xl border border-black bg-card transition-colors hover:border-foreground/40 ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
+                            className="group relative flex min-h-[100px] flex-col rounded-xl border border-black bg-white transition-colors hover:border-foreground/40"
                           >
                             <AccordionTrigger
                               showChevron={false}
-                              className={`relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start pr-[260px] text-left text-white hover:no-underline ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
+                              className="relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start pr-[260px] text-left text-white hover:no-underline"
                             >
                               <div className="absolute inset-y-0 left-0 flex min-w-0 max-w-[40%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6">
                                 <span className="w-full truncate font-medium tracking-tight text-white">
