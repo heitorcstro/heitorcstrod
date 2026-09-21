@@ -112,7 +112,7 @@ export function ListaView({
                 htmlFor={item.id}
                 className={cn(
                   "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed",
-                  item.concluido && "text-muted-foreground line-through",
+                  item.concluido ? "text-red-600 no-underline" : "text-foreground",
                 )}
               >
                 {item.texto}
