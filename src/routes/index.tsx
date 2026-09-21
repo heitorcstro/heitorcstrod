@@ -332,17 +332,28 @@ function NirvanaPage() {
               </Button>
             </div>
 
+            <ListaOrdenavel
+              ids={categorias.map((c) => c.id)}
+              onReordenar={reordenarCategorias}
+            >
             <Accordion type="multiple" className="mt-8 grid gap-3 lg:grid-cols-2">
               {categorias.map((categoria) => {
                 const total = contarItens(categoria);
                 const pendentes = contarPendentes(categoria);
                 return (
-                  <AccordionItem
+                  <ItemOrdenavel
                     key={categoria.id}
-                    value={categoria.id}
-                    className="rounded-xl border border-border bg-card px-5 transition-colors hover:border-foreground/40"
+                    id={categoria.id}
+                    rotulo={categoria.nome}
                   >
-                    <AccordionTrigger className="py-5 text-left hover:no-underline [&>svg]:text-foreground">
+                    {(alca) => (
+                  <AccordionItem
+                    value={categoria.id}
+                    className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
+                  >
+                    <div className="flex items-center gap-1">
+                      {alca}
+                    <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
                       <span>
                         <span className="block font-medium tracking-tight">
                           {categoria.nome}
@@ -354,6 +365,7 @@ function NirvanaPage() {
                         </span>
                       </span>
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent className="pb-5">
                       <div className="space-y-4 border-t border-border pt-4">
                         <Button
