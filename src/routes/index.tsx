@@ -493,7 +493,7 @@ function NirvanaPage() {
                               <ChevronDown
                                 size={28}
                                 strokeWidth={3}
-                                className="pointer-events-none absolute bottom-3 right-3 h-7 w-7 text-white transition-transform duration-200"
+                                className="pointer-events-none absolute bottom-3 right-3 h-7 w-7 text-black transition-transform duration-200"
                               />
                             </AccordionTrigger>
                             <div className="absolute right-3 top-3 z-10 flex max-w-[58%] flex-row flex-wrap items-center justify-end gap-2">
