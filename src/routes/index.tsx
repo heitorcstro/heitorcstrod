@@ -186,6 +186,19 @@ function NirvanaPage() {
       ),
     );
 
+  const renomearSubcategoria = (subcategoriaId: string, nome: string) =>
+    patchSubcategoria(subcategoriaId, (sub) => ({ ...sub, nome }));
+
+  const excluirSubcategoria = (subcategoriaId: string) => {
+    setCategorias((atual) =>
+      atual.map((c) => ({
+        ...c,
+        subcategorias: c.subcategorias.filter((s) => s.id !== subcategoriaId),
+      })),
+    );
+    if (subcategoriaAtivaId === subcategoriaId) setSubcategoriaAtivaId(null);
+  };
+
   const alternarModoCompras = (categoriaId: string) =>
     setCategorias((atual) =>
       atual.map((c) => (c.id === categoriaId ? { ...c, isShoppingList: !c.isShoppingList } : c)),
@@ -299,6 +312,8 @@ function NirvanaPage() {
             onReordenarSubcategorias={(ativoId, sobreId) =>
               reordenarSubcategorias(categoriaAtiva.id, ativoId, sobreId)
             }
+            onRenomearSubcategoria={renomearSubcategoria}
+            onExcluirSubcategoria={excluirSubcategoria}
           />
         ) : (
           <>
