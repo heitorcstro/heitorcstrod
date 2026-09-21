@@ -903,7 +903,11 @@ function NirvanaPage() {
                 </div>
               </div>
 
-              <AreaSoltavel id="raiz" classNameAtiva="rounded-xl ring-2 ring-blue-500">
+              <AreaSoltavel
+                id="raiz"
+                tipo="categoria"
+                classNameAtiva="rounded-xl ring-2 ring-blue-500"
+              >
                 <Accordion
                   type="multiple"
                   value={categoriasAbertas}

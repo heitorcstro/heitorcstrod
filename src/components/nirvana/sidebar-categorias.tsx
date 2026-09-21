@@ -316,7 +316,7 @@ export function SidebarCategorias({
                 </div>
               </div>
 
-              <AreaSoltavel id="raiz" classNameAtiva="bg-blue-50">
+              <AreaSoltavel id="raiz" tipo="categoria" classNameAtiva="bg-blue-50">
                 {categoriasSoltas.map((categoria) => linhaCategoria(categoria))}
               </AreaSoltavel>
             </ContextoArrasto>
