@@ -106,6 +106,7 @@ function NirvanaPage() {
   const [modalPastaAberto, setModalPastaAberto] = useState(false);
   const [modalDeletarPastaAberto, setModalDeletarPastaAberto] = useState(false);
   const [nomeNovaPasta, setNomeNovaPasta] = useState("");
+  const [novaCorPasta, setNovaCorPasta] = useState<CorCategoria | null>(null);
   const [itemTransferindo, setItemTransferindo] = useState<{
     item: Item;
     subcategoriaId: string;
@@ -203,9 +204,10 @@ function NirvanaPage() {
   const criarPasta = (e: React.FormEvent) => {
     e.preventDefault();
     const nome = nomeNovaPasta.trim();
-    if (!nome) return;
-    setPastas((atual) => [...atual, { id: criarId(), nome }]);
+    if (!nome || !novaCorPasta) return;
+    setPastas((atual) => [...atual, { id: criarId(), nome, cor: novaCorPasta }]);
     setNomeNovaPasta("");
+    setNovaCorPasta(null);
     setModalPastaAberto(false);
   };
 
@@ -973,28 +975,35 @@ function NirvanaPage() {
         open={modalPastaAberto}
         onOpenChange={(aberto) => {
           setModalPastaAberto(aberto);
-          if (!aberto) setNomeNovaPasta("");
+          if (!aberto) {
+            setNomeNovaPasta("");
+            setNovaCorPasta(null);
+          }
         }}
       >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Criar Pasta</DialogTitle>
             <DialogDescription>
-              Dê um nome para a pasta. Depois arraste categorias para dentro dela.
+              Dê um nome e escolha uma cor para a pasta. Depois arraste categorias para dentro dela.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={criarPasta}>
+          <form onSubmit={criarPasta} className="space-y-4">
             <Input
               autoFocus
               value={nomeNovaPasta}
               onChange={(e) => setNomeNovaPasta(e.target.value)}
               placeholder="Nome da pasta"
             />
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-black">Cor da pasta</p>
+              <GradeCoresCategoria selecionada={novaCorPasta} onSelecionar={setNovaCorPasta} />
+            </div>
             <DialogFooter className="mt-4">
               <Button type="button" variant="outline" onClick={() => setModalPastaAberto(false)}>
                 Cancelar
               </Button>
-              <Button type="submit" disabled={!nomeNovaPasta.trim()}>
+              <Button type="submit" disabled={!nomeNovaPasta.trim() || !novaCorPasta}>
                 Criar
               </Button>
             </DialogFooter>

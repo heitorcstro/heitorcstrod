@@ -213,7 +213,15 @@ export function SidebarCategorias({
                       onClick={() => alternarPasta(pasta.id)}
                       className="flex w-full flex-row items-center gap-3 border-b border-gray-200 px-4 py-3 text-left text-black hover:bg-slate-100"
                     >
-                      <Folder className="size-[18px] shrink-0" strokeWidth={2.5} />
+                      <Folder
+                        className={cn(
+                          "size-[18px] shrink-0",
+                          ESTILOS_COR_CATEGORIA[pasta.cor]?.texto,
+                        )}
+                        strokeWidth={2.5}
+                        fill="currentColor"
+                      />
+
                       <span className="min-w-0 flex-1 whitespace-normal break-words text-sm font-medium">
                         {pasta.nome}
                       </span>
