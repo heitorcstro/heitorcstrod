@@ -186,6 +186,14 @@ function NirvanaPage() {
       ),
     );
 
+  // Marca/desmarca apenas os itens desta subcategoria e volta à ordenação automática.
+  const marcarTodosItens = (subcategoriaId: string, concluido: boolean) =>
+    patchSubcategoria(subcategoriaId, (sub) => ({
+      ...sub,
+      ordemManual: false,
+      itens: sub.itens.map((i) => ({ ...i, concluido })),
+    }));
+
   const renomearSubcategoria = (subcategoriaId: string, nome: string) =>
     patchSubcategoria(subcategoriaId, (sub) => ({ ...sub, nome }));
 
@@ -314,6 +322,7 @@ function NirvanaPage() {
             }
             onRenomearSubcategoria={renomearSubcategoria}
             onExcluirSubcategoria={excluirSubcategoria}
+            onMarcarTodos={marcarTodosItens}
           />
         ) : (
           <>

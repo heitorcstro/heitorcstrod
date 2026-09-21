@@ -37,7 +37,11 @@ type Props = {
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
+  onMarcarTodos: (subcategoriaId: string, concluido: boolean) => void;
 };
+
+const estiloLink =
+  "text-xs text-slate-500 underline-offset-2 transition-colors hover:text-black hover:underline disabled:opacity-40 disabled:hover:no-underline";
 
 const estiloBotao =
   "inline-flex shrink-0 select-none items-center rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5";
@@ -51,6 +55,7 @@ export function CategoriaView({
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
+  onMarcarTodos,
 }: Props) {
   const modoCompras = categoria.isShoppingList === true;
   const [criando, setCriando] = useState(false);
@@ -202,6 +207,26 @@ export function CategoriaView({
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
+
+                    <div className="flex flex-wrap items-center gap-4 pb-3">
+                      <button
+                        type="button"
+                        className={estiloLink}
+                        disabled={sub.itens.length === 0}
+                        onClick={() => onMarcarTodos(sub.id, true)}
+                      >
+                        Marcar Tudo
+                      </button>
+                      <button
+                        type="button"
+                        className={estiloLink}
+                        disabled={sub.itens.length === 0}
+                        onClick={() => onMarcarTodos(sub.id, false)}
+                      >
+                        Desmarcar Tudo
+                      </button>
+                    </div>
+
 
                     {renomeandoId === sub.id && (
                       <div className="pb-3">
