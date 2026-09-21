@@ -922,8 +922,8 @@ function NirvanaPage() {
                   className="mt-8 grid gap-3 lg:grid-cols-2"
                 >
                   {categoriasVisiveis
-                    .filter((c) => !c.pastaId)
-                    .map((categoria) => cartaoCategoria(categoria))}
+                    .filter((c) => !c.pastaId || c.manterEmCategorias !== false)
+                    .map((categoria) => cartaoCategoria(categoria, !!categoria.pastaId))}
                 </Accordion>
               </AreaSoltavel>
             </ContextoArrasto>
