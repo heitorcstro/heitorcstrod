@@ -21,7 +21,7 @@ export function SidebarCategorias({
   totalArquivados = 0,
 }: Props) {
   return (
-    <aside className="flex w-72 shrink-0 flex-col border-r border-black bg-white">
+    <aside className="flex w-72 shrink-0 flex-col border-l border-black bg-white">
       <div className="flex flex-row items-center justify-between border-b border-black px-4 py-4">
         <span className="font-display text-sm font-semibold uppercase tracking-[0.16em] text-black">
           Categorias
