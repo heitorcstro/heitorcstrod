@@ -21,14 +21,17 @@ import {
 import { ListaView } from "@/components/nirvana/lista-view";
 import { CategoriaView } from "@/components/nirvana/categoria-view";
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
+import { ItemOrdenavel, ListaOrdenavel } from "@/components/nirvana/dnd";
 import {
   categoriasIniciais,
   contarItens,
   contarPendentes,
   criarId,
+  moverPorId,
   type Categoria,
   type Item,
   type Prioridade,
+  type Subcategoria,
 } from "@/components/nirvana/types";
 
 export const Route = createFileRoute("/")({
