@@ -6,9 +6,8 @@
 - Fundo dividido (colorido à esquerda, branco à direita).
 - Badge "Urgente" (bookmark vermelho + contador) na categoria com "Urgente".
 - Badge "Urgente" ampliado: ícone size 38, text-2xl font-black, red-600 com glow e animação heartbeat.
-- Sidebar movida para a DIREITA (border-l border-black).
-- Cabeçalho gigante centralizado na Focused View (text-5xl/6xl font-black text-blue-800).
-- Subcategorias ampliadas: títulos text-2xl font-bold, padding py-4 px-6, barra de progresso h-3 w-28.
+- Sidebar à direita + header gigante + subcategorias ampliadas (depois revertida).
+- Sidebar recolhível à ESQUERDA: border-r border-black; estado isSidebarExpanded (default true); largura w-72 expandida / w-16 recolhida com transition-all duration-300 ease-in-out overflow-hidden; botão toggle (ChevronLeft/ChevronRight) no topo-direito do header (w-8 h-8 quadrado bg-white border border-black text-black rounded-md); quando recolhida, nomes, alças "M" e "+" ficam ocultos, restando apenas seta de expandir e indicadores de cor; cabeçalhos gigantes e subcategorias ampliadas preservados e aproveitam o espaço extra.
 
 ## Aberto
 (nada)
