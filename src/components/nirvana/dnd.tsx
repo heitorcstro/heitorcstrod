@@ -56,7 +56,11 @@ export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
 
 type ItemProps = {
   id: string;
-  textoAlca: "Mover categoria" | "Mover subcategoria" | "Mover item";
+  textoAlca:
+    | "Mover categoria"
+    | "Mover subcategoria"
+    | "Mover item"
+    | "Mover essa Categoria";
   className?: string;
   /**
    * Quando verdadeiro, renderiza a alça como um texto sutil embutido ao lado
