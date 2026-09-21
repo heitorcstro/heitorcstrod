@@ -111,83 +111,94 @@ export function CategoriaView({
         </form>
       )}
 
-      <Accordion type="multiple" className="mt-8 grid gap-3 sm:grid-cols-2">
-        {categoria.subcategorias.map((sub) => {
-          const pendentes = sub.itens.filter((i) => !i.concluido).length;
-          return (
-            <AccordionItem
-              key={sub.id}
-              value={sub.id}
-              className="rounded-xl border border-border bg-card px-5 transition-colors hover:border-foreground/40"
-            >
-              <AccordionTrigger className="py-5 text-left hover:no-underline [&>svg]:text-foreground">
-                <span>
-                  <span className="block font-medium tracking-tight">
-                    {sub.nome}
-                  </span>
-                  <span className="mt-0.5 block text-xs text-muted-foreground">
-                    {sub.itens.length === 0
-                      ? "Lista vazia"
-                      : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
-                          sub.itens.length
-                        } ${sub.itens.length === 1 ? "item" : "itens"}`}
-                  </span>
-                  {modoCompras && (
-                    <span className="mt-1 block text-xs font-medium tabular-nums">
-                      {formatarBRL(totalSubcategoria(sub))}
-                    </span>
-                  )}
-                </span>
-              </AccordionTrigger>
-              <AccordionContent className="pb-5">
-                <div className="space-y-4 border-t border-border pt-4">
-                  {sub.itens.length > 0 ? (
-                    <ul className="space-y-2">
-                      {ordenarItens(sub.itens).map((item) => (
-                        <li
-                          key={item.id}
-                          className="flex items-center justify-between gap-3 text-sm"
-                        >
-                          <span
-                            className={
-                              item.concluido
-                                ? "text-destructive no-underline"
-                                : "text-foreground"
-                            }
-                          >
-                            {item.texto}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {item.prioridade ?? "—"}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Nenhum item nesta subcategoria.
-                    </p>
-                  )}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => onAbrirSubcategoria(sub.id)}
-                    className="w-full"
+      <ListaOrdenavel
+        ids={categoria.subcategorias.map((s) => s.id)}
+        onReordenar={onReordenarSubcategorias}
+      >
+        <Accordion type="multiple" className="mt-8 grid gap-3 sm:grid-cols-2">
+          {categoria.subcategorias.map((sub) => {
+            const pendentes = sub.itens.filter((i) => !i.concluido).length;
+            return (
+              <ItemOrdenavel key={sub.id} id={sub.id} rotulo={sub.nome}>
+                {(alca) => (
+                  <AccordionItem
+                    value={sub.id}
+                    className="rounded-xl border border-border bg-card px-3 transition-colors hover:border-foreground/40"
                   >
-                    Abrir lista
-                  </Button>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
-        {categoria.subcategorias.length === 0 && (
-          <p className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground sm:col-span-2">
-            Nenhuma subcategoria ainda. Use “Nova Subcategoria” para criar a
-            primeira.
-          </p>
-        )}
-      </Accordion>
+                    <div className="flex items-center gap-1">
+                      {alca}
+                      <AccordionTrigger className="flex-1 py-5 text-left hover:no-underline [&>svg]:text-foreground">
+                        <span>
+                          <span className="block font-medium tracking-tight">
+                            {sub.nome}
+                          </span>
+                          <span className="mt-0.5 block text-xs text-muted-foreground">
+                            {sub.itens.length === 0
+                              ? "Lista vazia"
+                              : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
+                                  sub.itens.length
+                                } ${sub.itens.length === 1 ? "item" : "itens"}`}
+                          </span>
+                          {modoCompras && (
+                            <span className="mt-1 block text-xs font-medium tabular-nums">
+                              {formatarBRL(totalSubcategoria(sub))}
+                            </span>
+                          )}
+                        </span>
+                      </AccordionTrigger>
+                    </div>
+                    <AccordionContent className="pb-5">
+                      <div className="space-y-4 border-t border-border pt-4">
+                        {sub.itens.length > 0 ? (
+                          <ul className="space-y-2">
+                            {itensExibidos(sub).map((item) => (
+                              <li
+                                key={item.id}
+                                className="flex items-center justify-between gap-3 text-sm"
+                              >
+                                <span
+                                  className={
+                                    item.concluido
+                                      ? "text-destructive no-underline"
+                                      : "text-foreground"
+                                  }
+                                >
+                                  {item.texto}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {item.prioridade ?? "—"}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">
+                            Nenhum item nesta subcategoria.
+                          </p>
+                        )}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => onAbrirSubcategoria(sub.id)}
+                          className="w-full"
+                        >
+                          Abrir lista
+                        </Button>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                )}
+              </ItemOrdenavel>
+            );
+          })}
+          {categoria.subcategorias.length === 0 && (
+            <p className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground sm:col-span-2">
+              Nenhuma subcategoria ainda. Use “Nova Subcategoria” para criar a
+              primeira.
+            </p>
+          )}
+        </Accordion>
+      </ListaOrdenavel>
 
       {modoCompras && (
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-primary px-6 py-5 text-primary-foreground">
