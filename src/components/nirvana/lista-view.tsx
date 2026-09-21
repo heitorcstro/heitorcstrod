@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { SeletorPrioridade } from "./seletor-prioridade";
+import { ordenarItens } from "./types";
 import type { Item, Prioridade, Subcategoria } from "./types";
 
 type Props = {

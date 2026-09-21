@@ -52,6 +52,22 @@ export const categoriasIniciais = (): Categoria[] =>
     subcategorias: [{ id: criarId(), nome: "Geral", itens: [] }],
   }));
 
+const ORDEM_PRIORIDADE: Record<Prioridade, number> = {
+  "1": 0,
+  "2": 1,
+  "3": 2,
+  D: 3,
+};
+
+// Ordena por prioridade (1 > 2 > 3 > D); sem prioridade vai para o fim.
+// Ordenação estável: empates mantêm a ordem de criação.
+export const ordenarItens = (itens: Item[]): Item[] =>
+  [...itens].sort(
+    (a, b) =>
+      (a.prioridade ? ORDEM_PRIORIDADE[a.prioridade] : 4) -
+      (b.prioridade ? ORDEM_PRIORIDADE[b.prioridade] : 4),
+  );
+
 export const contarItens = (categoria: Categoria) =>
   categoria.subcategorias.reduce((total, s) => total + s.itens.length, 0);
 
