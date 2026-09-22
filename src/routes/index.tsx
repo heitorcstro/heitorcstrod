@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Archive,
+  ArchiveRestore,
   ArrowLeft,
   Bookmark,
   ChevronDown,
@@ -200,6 +201,13 @@ function NirvanaPage() {
   const restaurarPasta = (pastaId: string) =>
     setPastas((atual) => atual.map((p) => (p.id === pastaId ? { ...p, arquivada: false } : p)));
 
+
+  const abrirCategoria = (categoriaId: string) => {
+    setMostrandoArquivados(false);
+    setPastaAtivaId(null);
+    setSubcategoriaAtivaId(null);
+    setCategoriaAtivaId(categoriaId);
+  };
 
   const abrirPasta = (pastaId: string) => {
     setMostrandoArquivados(false);
@@ -802,7 +810,13 @@ function NirvanaPage() {
                         strokeWidth={2.5}
                         fill="currentColor"
                       />
-                      <span className="text-sm font-medium text-black">{pasta.nome}</span>
+                      <button
+                        type="button"
+                        onClick={() => abrirPasta(pasta.id)}
+                        className="truncate text-sm font-medium text-black hover:underline"
+                      >
+                        {pasta.nome}
+                      </button>
                       <span className="text-xs text-muted-foreground">Pasta</span>
                     </span>
                     <Button
@@ -824,7 +838,13 @@ function NirvanaPage() {
                       <span
                         className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
                       />
-                      <span className="text-sm font-medium text-black">{categoria.nome}</span>
+                      <button
+                        type="button"
+                        onClick={() => abrirCategoria(categoria.id)}
+                        className="truncate text-sm font-medium text-black hover:underline"
+                      >
+                        {categoria.nome}
+                      </button>
                       <span className="text-xs text-muted-foreground">Categoria</span>
                     </span>
                     <Button
@@ -893,6 +913,12 @@ function NirvanaPage() {
           <CategoriaView
             categoria={categoriaAtiva}
             onVoltar={() => setCategoriaAtivaId(null)}
+            onArquivar={() =>
+              setCategorias((atual) =>
+                atual.map((c) => (c.id === categoriaAtiva.id ? { ...c, arquivada: true } : c)),
+              )
+            }
+            onRestaurar={() => restaurarCategoria(categoriaAtiva.id)}
             onTrocarCor={(cor) => trocarCorCategoria(categoriaAtiva.id, cor)}
             onCriarSubcategoria={(nome) => criarSubcategoria(categoriaAtiva.id, nome)}
             onReordenarSubcategorias={(ativoId, sobreId) =>
@@ -931,8 +957,13 @@ function NirvanaPage() {
                   fill="currentColor"
                 />
                 <div>
-                  <h1 className="font-display text-3xl font-semibold tracking-tight">
+                  <h1 className="flex items-center font-display text-3xl font-semibold tracking-tight">
                     {pastaAtiva.nome}
+                    {pastaAtiva.arquivada ? (
+                      <span className="ml-4 rounded-full bg-gray-200 px-2 py-1 text-[10px] text-gray-600">
+                        ARQUIVADO
+                      </span>
+                    ) : null}
                   </h1>
                   <p className="text-sm text-black/60">
                     {categoriasDaPastaAtiva.length}{" "}
@@ -958,15 +989,27 @@ function NirvanaPage() {
                 >
                   Excluir Categoria da Pasta
                 </button>
-                <button
-                  type="button"
-                  aria-label="Arquivar Pasta"
-                  title="Arquivar Pasta"
-                  onClick={() => arquivarPasta(pastaAtiva.id)}
-                  className="rounded-md border border-gray-300 p-2 text-gray-700 transition-colors hover:bg-gray-100"
-                >
-                  <Archive className="size-5" />
-                </button>
+                {pastaAtiva.arquivada ? (
+                  <button
+                    type="button"
+                    aria-label="Restaurar Pasta"
+                    title="Restaurar Pasta"
+                    onClick={() => restaurarPasta(pastaAtiva.id)}
+                    className="rounded-md border border-blue-300 p-2 text-blue-600 transition-colors hover:bg-blue-50"
+                  >
+                    <ArchiveRestore className="size-5" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    aria-label="Arquivar Pasta"
+                    title="Arquivar Pasta"
+                    onClick={() => arquivarPasta(pastaAtiva.id)}
+                    className="rounded-md border border-gray-300 p-2 text-gray-700 transition-colors hover:bg-gray-100"
+                  >
+                    <Archive className="size-5" />
+                  </button>
+                )}
                 <button
                   type="button"
                   aria-label="Deletar Pasta"

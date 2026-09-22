@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Plus } from "lucide-react";
+import { Archive, ArchiveRestore, ArrowLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,6 +13,8 @@ import type { Categoria, CorCategoria, Item, Prioridade } from "./types";
 type Props = {
   categoria: Categoria;
   onVoltar: () => void;
+  onArquivar?: () => void;
+  onRestaurar?: () => void;
   onTrocarCor: (cor: CorCategoria) => void;
   onCriarSubcategoria: (nome: string) => void;
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
@@ -41,6 +43,8 @@ type Props = {
 export function CategoriaView({
   categoria,
   onVoltar,
+  onArquivar,
+  onRestaurar,
   onTrocarCor,
   onCriarSubcategoria,
   onReordenarSubcategorias,
@@ -82,6 +86,27 @@ export function CategoriaView({
 
       <div className="relative mb-8 flex justify-end gap-2">
         <TrocarCorCategoria corAtual={categoria.cor} onSelecionar={onTrocarCor} />
+        {categoria.arquivada ? (
+          <button
+            type="button"
+            aria-label="Restaurar Categoria"
+            title="Restaurar Categoria"
+            onClick={onRestaurar}
+            className="rounded-md border border-blue-300 p-2 text-blue-600 transition-colors hover:bg-blue-50"
+          >
+            <ArchiveRestore className="size-5" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            aria-label="Arquivar Categoria"
+            title="Arquivar Categoria"
+            onClick={onArquivar}
+            className="rounded-md border border-gray-300 p-2 text-gray-700 transition-colors hover:bg-gray-100"
+          >
+            <Archive className="size-5" />
+          </button>
+        )}
         <Button onClick={() => setCriando((v) => !v)}>
           <Plus className="size-4" />
           Nova Subcategoria
@@ -92,6 +117,11 @@ export function CategoriaView({
         <h1 className="flex min-w-0 items-center justify-center gap-3 text-5xl font-black tracking-tight text-blue-800 sm:text-6xl">
           <IndicadorCorCategoria cor={categoria.cor} className="size-8 shrink-0" />
           <span className="truncate">{categoria.nome}</span>
+          {categoria.arquivada ? (
+            <span className="ml-4 rounded-full bg-gray-200 px-2 py-1 text-[10px] text-gray-600">
+              ARQUIVADO
+            </span>
+          ) : null}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {categoria.subcategorias.length === 0
