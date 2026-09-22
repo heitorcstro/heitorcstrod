@@ -41,7 +41,11 @@ type Props = {
   onAdicionarItem: (subcategoriaId: string, texto: string) => void;
   onAlternarItem: (subcategoriaId: string, itemId: string) => void;
   onRemoverItem: (subcategoriaId: string, itemId: string) => void;
-  onDefinirPrioridade: (subcategoriaId: string, itemId: string, prioridade: Prioridade) => void;
+  onDefinirPrioridade: (
+    subcategoriaId: string,
+    itemId: string,
+    prioridade: Prioridade | null,
+  ) => void;
   onTransferir: (subcategoriaId: string, item: Item) => void;
   onReordenarItens: (
     subcategoriaId: string,
