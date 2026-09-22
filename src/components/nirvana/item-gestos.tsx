@@ -92,7 +92,7 @@ export function ItemGestos({
         }
       }}
       className={cn(
-        "cursor-pointer select-none bg-white text-gray-900 transition-colors",
+        "cursor-pointer select-none bg-transparent text-gray-900 transition-colors",
         item.prioridade ? corDaPrioridade[item.prioridade] : "text-gray-900",
         className,
       )}

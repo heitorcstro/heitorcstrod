@@ -148,7 +148,7 @@ export function SubcategoriasAccordion({
               >
                 {(alcaItem) => (
                   <li className="list-none py-3">
-                    <div className="flex w-full max-w-full flex-col border-b border-border bg-white p-1">
+                    <div className="flex w-full max-w-full flex-col border-b border-border bg-transparent p-1">
                       {/* LINHA DE CIMA: o nome do item é o gatilho de prioridade */}
                       <div className="flex w-full min-w-0 flex-wrap items-center">
                         <ItemGestos
@@ -158,7 +158,7 @@ export function SubcategoriasAccordion({
                           }
                           onTransferir={() => onTransferir(sub.id, item)}
                           onAlternarConclusao={() => onAlternarItem(sub.id, item.id)}
-                          className="min-w-0 flex-1 truncate text-xs font-medium leading-relaxed no-underline"
+                          className="min-w-0 flex-1 truncate text-[11px] font-medium leading-relaxed no-underline"
                         >
                           {item.texto}
                         </ItemGestos>
@@ -223,7 +223,7 @@ export function SubcategoriasAccordion({
                       sub.arquivada ? "bg-gray-100 opacity-60" : "bg-card",
                     )}
                   >
-                     <div className="flex w-full min-w-0 max-w-full flex-col gap-3 py-4 xl:flex-row xl:items-center">
+                     <div className="flex w-full min-w-0 max-w-full flex-col gap-1 bg-transparent pb-1 pt-2 xl:flex-row xl:items-center">
                        {renomeandoId === sub.id ? (
                          <div
                            className="min-w-0 flex-1 py-2"
@@ -277,7 +277,7 @@ export function SubcategoriasAccordion({
                       </AccordionTrigger>
                        )}
 
-                      <div className="flex w-full flex-nowrap items-center gap-3 xl:w-auto xl:justify-end">
+                      <div className="mt-0.5 flex w-full flex-nowrap items-center gap-3 bg-transparent xl:mt-0 xl:w-auto xl:justify-end">
                         {alca}
                         <button
                           type="button"
