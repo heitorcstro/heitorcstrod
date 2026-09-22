@@ -1,4 +1,4 @@
-export type Prioridade = "1" | "2" | "3" | "D";
+export type Prioridade = "1" | "2" | "3" | "D" | "T";
 
 export type CorCategoria =
   | "Red"
@@ -10,7 +10,7 @@ export type CorCategoria =
   | "Magenta"
   | "Gold";
 
-export const PRIORIDADES: Prioridade[] = ["1", "2", "3", "D"];
+export const PRIORIDADES: Prioridade[] = ["1", "2", "3", "D", "T"];
 
 export const CORES_CATEGORIA: CorCategoria[] = [
   "Red",
@@ -39,6 +39,7 @@ export const ROTULOS_PRIORIDADE: Record<Prioridade, string> = {
   "2": "Prioridade 2",
   "3": "Prioridade 3",
   D: "Delegado",
+  T: "Transferir",
 };
 
 export type Item = {
@@ -176,13 +177,14 @@ const ORDEM_PRIORIDADE: Record<Prioridade, number> = {
   "2": 1,
   "3": 2,
   D: 3,
+  T: 4,
 };
 
 // Concluídos vão para o fim (sobrepõe a prioridade).
 // Depois ordena por prioridade (1 > 2 > 3 > D); sem prioridade vai para o fim.
 // Ordenação estável: empates mantêm a ordem de criação.
 const rank = (item: Item) =>
-  item.prioridade ? ORDEM_PRIORIDADE[item.prioridade] : 4;
+  item.prioridade ? ORDEM_PRIORIDADE[item.prioridade] : 5;
 
 export const ordenarItens = (itens: Item[]): Item[] =>
   [...itens].sort((a, b) => {
