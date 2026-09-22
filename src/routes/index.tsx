@@ -1328,6 +1328,34 @@ function NirvanaPage() {
         </DialogContent>
       </Dialog>
 
+      <AlertDialog
+        open={confirmarExcluirPastaAtiva}
+        onOpenChange={setConfirmarExcluirPastaAtiva}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir pasta</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir esta pasta? A exclusão da pasta é permanente.
+              As categorias dentro dela não são apagadas: elas voltam para a página
+              principal.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 text-white hover:bg-red-700"
+              onClick={() => {
+                if (pastaAtivaId) excluirPasta(pastaAtivaId);
+                setConfirmarExcluirPastaAtiva(false);
+              }}
+            >
+              Sim, excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Dialog open={modalDeletarPastaAberto} onOpenChange={setModalDeletarPastaAberto}>
         <DialogContent>
           <DialogHeader>
