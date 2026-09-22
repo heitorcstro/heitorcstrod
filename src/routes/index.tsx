@@ -609,7 +609,7 @@ function NirvanaPage() {
         textoAlca="Mover categoria"
         inline
         alcaIcone
-        alcaBoxClassName="h-8 w-8 -ml-[0.05cm]"
+        alcaBoxClassName="h-8 w-8 -translate-x-[0.1cm]"
         alcaImgClassName="h-7 w-7"
       >
         {(alca) => (
