@@ -142,15 +142,17 @@ export function GradeCoresCategoria({
 export function TrocarCorCategoria({
   corAtual,
   onSelecionar,
+  rotulo = "Trocar de cor",
 }: {
   corAtual: CorCategoria;
   onSelecionar: (cor: CorCategoria) => void;
+  rotulo?: string;
 }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button type="button" className={estiloBotaoCorCategoria}>
-          Trocar de cor
+          {rotulo}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-48">
