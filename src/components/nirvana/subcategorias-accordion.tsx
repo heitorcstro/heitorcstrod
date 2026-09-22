@@ -19,8 +19,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ArchiveRestore } from "lucide-react";
-import { BotaoArquivar } from "./botao-arquivar";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
 import { ItemGestos } from "./item-gestos";
 import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
