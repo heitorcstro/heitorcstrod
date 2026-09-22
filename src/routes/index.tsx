@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bookmark, ChevronDown, Folder, Plus, Trash2 } from "lucide-react";
+import { Bookmark, ChevronDown, ChevronRight, Folder, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -113,6 +113,8 @@ function NirvanaPage() {
   const [nomeNovaPasta, setNomeNovaPasta] = useState("");
   const [novaCorPasta, setNovaCorPasta] = useState<CorCategoria | null>(null);
   const [pastasAbertasCentral, setPastasAbertasCentral] = useState<string[]>([]);
+  const [secaoPastasCentral, setSecaoPastasCentral] = useState(true);
+  const [secaoCategoriasCentral, setSecaoCategoriasCentral] = useState(true);
   const [pastaAtivaId, setPastaAtivaId] = useState<string | null>(null);
   const [modalRemoverDaPastaAberto, setModalRemoverDaPastaAberto] = useState(false);
   const [modalImportarAberto, setModalImportarAberto] = useState(false);
@@ -922,23 +924,34 @@ function NirvanaPage() {
         ) : (
           <>
             <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
+              <button
+                type="button"
+                onClick={() => setSecaoPastasCentral((v) => !v)}
+                className="flex cursor-pointer items-center gap-2 text-left"
+              >
                 <h1 className="font-display text-3xl font-semibold tracking-tight">Pastas</h1>
-              </div>
-              <div className="flex flex-row items-center gap-3">
-                <Button size="lg" onClick={() => setModalPastaAberto(true)}>
-                  <Plus className="size-4" />
-                  Criar Pasta
-                </Button>
-                <Button
-                  size="lg"
-                  onClick={() => setModalDeletarPastaAberto(true)}
-                  className="bg-red-600 text-white hover:bg-red-700"
-                >
-                  <Trash2 className="size-4" />
-                  Deletar Pasta
-                </Button>
-              </div>
+                {secaoPastasCentral ? (
+                  <ChevronDown className="size-6" strokeWidth={3} />
+                ) : (
+                  <ChevronRight className="size-6" strokeWidth={3} />
+                )}
+              </button>
+              {secaoPastasCentral ? (
+                <div className="flex flex-row items-center gap-3">
+                  <Button size="lg" onClick={() => setModalPastaAberto(true)}>
+                    <Plus className="size-4" />
+                    Criar Pasta
+                  </Button>
+                  <Button
+                    size="lg"
+                    onClick={() => setModalDeletarPastaAberto(true)}
+                    className="bg-red-600 text-white hover:bg-red-700"
+                  >
+                    <Trash2 className="size-4" />
+                    Deletar Pasta
+                  </Button>
+                </div>
+              ) : null}
             </div>
 
             <ContextoArrasto
@@ -948,7 +961,7 @@ function NirvanaPage() {
               ]}
               onSoltar={aoSoltarHierarquia}
             >
-              {pastas.length > 0 ? (
+              {!secaoPastasCentral ? null : pastas.length > 0 ? (
                 <div className="mt-6 space-y-3">
                   {pastas.map((pasta) => {
                     const dentro = categoriasVisiveis.filter((c) => c.pastaId === pasta.id);
@@ -1026,23 +1039,34 @@ function NirvanaPage() {
               )}
 
               <div className="mt-10 flex flex-wrap items-end justify-between gap-4">
-                <div>
+                <button
+                  type="button"
+                  onClick={() => setSecaoCategoriasCentral((v) => !v)}
+                  className="flex cursor-pointer items-center gap-2 text-left"
+                >
                   <h1 className="font-display text-3xl font-semibold tracking-tight">Categorias</h1>
-                </div>
-                <div className="flex flex-row items-center gap-3">
-                  <Button size="lg" onClick={() => setModalAberto(true)}>
-                    <Plus className="size-4" />
-                    Criar Categoria
-                  </Button>
-                  <Button
-                    size="lg"
-                    onClick={() => setModalDeletarAberto(true)}
-                    className="bg-red-600 text-white hover:bg-red-700"
-                  >
-                    <Trash2 className="size-4" />
-                    Deletar Categoria
-                  </Button>
-                </div>
+                  {secaoCategoriasCentral ? (
+                    <ChevronDown className="size-6" strokeWidth={3} />
+                  ) : (
+                    <ChevronRight className="size-6" strokeWidth={3} />
+                  )}
+                </button>
+                {secaoCategoriasCentral ? (
+                  <div className="flex flex-row items-center gap-3">
+                    <Button size="lg" onClick={() => setModalAberto(true)}>
+                      <Plus className="size-4" />
+                      Criar Categoria
+                    </Button>
+                    <Button
+                      size="lg"
+                      onClick={() => setModalDeletarAberto(true)}
+                      className="bg-red-600 text-white hover:bg-red-700"
+                    >
+                      <Trash2 className="size-4" />
+                      Deletar Categoria
+                    </Button>
+                  </div>
+                ) : null}
               </div>
 
               <AreaSoltavel
@@ -1056,9 +1080,11 @@ function NirvanaPage() {
                   onValueChange={atualizarCategoriasAbertas}
                   className="mt-8 grid gap-3 lg:grid-cols-2"
                 >
-                  {categoriasVisiveis
-                    .filter((c) => !c.pastaId || c.manterEmCategorias !== false)
-                    .map((categoria) => cartaoCategoria(categoria, !!categoria.pastaId))}
+                  {secaoCategoriasCentral
+                    ? categoriasVisiveis
+                        .filter((c) => !c.pastaId || c.manterEmCategorias !== false)
+                        .map((categoria) => cartaoCategoria(categoria, !!categoria.pastaId))
+                    : []}
                 </Accordion>
               </AreaSoltavel>
             </ContextoArrasto>

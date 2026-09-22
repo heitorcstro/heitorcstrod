@@ -52,6 +52,8 @@ export function SidebarCategorias({
   onAlternarExpansao,
 }: Props) {
   const [pastasAbertas, setPastasAbertas] = useState<string[]>([]);
+  const [secaoPastasAberta, setSecaoPastasAberta] = useState(true);
+  const [secaoCategoriasAberta, setSecaoCategoriasAberta] = useState(true);
 
   const alternarPasta = (pastaId: string) =>
     setPastasAbertas((atual) =>
@@ -187,9 +189,19 @@ export function SidebarCategorias({
         {expandido ? (
           <>
             {/* Seção 1: Pastas */}
-            <div className="px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider">
+            <button
+              type="button"
+              onClick={() => setSecaoPastasAberta((v) => !v)}
+              className="flex w-full cursor-pointer flex-row items-center justify-between px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+            >
               PASTAS
-            </div>
+              {secaoPastasAberta ? (
+                <ChevronDown className="size-4" strokeWidth={2.5} />
+              ) : (
+                <ChevronRight className="size-4" strokeWidth={2.5} />
+              )}
+            </button>
+            {secaoPastasAberta ? (
             <div>
               <div
                 role="button"
@@ -219,6 +231,7 @@ export function SidebarCategorias({
                 <span className="text-sm font-medium">Deletar Pasta</span>
               </div>
             </div>
+            ) : null}
 
             <ContextoArrasto
               ids={[
@@ -227,7 +240,7 @@ export function SidebarCategorias({
               ]}
               onSoltar={aoSoltar}
             >
-              {pastas.map((pasta) => {
+              {secaoPastasAberta && pastas.map((pasta) => {
                 const aberta = pastasAbertas.includes(pasta.id);
                 const dentro = categoriasDaPasta(pasta.id);
                 return (
@@ -290,9 +303,19 @@ export function SidebarCategorias({
 
 
               {/* Seção 2: Categorias */}
-              <div className="px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider">
+              <button
+                type="button"
+                onClick={() => setSecaoCategoriasAberta((v) => !v)}
+                className="flex w-full cursor-pointer flex-row items-center justify-between px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+              >
                 CATEGORIAS
-              </div>
+                {secaoCategoriasAberta ? (
+                  <ChevronDown className="size-4" strokeWidth={2.5} />
+                ) : (
+                  <ChevronRight className="size-4" strokeWidth={2.5} />
+                )}
+              </button>
+              {secaoCategoriasAberta ? (
               <div>
                 <div
                   role="button"
@@ -322,9 +345,12 @@ export function SidebarCategorias({
                   <span className="text-sm font-medium">Deletar Categoria</span>
                 </div>
               </div>
+              ) : null}
 
               <AreaSoltavel id="raiz" tipo="categoria" classNameAtiva="bg-blue-50">
-                {categoriasSoltas.map((categoria) => linhaCategoria(categoria))}
+                {secaoCategoriasAberta
+                  ? categoriasSoltas.map((categoria) => linhaCategoria(categoria))
+                  : null}
               </AreaSoltavel>
             </ContextoArrasto>
           </>
