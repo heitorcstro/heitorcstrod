@@ -5,7 +5,9 @@ import {
   ChevronRight,
   Folder,
   Plus,
+  Search,
   Trash2,
+  X,
 } from "lucide-react";
 import { AreaSoltavel, ContextoArrasto, ItemOrdenavel } from "./dnd";
 import { ESTILOS_COR_CATEGORIA } from "./cores-categoria";
@@ -54,17 +56,74 @@ export function SidebarCategorias({
   const [pastasAbertas, setPastasAbertas] = useState<string[]>([]);
   const [secaoPastasAberta, setSecaoPastasAberta] = useState(true);
   const [secaoCategoriasAberta, setSecaoCategoriasAberta] = useState(true);
+  const [buscaPastas, setBuscaPastas] = useState("");
+  const [buscaCategorias, setBuscaCategorias] = useState("");
+  const [pesquisaPastasAtiva, setPesquisaPastasAtiva] = useState(false);
+  const [pesquisaCategoriasAtiva, setPesquisaCategoriasAtiva] = useState(false);
 
   const alternarPasta = (pastaId: string) =>
     setPastasAbertas((atual) =>
       atual.includes(pastaId) ? atual.filter((id) => id !== pastaId) : [...atual, pastaId],
     );
 
+  const contem = (nome: string, busca: string) =>
+    nome.toLowerCase().includes(busca.trim().toLowerCase());
+
   const categoriasSoltas = categorias.filter(
     (c) => !c.pastaId || c.manterEmCategorias !== false,
   );
+  const pastasFiltradas = pastas.filter((p) => contem(p.nome, buscaPastas));
+  const categoriasSoltasFiltradas = categoriasSoltas.filter((c) =>
+    contem(c.nome, buscaCategorias),
+  );
   const categoriasDaPasta = (pastaId: string) =>
     categorias.filter((c) => c.pastaId === pastaId);
+
+  /** Caixa de ação "Pesquisar" que se transforma em campo de texto ao clicar. */
+  const caixaPesquisa = (
+    ativa: boolean,
+    setAtiva: (v: boolean) => void,
+    valor: string,
+    setValor: (v: string) => void,
+    rotulo: string,
+  ) =>
+    ativa ? (
+      <div className={cn(CLASSE_ACAO, "cursor-text")}>
+        <Search className="size-[18px] shrink-0 text-gray-600" strokeWidth={2.5} />
+        <input
+          autoFocus
+          value={valor}
+          onChange={(e) => setValor(e.target.value)}
+          aria-label={rotulo}
+          placeholder="Pesquisar"
+          className="w-full min-w-0 bg-transparent text-sm font-medium outline-none"
+        />
+        <button
+          type="button"
+          aria-label="Limpar pesquisa"
+          onClick={() => {
+            setValor("");
+            setAtiva(false);
+          }}
+          className="shrink-0 text-gray-500 hover:text-black"
+        >
+          <X className="size-[18px]" strokeWidth={2.5} />
+        </button>
+      </div>
+    ) : (
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => setAtiva(true)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") setAtiva(true);
+        }}
+        className={CLASSE_ACAO}
+      >
+        <Search className="size-[18px] shrink-0 text-gray-600" strokeWidth={2.5} />
+        <span className="text-sm font-medium">Pesquisar</span>
+      </div>
+    );
 
   const aoSoltar = (ativoId: string, sobreId: string) => {
     if (onSoltarHierarquia) {
@@ -230,6 +289,13 @@ export function SidebarCategorias({
                 />
                 <span className="text-sm font-medium">Deletar Pasta</span>
               </div>
+              {caixaPesquisa(
+                pesquisaPastasAtiva,
+                setPesquisaPastasAtiva,
+                buscaPastas,
+                setBuscaPastas,
+                "Pesquisar pastas",
+              )}
             </div>
             ) : null}
 
@@ -240,7 +306,7 @@ export function SidebarCategorias({
               ]}
               onSoltar={aoSoltar}
             >
-              {secaoPastasAberta && pastas.map((pasta) => {
+              {secaoPastasAberta && pastasFiltradas.map((pasta) => {
                 const aberta = pastasAbertas.includes(pasta.id);
                 const dentro = categoriasDaPasta(pasta.id);
                 return (
@@ -344,12 +410,19 @@ export function SidebarCategorias({
                   />
                   <span className="text-sm font-medium">Deletar Categoria</span>
                 </div>
+                {caixaPesquisa(
+                  pesquisaCategoriasAtiva,
+                  setPesquisaCategoriasAtiva,
+                  buscaCategorias,
+                  setBuscaCategorias,
+                  "Pesquisar categorias",
+                )}
               </div>
               ) : null}
 
               <AreaSoltavel id="raiz" tipo="categoria" classNameAtiva="bg-blue-50">
                 {secaoCategoriasAberta
-                  ? categoriasSoltas.map((categoria) => linhaCategoria(categoria))
+                  ? categoriasSoltasFiltradas.map((categoria) => linhaCategoria(categoria))
                   : null}
               </AreaSoltavel>
             </ContextoArrasto>
