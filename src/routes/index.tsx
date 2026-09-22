@@ -1247,7 +1247,7 @@ function NirvanaPage() {
                   type="multiple"
                   value={categoriasAbertas}
                   onValueChange={atualizarCategoriasAbertas}
-                  className="mt-8 grid gap-3 lg:grid-cols-2"
+                  className="mt-8 grid w-full min-w-0 max-w-full gap-3 pr-4 lg:grid-cols-2"
                 >
                   {secaoCategoriasCentral
                     ? categoriasVisiveis
