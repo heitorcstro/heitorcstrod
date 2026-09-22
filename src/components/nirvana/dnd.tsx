@@ -189,6 +189,16 @@ type ItemProps = {
    * permanece como rótulo acessível (aria-label).
    */
   alcaIcone?: boolean;
+  /**
+   * Classes para sobrescrever as dimensões da caixa do ícone (ex.: "h-8 w-8").
+   * Por padrão a caixa é h-6 w-6.
+   */
+  alcaBoxClassName?: string;
+  /**
+   * Classes para sobrescrever as dimensões do ícone PNG (ex.: "h-7 w-7").
+   * Por padrão o ícone é h-5 w-5 (preto sólido).
+   */
+  alcaImgClassName?: string;
   children: (alca: ReactNode) => ReactNode;
 };
 
