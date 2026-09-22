@@ -791,6 +791,30 @@ function NirvanaPage() {
               </p>
             ) : (
               <div className="space-y-3">
+                {pastasArquivadas.map((pasta) => (
+                  <div
+                    key={pasta.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-black bg-white px-4 py-3"
+                  >
+                    <span className="flex min-w-0 items-center gap-2">
+                      <Folder
+                        className={`size-5 shrink-0 ${ESTILOS_COR_CATEGORIA[pasta.cor].texto}`}
+                        strokeWidth={2.5}
+                        fill="currentColor"
+                      />
+                      <span className="text-sm font-medium text-black">{pasta.nome}</span>
+                      <span className="text-xs text-muted-foreground">Pasta</span>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => restaurarPasta(pasta.id)}
+                    >
+                      Restaurar
+                    </Button>
+                  </div>
+                ))}
                 {categoriasArquivadas.map((categoria) => (
                   <div
                     key={categoria.id}
