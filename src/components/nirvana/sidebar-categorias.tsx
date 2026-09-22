@@ -169,18 +169,14 @@ export function SidebarCategorias({
   );
 
   const linhaCategoria = (categoria: Categoria, dentroDePasta = false) => {
-    // A categoria que vive numa pasta só é arrastável de dentro dela; o eco na
-    // lista principal (quando o usuário optou por manter) é apenas visual.
+    // Quando a mesma categoria também aparece no menu principal, o prefixo
+    // mantém ids únicos no DnD sem retirar sua alça nem sua mobilidade.
     const eco = !dentroDePasta && !!categoria.pastaId;
-    if (eco) {
-      return (
-        <div key={`eco-${categoria.id}`}>{conteudoCategoria(categoria, false, null)}</div>
-      );
-    }
+    const idArrasto = eco ? `eco:${categoria.id}` : categoria.id;
     return (
       <ItemOrdenavel
-        key={dentroDePasta ? `pasta-${categoria.id}` : categoria.id}
-        id={categoria.id}
+        key={dentroDePasta ? `pasta-${categoria.id}` : idArrasto}
+        id={idArrasto}
         tipo="categoria"
         textoAlca="Mover essa Categoria"
         alcaLetra="M"
@@ -308,7 +304,9 @@ export function SidebarCategorias({
             <ContextoArrasto
               ids={[
                 ...pastas.map((p) => `pasta:${p.id}`),
-                ...categorias.map((c) => c.id),
+                ...categorias.flatMap((c) =>
+                  c.pastaId && c.manterEmCategorias !== false ? [c.id, `eco:${c.id}`] : [c.id],
+                ),
               ]}
               onSoltar={aoSoltar}
             >

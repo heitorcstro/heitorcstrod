@@ -332,9 +332,6 @@ function NirvanaPage() {
     const pastaAtiva = ativoId.startsWith("pasta:");
     const pastaAlvo = sobreId.startsWith("pasta:");
 
-    // Ecos (cópias visuais) nunca movem nada.
-    if (ativoId.startsWith("eco:") || sobreId.startsWith("eco:")) return;
-
     if (pastaAtiva) {
       // Pasta só pode ser reordenada entre pastas.
       if (pastaAlvo) {
@@ -343,29 +340,39 @@ function NirvanaPage() {
       return;
     }
 
+    const categoriaAtivaId = ativoId.startsWith("eco:")
+      ? ativoId.slice("eco:".length)
+      : ativoId;
+    const categoriaAlvoId = sobreId.startsWith("eco:")
+      ? sobreId.slice("eco:".length)
+      : sobreId;
+
     if (pastaAlvo) {
       // Categoria solta numa pasta: pergunta antes de aplicar.
-      setPendenteMoverPasta({ categoriaId: ativoId, pastaId: sobreId.slice("pasta:".length) });
+      setPendenteMoverPasta({
+        categoriaId: categoriaAtivaId,
+        pastaId: sobreId.slice("pasta:".length),
+      });
       return;
     }
 
     if (sobreId === "raiz") {
-      moverCategoriaParaPasta(ativoId, null);
+      moverCategoriaParaPasta(categoriaAtivaId, null);
       return;
     }
 
-    const alvo = categorias.find((c) => c.id === sobreId);
-    const ativa = categorias.find((c) => c.id === ativoId);
+    const alvo = categorias.find((c) => c.id === categoriaAlvoId);
+    const ativa = categorias.find((c) => c.id === categoriaAtivaId);
     if (!alvo || !ativa) return;
     const destino = alvo.pastaId ?? null;
     if ((ativa.pastaId ?? null) !== destino) {
       if (destino) {
-        setPendenteMoverPasta({ categoriaId: ativoId, pastaId: destino });
+        setPendenteMoverPasta({ categoriaId: categoriaAtivaId, pastaId: destino });
         return;
       }
-      moverCategoriaParaPasta(ativoId, null);
+      moverCategoriaParaPasta(categoriaAtivaId, null);
     }
-    reordenarCategorias(ativoId, sobreId);
+    reordenarCategorias(categoriaAtivaId, categoriaAlvoId);
   };
 
   /** Aplica a escolha do modal: a categoria sempre entra na pasta. */
@@ -586,8 +593,8 @@ function NirvanaPage() {
   };
 
   /**
-   * `eco` = cópia apenas visual da categoria que vive dentro de uma pasta mas
-   * que o usuário optou por manter também na lista principal: não arrasta.
+   * `eco` = segunda representação da categoria que vive dentro de uma pasta e
+   * que o usuário optou por manter também na lista principal.
    */
   const cartaoCategoria = (categoria: Categoria, eco = false) => {
     const total = contarItens(categoria);
@@ -597,9 +604,10 @@ function NirvanaPage() {
       <ItemOrdenavel
         key={idArrasto}
         id={idArrasto}
-        tipo={eco ? undefined : "categoria"}
+        tipo="categoria"
         textoAlca="Mover categoria"
         inline
+        alcaLetra="M"
         alcaClassName="ml-auto inline-flex shrink-0 cursor-grab touch-none select-none items-center whitespace-nowrap rounded-md border border-blue-500 bg-white px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 active:cursor-grabbing"
       >
         {(alca) => (
@@ -1097,7 +1105,9 @@ function NirvanaPage() {
             <ContextoArrasto
               ids={[
                 ...pastasVisiveis.map((p) => `pasta:${p.id}`),
-                ...categoriasVisiveis.map((c) => c.id),
+                ...categoriasVisiveis.flatMap((c) =>
+                  c.pastaId && c.manterEmCategorias !== false ? [c.id, `eco:${c.id}`] : [c.id],
+                ),
               ]}
               onSoltar={aoSoltarHierarquia}
             >
