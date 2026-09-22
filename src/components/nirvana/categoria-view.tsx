@@ -20,6 +20,8 @@ type Props = {
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
+  onArquivarSubcategoria?: (subcategoriaId: string) => void;
+  onRestaurarSubcategoria?: (subcategoriaId: string) => void;
   onMarcarTodos: (subcategoriaId: string, concluido: boolean) => void;
   onAdicionarItem: (subcategoriaId: string, texto: string) => void;
   onAlternarItem: (subcategoriaId: string, itemId: string) => void;
@@ -50,6 +52,8 @@ export function CategoriaView({
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
+  onArquivarSubcategoria,
+  onRestaurarSubcategoria,
   onMarcarTodos,
   onAdicionarItem,
   onAlternarItem,
@@ -167,6 +171,8 @@ export function CategoriaView({
         onReordenarSubcategorias={onReordenarSubcategorias}
         onRenomearSubcategoria={onRenomearSubcategoria}
         onExcluirSubcategoria={onExcluirSubcategoria}
+        onArquivarSubcategoria={onArquivarSubcategoria}
+        onRestaurarSubcategoria={onRestaurarSubcategoria}
         onMarcarTodos={onMarcarTodos}
         onAdicionarItem={onAdicionarItem}
         onAlternarItem={onAlternarItem}

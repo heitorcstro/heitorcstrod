@@ -41,7 +41,15 @@ export function BotaoArquivar({ rotulo, onArquivar, comoSpan = false }: Props) {
   }
 
   return (
-    <button type="button" aria-label={rotulo} className={estiloQuadrado} onClick={onArquivar}>
+    <button
+      type="button"
+      aria-label={rotulo}
+      className={estiloQuadrado}
+      onClick={(e) => {
+        e.stopPropagation();
+        onArquivar();
+      }}
+    >
       <IconeArquivar />
     </button>
   );
