@@ -157,12 +157,12 @@ export function SidebarCategorias({
       <button
         type="button"
         onClick={() => onSelecionarCategoria(categoria.id)}
-        className="flex min-w-0 items-center gap-2 text-left"
+        className="flex min-w-0 items-center gap-2 whitespace-nowrap text-left"
       >
         <span
           className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
         />
-        <span className="whitespace-normal break-words text-sm font-medium">{categoria.nome}</span>
+        <span className="whitespace-nowrap text-sm font-medium">{categoria.nome}</span>
         {categoria.arquivada ? (
           <span className="shrink-0 rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-600">
             ARQ.
@@ -194,7 +194,7 @@ export function SidebarCategorias({
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-hidden border-r border-black bg-white shadow-2xl transition-transform duration-300 ease-in-out",
+        "fixed left-0 top-0 z-50 flex h-screen w-fit flex-col overflow-hidden border-r border-black bg-white pr-4 shadow-2xl transition-transform duration-300 ease-in-out",
         expandido ? "translate-x-0" : "-translate-x-full",
       )}
     >
@@ -257,7 +257,7 @@ export function SidebarCategorias({
             <button
               type="button"
               onClick={() => setSecaoPastasAberta((v) => !v)}
-              className="flex w-full cursor-pointer flex-row items-center gap-1 px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+              className="flex w-full cursor-pointer flex-row items-center gap-1 whitespace-nowrap px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
             >
               PASTAS
               {secaoPastasAberta ? (
@@ -343,7 +343,7 @@ export function SidebarCategorias({
                           <button
                             type="button"
                             onClick={() => onSelecionarPasta?.(pasta.id)}
-                            className="flex min-w-0 items-center gap-2 text-left text-sm font-medium"
+                            className="flex min-w-0 items-center gap-2 whitespace-nowrap text-left text-sm font-medium"
                           >
                             <Folder
                               className={cn(
@@ -353,7 +353,7 @@ export function SidebarCategorias({
                               strokeWidth={2.5}
                               fill="currentColor"
                             />
-                            <span className="whitespace-normal break-words">{pasta.nome}</span>
+                            <span className="whitespace-nowrap">{pasta.nome}</span>
                             <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
                           </button>
                         </div>
@@ -376,7 +376,7 @@ export function SidebarCategorias({
               <button
                 type="button"
                 onClick={() => setSecaoCategoriasAberta((v) => !v)}
-                className="flex w-full cursor-pointer flex-row items-center gap-1 px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+                className="flex w-full cursor-pointer flex-row items-center gap-1 whitespace-nowrap px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
               >
                 CATEGORIAS
                 {secaoCategoriasAberta ? (
@@ -449,7 +449,7 @@ export function SidebarCategorias({
             !expandido && "justify-center px-0",
           )}
         >
-          <span className="whitespace-normal break-words text-sm font-medium">
+          <span className="whitespace-nowrap text-sm font-medium">
             {expandido ? "Arquivados" : "📦"}
           </span>
           {expandido && totalArquivados > 0 && (
