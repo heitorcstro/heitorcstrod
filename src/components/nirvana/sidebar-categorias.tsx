@@ -146,6 +146,7 @@ export function SidebarCategorias({
       className={cn(
         "flex flex-row items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 text-black",
         dentroDePasta && "bg-slate-50 pl-9",
+        categoria.arquivada && "bg-gray-100 opacity-60",
       )}
     >
       <button
@@ -157,6 +158,11 @@ export function SidebarCategorias({
           className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
         />
         <span className="whitespace-normal break-words text-sm font-medium">{categoria.nome}</span>
+        {categoria.arquivada ? (
+          <span className="shrink-0 rounded-full bg-gray-200 px-2 py-0.5 text-[10px] text-gray-600">
+            ARQ.
+          </span>
+        ) : null}
       </button>
       {alca}
     </div>
