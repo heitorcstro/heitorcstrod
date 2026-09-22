@@ -1069,7 +1069,7 @@ function NirvanaPage() {
                   type="multiple"
                   value={categoriasAbertas}
                   onValueChange={atualizarCategoriasAbertas}
-                  className="mt-8 grid w-full min-w-0 max-w-full gap-3 pr-4 lg:grid-cols-2"
+                  className="mt-8 grid w-full min-w-0 max-w-full grid-cols-1 gap-3 pr-4 lg:grid-cols-2"
                 >
                   {categoriasDaPastaAtiva.map((categoria) => cartaoCategoria(categoria))}
                 </Accordion>
@@ -1247,7 +1247,7 @@ function NirvanaPage() {
                   type="multiple"
                   value={categoriasAbertas}
                   onValueChange={atualizarCategoriasAbertas}
-                  className="mt-8 grid w-full min-w-0 max-w-full gap-3 pr-4 lg:grid-cols-2"
+                  className="mt-8 grid w-full min-w-0 max-w-full grid-cols-1 gap-3 pr-4 lg:grid-cols-2"
                 >
                   {secaoCategoriasCentral
                     ? categoriasVisiveis
