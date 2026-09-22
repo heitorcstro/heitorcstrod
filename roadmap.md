@@ -14,6 +14,8 @@
 - Renomear categoria "Fazer de Maneira Urgente" -> "Urgente": atualizado em CATEGORIAS_PADRAO e via migração idempotente em normalizarCategorias (preserva id, cor, pastaId e subcategorias; só o nome muda). Badge urgente (nome contém "Urgente") continua funcionando.
 - Largura mínima dinâmica da sidebar (w-fit): removida a largura fixa w-72 do <aside> overlay, agora w-fit + pr-4 (encolhe até a maior linha). Textos de nomes e headers PASTAS/CATEGORIAS/Arquivados ganharam whitespace-nowrap para não quebrar em duas linhas. Espaçamento apertado (gap-1) e alinhamento esquerdo (slots w-5 chevron + w-6 M) preservados — alças "M" permanecem em coluna reta (left=28px).
 - Prioridade dos itens convertida em botão cíclico 1 → 2 → 3 → D → T → 1, com cores próprias e abertura automática da transferência em T.
+- Quadrados de prioridade e conclusão removidos: toque curto no item avança a prioridade e colore a linha; pressão de 2 segundos marca ou desmarca como feito.
+- Aparência branca preservada em toda a lista; somente o fundo do item muda conforme a prioridade.
 
 ## Aberto
 (nada)
