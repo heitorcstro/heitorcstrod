@@ -618,9 +618,9 @@ function NirvanaPage() {
           >
             <AccordionTrigger
               showChevron={false}
-              className="relative flex min-h-[68px] w-full min-w-0 max-w-full flex-1 flex-col items-start pr-[120px] text-left text-white hover:no-underline sm:pr-[260px]"
+              className="relative z-10 flex min-h-[68px] w-full min-w-0 max-w-full flex-1 flex-col items-start pr-[120px] text-left text-white hover:no-underline sm:pr-[260px]"
             >
-              <div className={`absolute inset-y-0 left-0 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}>
+              <div className={`absolute inset-y-0 left-0 z-10 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}>
                 <span className="flex w-full min-w-0 items-center gap-2 font-medium tracking-tight text-white">
                   <span className="truncate">{categoria.nome}</span>
                   {categoria.arquivada ? (
@@ -689,7 +689,7 @@ function NirvanaPage() {
                 />
               )}
             </div>
-            <AccordionContent className="mx-4 mb-1 mt-[50px] overflow-hidden rounded-lg bg-white bg-clip-padding px-2 pb-[50px]">
+            <AccordionContent className="relative z-0 mx-4 mb-1 mt-[50px] overflow-hidden rounded-lg bg-white bg-clip-padding px-2 pb-[50px]">
               <div className="space-y-4">
                 {categoria.subcategorias.length > 0 ? (
                   <SubcategoriasAccordion
