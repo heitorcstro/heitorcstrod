@@ -173,6 +173,12 @@ type ItemProps = {
    */
   alcaLetra?: string;
   /**
+   * Quando informado e `alcaLetra` estiver ausente, renderiza este texto
+   * como conteúdo visível da alça (em vez de `textoAlca`). `textoAlca`
+   * permanece como rótulo acessível (aria-label).
+   */
+  alcaTexto?: string;
+  /**
    * Classes opcionais para sobrescrever o estilo padrão da alça inline
    * (apenas quando `alcaLetra` não é informado).
    */
