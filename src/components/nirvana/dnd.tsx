@@ -234,7 +234,7 @@ export function ItemOrdenavel({
         )
       }
     >
-      {alcaLetra ?? textoAlca}
+      {alcaLetra ?? alcaTexto ?? textoAlca}
     </span>
   ) : (
     <Button
