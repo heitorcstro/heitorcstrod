@@ -378,32 +378,23 @@ export function SidebarCategorias({
               </button>
               {secaoCategoriasAberta ? (
               <div>
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={onCriarCategoria}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") onCriarCategoria();
-                  }}
-                  className={CLASSE_ACAO}
-                >
-                  <Plus className="size-[18px] shrink-0" strokeWidth={2.5} />
-                  <span className="text-sm font-medium">Criar Categoria</span>
-                </div>
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={onDeletarCategoria}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") onDeletarCategoria?.();
-                  }}
-                  className={cn(CLASSE_ACAO, "group")}
-                >
-                  <Trash2
-                    className="size-[18px] shrink-0 text-gray-500 transition-colors group-hover:text-red-500"
-                    strokeWidth={2.5}
-                  />
-                  <span className="text-sm font-medium">Deletar Categoria</span>
+                <div className="flex flex-row items-center gap-3 border-b border-gray-200 px-4 py-3">
+                  <button
+                    type="button"
+                    onClick={onCriarCategoria}
+                    className="inline-flex items-center justify-start gap-1.5 rounded-md bg-black pl-2 pr-3 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90"
+                  >
+                    <Plus className="size-4 shrink-0" strokeWidth={2.5} />
+                    Criar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onDeletarCategoria}
+                    className="inline-flex items-center justify-start gap-1.5 rounded-md bg-red-600 pl-2 pr-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                  >
+                    <Trash2 className="size-4 shrink-0" strokeWidth={2.5} />
+                    Del.
+                  </button>
                 </div>
                 {caixaPesquisa(
                   pesquisaCategoriasAtiva,

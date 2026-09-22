@@ -1208,18 +1208,22 @@ function NirvanaPage() {
                 </button>
                 {secaoCategoriasCentral ? (
                   <div className="flex flex-row items-center gap-3">
-                    <Button size="lg" onClick={() => setModalAberto(true)}>
+                    <button
+                      type="button"
+                      onClick={() => setModalAberto(true)}
+                      className="inline-flex items-center justify-start gap-1.5 rounded-md bg-black pl-2 pr-3 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90"
+                    >
                       <Plus className="size-4" />
-                      Criar Categoria
-                    </Button>
-                    <Button
-                      size="lg"
+                      Criar
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => setModalDeletarAberto(true)}
-                      className="bg-red-600 text-white hover:bg-red-700"
+                      className="inline-flex items-center justify-start gap-1.5 rounded-md bg-red-600 pl-2 pr-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
                     >
                       <Trash2 className="size-4" />
-                      Deletar Categoria
-                    </Button>
+                      Del.
+                    </button>
                   </div>
                 ) : null}
               </div>
