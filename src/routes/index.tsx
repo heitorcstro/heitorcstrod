@@ -172,12 +172,25 @@ function NirvanaPage() {
   const subcategoriasArquivadas = categorias.flatMap((c) =>
     c.subcategorias.filter((s) => s.arquivada).map((s) => ({ categoria: c, sub: s })),
   );
-  const totalArquivados = categoriasArquivadas.length + subcategoriasArquivadas.length;
+  const pastasVisiveis = pastas.filter((p) => !p.arquivada);
+  const pastasArquivadas = pastas.filter((p) => p.arquivada);
+  const totalArquivados =
+    categoriasArquivadas.length + subcategoriasArquivadas.length + pastasArquivadas.length;
 
   const pastaAtiva = pastas.find((p) => p.id === pastaAtivaId) ?? null;
   const categoriasDaPastaAtiva = pastaAtiva
     ? categoriasVisiveis.filter((c) => c.pastaId === pastaAtiva.id)
     : [];
+
+  /** Arquiva a pasta e sai da vista interna. */
+  const arquivarPasta = (pastaId: string) => {
+    setPastas((atual) => atual.map((p) => (p.id === pastaId ? { ...p, arquivada: true } : p)));
+    setPastaAtivaId(null);
+  };
+
+  const restaurarPasta = (pastaId: string) =>
+    setPastas((atual) => atual.map((p) => (p.id === pastaId ? { ...p, arquivada: false } : p)));
+
 
   const abrirPasta = (pastaId: string) => {
     setMostrandoArquivados(false);
