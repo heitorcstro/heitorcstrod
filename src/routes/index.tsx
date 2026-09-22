@@ -924,23 +924,34 @@ function NirvanaPage() {
         ) : (
           <>
             <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
+              <button
+                type="button"
+                onClick={() => setSecaoPastasCentral((v) => !v)}
+                className="flex cursor-pointer items-center gap-2 text-left"
+              >
                 <h1 className="font-display text-3xl font-semibold tracking-tight">Pastas</h1>
-              </div>
-              <div className="flex flex-row items-center gap-3">
-                <Button size="lg" onClick={() => setModalPastaAberto(true)}>
-                  <Plus className="size-4" />
-                  Criar Pasta
-                </Button>
-                <Button
-                  size="lg"
-                  onClick={() => setModalDeletarPastaAberto(true)}
-                  className="bg-red-600 text-white hover:bg-red-700"
-                >
-                  <Trash2 className="size-4" />
-                  Deletar Pasta
-                </Button>
-              </div>
+                {secaoPastasCentral ? (
+                  <ChevronDown className="size-6" strokeWidth={3} />
+                ) : (
+                  <ChevronRight className="size-6" strokeWidth={3} />
+                )}
+              </button>
+              {secaoPastasCentral ? (
+                <div className="flex flex-row items-center gap-3">
+                  <Button size="lg" onClick={() => setModalPastaAberto(true)}>
+                    <Plus className="size-4" />
+                    Criar Pasta
+                  </Button>
+                  <Button
+                    size="lg"
+                    onClick={() => setModalDeletarPastaAberto(true)}
+                    className="bg-red-600 text-white hover:bg-red-700"
+                  >
+                    <Trash2 className="size-4" />
+                    Deletar Pasta
+                  </Button>
+                </div>
+              ) : null}
             </div>
 
             <ContextoArrasto
