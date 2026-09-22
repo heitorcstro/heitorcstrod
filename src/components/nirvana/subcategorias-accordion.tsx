@@ -212,6 +212,7 @@ export function SubcategoriasAccordion({
                 id={sub.id}
                 textoAlca="Mover subcategoria"
                 inline
+                alcaTexto="Mov. Sub"
                 alcaClassName={`${estiloBaseAcao} cursor-grab touch-none text-black active:cursor-grabbing`}
               >
                 {(alca) => (
@@ -276,8 +277,7 @@ export function SubcategoriasAccordion({
                       </AccordionTrigger>
                        )}
 
-                      <div className="flex min-w-0 flex-wrap items-center gap-2 xl:justify-end">
-                        {alca}
+                      <div className="-mt-3 flex w-full flex-nowrap items-center gap-3 xl:w-auto xl:justify-end">
                         <button
                           type="button"
                           className={`${estiloBaseAcao} text-green-700 font-bold`}
@@ -289,6 +289,7 @@ export function SubcategoriasAccordion({
                         >
                           Ok
                         </button>
+                        {alca}
                         <button
                           type="button"
                           aria-label="Desmarcar tudo"
@@ -305,7 +306,7 @@ export function SubcategoriasAccordion({
                           </div>
                         </button>
 
-                        <div className="flex shrink-0 items-center gap-2">
+                        <div className="ml-auto flex shrink-0 items-center gap-2">
                           <button
                             type="button"
                             aria-label={`Renomear ${sub.nome}`}
