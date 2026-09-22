@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bookmark, ChevronDown, ChevronRight, Folder, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Bookmark, ChevronDown, ChevronRight, Folder, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -270,6 +270,11 @@ function NirvanaPage() {
     setCategorias((atual) =>
       atual.map((c) => (c.pastaId === pastaId ? { ...c, pastaId: null } : c)),
     );
+    setPastaAtivaId((atual) => (atual === pastaId ? null : atual));
+    setCategoriaAtivaId((atual) => {
+      const categoria = categorias.find((c) => c.id === atual);
+      return categoria?.pastaId === pastaId ? null : atual;
+    });
   };
 
   const moverCategoriaParaPasta = (categoriaId: string, pastaId: string | null) =>
@@ -860,11 +865,19 @@ function NirvanaPage() {
           />
         ) : pastaAtiva ? (
           <section>
-            <Button variant="ghost" size="sm" onClick={() => setPastaAtivaId(null)}>
-              Voltar
-            </Button>
-            <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
               <div className="flex flex-row items-center gap-3">
+                <button
+                  type="button"
+                  aria-label="Voltar para o menu principal"
+                  onClick={() => {
+                    setPastaAtivaId(null);
+                    setCategoriaAtivaId(null);
+                  }}
+                  className="cursor-pointer rounded-full p-2 transition-colors hover:bg-gray-100"
+                >
+                  <ArrowLeft className="size-6" strokeWidth={2.5} />
+                </button>
                 <Folder
                   className={`size-8 shrink-0 ${ESTILOS_COR_CATEGORIA[pastaAtiva.cor].texto}`}
                   strokeWidth={2.5}
@@ -897,6 +910,15 @@ function NirvanaPage() {
                   className="rounded-md bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700"
                 >
                   Excluir Categoria da Pasta
+                </button>
+                <button
+                  type="button"
+                  aria-label="Deletar Pasta"
+                  title="Deletar Pasta"
+                  onClick={() => setConfirmarExcluirPastaAtiva(true)}
+                  className="rounded-md border border-red-200 p-2 text-red-600 hover:bg-red-50"
+                >
+                  <Trash2 className="size-5" />
                 </button>
               </div>
             </div>
