@@ -154,7 +154,10 @@ export function SubcategoriasAccordion({
         <Accordion
           type="multiple"
           {...accordionControle}
-          className={cn("grid gap-3 border-l border-border pl-3 sm:pl-4", className)}
+          className={cn(
+            "grid w-full max-w-full gap-3 border-l border-border pl-3 pr-4 sm:pl-4",
+            className,
+          )}
         >
           {subcategoriasVisiveis.map((sub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
@@ -171,7 +174,7 @@ export function SubcategoriasAccordion({
               >
                 {(alcaItem) => (
                   <li className="list-none py-3">
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                    <div className="flex w-full max-w-full flex-wrap items-center gap-x-3 gap-y-2">
                       {alcaItem}
                       <SeletorPrioridade
                         prioridade={item.prioridade}
@@ -188,7 +191,7 @@ export function SubcategoriasAccordion({
                       <label
                         htmlFor={`${sub.id}-${item.id}`}
                         className={cn(
-                          "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed no-underline",
+                          "min-w-0 flex-1 cursor-pointer truncate text-sm leading-relaxed no-underline",
                           item.concluido ? "text-red-600" : "text-foreground",
                         )}
                       >
@@ -211,7 +214,7 @@ export function SubcategoriasAccordion({
                         size="icon"
                         aria-label={`Excluir ${item.texto}`}
                         onClick={() => onRemoverItem(sub.id, item.id)}
-                        className="text-muted-foreground hover:text-destructive"
+                        className="shrink-0 text-muted-foreground hover:text-destructive"
                       >
                         <Trash2 className="size-4" />
                       </Button>
