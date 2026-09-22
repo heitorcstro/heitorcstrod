@@ -240,7 +240,7 @@ export function SidebarCategorias({
               ]}
               onSoltar={aoSoltar}
             >
-              {pastas.map((pasta) => {
+              {secaoPastasAberta && pastas.map((pasta) => {
                 const aberta = pastasAbertas.includes(pasta.id);
                 const dentro = categoriasDaPasta(pasta.id);
                 return (
