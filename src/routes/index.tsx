@@ -1,6 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, ChevronDown, ChevronRight, Folder, Plus, Trash2 } from "lucide-react";
+import {
+  Archive,
+  ArrowLeft,
+  Bookmark,
+  ChevronDown,
+  ChevronRight,
+  Folder,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -172,12 +181,25 @@ function NirvanaPage() {
   const subcategoriasArquivadas = categorias.flatMap((c) =>
     c.subcategorias.filter((s) => s.arquivada).map((s) => ({ categoria: c, sub: s })),
   );
-  const totalArquivados = categoriasArquivadas.length + subcategoriasArquivadas.length;
+  const pastasVisiveis = pastas.filter((p) => !p.arquivada);
+  const pastasArquivadas = pastas.filter((p) => p.arquivada);
+  const totalArquivados =
+    categoriasArquivadas.length + subcategoriasArquivadas.length + pastasArquivadas.length;
 
   const pastaAtiva = pastas.find((p) => p.id === pastaAtivaId) ?? null;
   const categoriasDaPastaAtiva = pastaAtiva
     ? categoriasVisiveis.filter((c) => c.pastaId === pastaAtiva.id)
     : [];
+
+  /** Arquiva a pasta e sai da vista interna. */
+  const arquivarPasta = (pastaId: string) => {
+    setPastas((atual) => atual.map((p) => (p.id === pastaId ? { ...p, arquivada: true } : p)));
+    setPastaAtivaId(null);
+  };
+
+  const restaurarPasta = (pastaId: string) =>
+    setPastas((atual) => atual.map((p) => (p.id === pastaId ? { ...p, arquivada: false } : p)));
+
 
   const abrirPasta = (pastaId: string) => {
     setMostrandoArquivados(false);
@@ -686,7 +708,7 @@ function NirvanaPage() {
     <div className="flex h-screen w-full bg-white">
       <SidebarCategorias
         categorias={categoriasVisiveis}
-        pastas={pastas}
+        pastas={pastasVisiveis}
         onCriarPasta={() => {
           setNomeNovaPasta("");
           setModalPastaAberto(true);
@@ -759,7 +781,7 @@ function NirvanaPage() {
             <div>
               <h1 className="font-display text-3xl font-semibold tracking-tight">Arquivados</h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                Categorias e subcategorias guardadas aqui. Restaure quando quiser.
+                Pastas, categorias e subcategorias guardadas aqui. Restaure quando quiser.
               </p>
             </div>
 
@@ -769,6 +791,30 @@ function NirvanaPage() {
               </p>
             ) : (
               <div className="space-y-3">
+                {pastasArquivadas.map((pasta) => (
+                  <div
+                    key={pasta.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-black bg-white px-4 py-3"
+                  >
+                    <span className="flex min-w-0 items-center gap-2">
+                      <Folder
+                        className={`size-5 shrink-0 ${ESTILOS_COR_CATEGORIA[pasta.cor].texto}`}
+                        strokeWidth={2.5}
+                        fill="currentColor"
+                      />
+                      <span className="text-sm font-medium text-black">{pasta.nome}</span>
+                      <span className="text-xs text-muted-foreground">Pasta</span>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => restaurarPasta(pasta.id)}
+                    >
+                      Restaurar
+                    </Button>
+                  </div>
+                ))}
                 {categoriasArquivadas.map((categoria) => (
                   <div
                     key={categoria.id}
@@ -914,6 +960,15 @@ function NirvanaPage() {
                 </button>
                 <button
                   type="button"
+                  aria-label="Arquivar Pasta"
+                  title="Arquivar Pasta"
+                  onClick={() => arquivarPasta(pastaAtiva.id)}
+                  className="rounded-md border border-gray-300 p-2 text-gray-700 transition-colors hover:bg-gray-100"
+                >
+                  <Archive className="size-5" />
+                </button>
+                <button
+                  type="button"
                   aria-label="Deletar Pasta"
                   title="Deletar Pasta"
                   onClick={() => setConfirmarExcluirPastaAtiva(true)}
@@ -979,14 +1034,14 @@ function NirvanaPage() {
 
             <ContextoArrasto
               ids={[
-                ...pastas.map((p) => `pasta:${p.id}`),
+                ...pastasVisiveis.map((p) => `pasta:${p.id}`),
                 ...categoriasVisiveis.map((c) => c.id),
               ]}
               onSoltar={aoSoltarHierarquia}
             >
-              {!secaoPastasCentral ? null : pastas.length > 0 ? (
+              {!secaoPastasCentral ? null : pastasVisiveis.length > 0 ? (
                 <div className="mt-6 space-y-3">
-                  {pastas.map((pasta) => {
+                  {pastasVisiveis.map((pasta) => {
                     const dentro = categoriasVisiveis.filter((c) => c.pastaId === pasta.id);
                     const aberta = pastasAbertasCentral.includes(pasta.id);
                     return (
@@ -1365,11 +1420,11 @@ function NirvanaPage() {
               categorias.
             </DialogDescription>
           </DialogHeader>
-          {pastas.length === 0 ? (
+          {pastasVisiveis.length === 0 ? (
             <p className="text-sm text-muted-foreground">Nenhuma pasta para excluir.</p>
           ) : (
             <div className="max-h-80 space-y-2 overflow-y-auto">
-              {pastas.map((pasta) => (
+              {pastasVisiveis.map((pasta) => (
                 <div
                   key={pasta.id}
                   className="flex flex-row items-center justify-between gap-3 rounded-lg border border-border px-3 py-2"
