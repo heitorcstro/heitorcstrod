@@ -618,7 +618,7 @@ function NirvanaPage() {
           >
             <div
               aria-hidden
-              className={`pointer-events-none absolute inset-y-0 left-0 w-[60%] lg:w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
+              className={`pointer-events-none absolute inset-y-0 left-0 hidden w-[60%] group-data-[state=open]:block lg:w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
             />
             <AccordionTrigger
               showChevron={false}
