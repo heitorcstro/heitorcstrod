@@ -92,7 +92,7 @@ export const CATEGORIAS_PADRAO = [
   "Bolsa de Roupas",
   "Fazer de Manhã",
   "Fazer à Noite",
-  "Fazer de Maneira Urgente",
+  "Urgente",
   "Bolsas Levadas",
   "Mochila Estudo",
   "Marmita",
@@ -139,8 +139,13 @@ export const normalizarCategorias = (categorias: Categoria[]): Categoria[] =>
   categorias.map((categoria) => {
     const corExistente = (categoria as { cor?: unknown }).cor;
     const cor = ehCorCategoria(corExistente) ? corExistente : corCategoriaAleatoria();
+    // Migração de nome: "Fazer de Maneira Urgente" -> "Urgente".
+    // Preserva id, cor, pastaId e subcategorias — apenas o nome muda.
+    const nome =
+      categoria.nome === "Fazer de Maneira Urgente" ? "Urgente" : categoria.nome;
     return {
       ...categoria,
+      nome,
       cor,
       isShoppingList: cor === "Gold",
       pastaId: typeof categoria.pastaId === "string" ? categoria.pastaId : null,
