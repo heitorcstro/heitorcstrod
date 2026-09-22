@@ -1011,8 +1011,12 @@ function NirvanaPage() {
             <ContextoArrasto
               ids={[
                 ...pastasVisiveis.map((p) => `pasta:${p.id}`),
-...
+                ...categoriasVisiveis.map((c) => c.id),
+              ]}
+              onSoltar={aoSoltarHierarquia}
+            >
               {!secaoPastasCentral ? null : pastasVisiveis.length > 0 ? (
+                <div className="mt-6 space-y-3">
                   {pastasVisiveis.map((pasta) => {
                     const dentro = categoriasVisiveis.filter((c) => c.pastaId === pasta.id);
                     const aberta = pastasAbertasCentral.includes(pasta.id);
