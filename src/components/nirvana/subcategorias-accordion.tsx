@@ -41,7 +41,11 @@ type Props = {
   onAdicionarItem: (subcategoriaId: string, texto: string) => void;
   onAlternarItem: (subcategoriaId: string, itemId: string) => void;
   onRemoverItem: (subcategoriaId: string, itemId: string) => void;
-  onDefinirPrioridade: (subcategoriaId: string, itemId: string, prioridade: Prioridade) => void;
+  onDefinirPrioridade: (
+    subcategoriaId: string,
+    itemId: string,
+    prioridade: Prioridade | null,
+  ) => void;
   onTransferir: (subcategoriaId: string, item: Item) => void;
   onReordenarItens: (
     subcategoriaId: string,
@@ -144,20 +148,20 @@ export function SubcategoriasAccordion({
               >
                 {(alcaItem) => (
                   <li className="list-none py-3">
-                    <ItemGestos
-                      item={item}
-                      onDefinirPrioridade={(prioridade) =>
-                        onDefinirPrioridade(sub.id, item.id, prioridade)
-                      }
-                      onTransferir={() => onTransferir(sub.id, item)}
-                      onAlternarConclusao={() => onAlternarItem(sub.id, item.id)}
-                      className="group flex w-full max-w-full flex-col border-b border-border p-1"
-                    >
-                      {/* LINHA DE CIMA: dados e info principal */}
+                    <div className="flex w-full max-w-full flex-col border-b border-border bg-white p-1">
+                      {/* LINHA DE CIMA: o nome do item é o gatilho de prioridade */}
                       <div className="flex w-full min-w-0 flex-wrap items-center">
-                        <span className="min-w-0 flex-1 truncate text-[13px] leading-relaxed no-underline">
+                        <ItemGestos
+                          item={item}
+                          onDefinirPrioridade={(prioridade) =>
+                            onDefinirPrioridade(sub.id, item.id, prioridade)
+                          }
+                          onTransferir={() => onTransferir(sub.id, item)}
+                          onAlternarConclusao={() => onAlternarItem(sub.id, item.id)}
+                          className="min-w-0 flex-1 truncate text-[13px] font-medium leading-relaxed no-underline"
+                        >
                           {item.texto}
-                        </span>
+                        </ItemGestos>
 
                         {modoCompras && (
                           <div
@@ -195,7 +199,7 @@ export function SubcategoriasAccordion({
                           <Trash2 className="size-4" />
                         </Button>
                       </div>
-                    </ItemGestos>
+                    </div>
                   </li>
                 )}
               </ItemOrdenavel>

@@ -1,10 +1,10 @@
 import { useEffect, useRef, type PointerEvent, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { PRIORIDADES, ROTULOS_PRIORIDADE, type Item, type Prioridade } from "./types";
+import { ROTULOS_PRIORIDADE, type Item, type Prioridade } from "./types";
 
 type Props = {
   item: Item;
-  onDefinirPrioridade: (prioridade: Prioridade) => void;
+  onDefinirPrioridade: (prioridade: Prioridade | null) => void;
   onTransferir: () => void;
   onAlternarConclusao: () => void;
   className?: string;
@@ -13,12 +13,19 @@ type Props = {
 
 const TEMPO_PRESSAO_LONGA = 2_000;
 
+/**
+ * Ciclo completo de prioridades, incluindo o estado inicial (sem prioridade).
+ * null -> 1 -> 2 -> 3 -> D -> T -> null
+ */
+const CICLO: (Prioridade | null)[] = [null, "1", "2", "3", "D", "T"];
+
+/** A única coisa que muda é a COR DO TEXTO; o fundo permanece branco. */
 const corDaPrioridade: Record<Prioridade, string> = {
-  "1": "bg-green-500 text-white hover:bg-green-500",
-  "2": "bg-yellow-500 text-black hover:bg-yellow-500",
-  "3": "bg-purple-500 text-white hover:bg-purple-500",
-  D: "bg-orange-500 text-white hover:bg-orange-500",
-  T: "bg-red-500 text-white hover:bg-red-500",
+  "1": "text-green-600",
+  "2": "text-yellow-500",
+  "3": "text-purple-600",
+  D: "text-orange-500",
+  T: "text-red-600",
 };
 
 export function ItemGestos({
@@ -57,10 +64,10 @@ export function ItemGestos({
       ignorarProximoClique.current = false;
       return;
     }
-    const indiceAtual = item.prioridade ? PRIORIDADES.indexOf(item.prioridade) : -1;
-    const proxima = PRIORIDADES[(indiceAtual + 1) % PRIORIDADES.length] ?? "1";
-    onDefinirPrioridade(proxima);
-    if (proxima === "T") onTransferir();
+    const indiceAtual = item.prioridade ? CICLO.indexOf(item.prioridade) : 0;
+    const proximo = CICLO[(indiceAtual + 1) % CICLO.length] ?? null;
+    onDefinirPrioridade(proximo);
+    if (proximo === "T") onTransferir();
   };
 
   return (
@@ -85,8 +92,8 @@ export function ItemGestos({
         }
       }}
       className={cn(
-        "cursor-pointer select-none transition-colors",
-        item.prioridade ? corDaPrioridade[item.prioridade] : "bg-card text-foreground",
+        "cursor-pointer select-none bg-white text-gray-900 transition-colors",
+        item.prioridade ? corDaPrioridade[item.prioridade] : "text-gray-900",
         className,
       )}
     >

@@ -555,16 +555,13 @@ function NirvanaPage() {
   const removerItem = (subcategoriaId: string, itemId: string) =>
     atualizarSubcategoria(subcategoriaId, (itens) => itens.filter((i) => i.id !== itemId));
 
-  const definirPrioridade = (subcategoriaId: string, itemId: string, prioridade: Prioridade) =>
+  const definirPrioridade = (
+    subcategoriaId: string,
+    itemId: string,
+    prioridade: Prioridade | null,
+  ) =>
     atualizarSubcategoria(subcategoriaId, (itens) =>
-      itens.map((i) =>
-        i.id === itemId
-          ? {
-              ...i,
-              prioridade: i.prioridade === prioridade ? null : prioridade,
-            }
-          : i,
-      ),
+      itens.map((i) => (i.id === itemId ? { ...i, prioridade } : i)),
     );
 
   const atualizarValoresItem = (

@@ -21,7 +21,7 @@ type Props = {
   onAdicionarItem: (texto: string) => void;
   onAlternarItem: (itemId: string) => void;
   onRemoverItem: (itemId: string) => void;
-  onDefinirPrioridade: (itemId: string, prioridade: Prioridade) => void;
+  onDefinirPrioridade: (itemId: string, prioridade: Prioridade | null) => void;
   onTransferir: (item: Item) => void;
   onReordenarItens: (ativoId: string, sobreId: string) => void;
   onRestaurarOrdem: () => void;
@@ -68,17 +68,17 @@ export function ListaView({
     >
       {(alca) => (
         <li className="list-none py-3">
-          <ItemGestos
-            item={item}
-            onDefinirPrioridade={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
-            onTransferir={() => onTransferir(item)}
-            onAlternarConclusao={() => onAlternarItem(item.id)}
-            className="flex w-full max-w-full flex-col gap-1 p-1"
-          >
+          <div className="flex w-full max-w-full flex-col gap-1 bg-white p-1">
             <div className="flex w-full min-w-0 flex-wrap items-center">
-              <span className="min-w-0 flex-1 truncate text-[13px] leading-relaxed no-underline">
+              <ItemGestos
+                item={item}
+                onDefinirPrioridade={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
+                onTransferir={() => onTransferir(item)}
+                onAlternarConclusao={() => onAlternarItem(item.id)}
+                className="min-w-0 flex-1 truncate text-[13px] font-medium leading-relaxed no-underline"
+              >
                 {item.texto}
-              </span>
+              </ItemGestos>
 
               {modoCompras && (
                 <div
@@ -107,7 +107,7 @@ export function ListaView({
                 <Trash2 className="size-4" />
               </Button>
             </div>
-          </ItemGestos>
+          </div>
         </li>
       )}
     </ItemOrdenavel>
