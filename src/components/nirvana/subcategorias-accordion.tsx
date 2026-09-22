@@ -241,19 +241,35 @@ export function SubcategoriasAccordion({
                     )}
                   >
                      <div className="flex w-full min-w-0 max-w-full flex-col gap-3 py-4 xl:flex-row xl:items-center">
-                       <button
-                         type="button"
-                         aria-label={`Excluir ${sub.nome}`}
-                         onClick={() => setSubParaExcluir(sub.id)}
-                         className="shrink-0 self-start rounded p-1 text-gray-400 transition-colors hover:text-red-500 active:text-red-600"
-                       >
-                         <Trash2 className="size-4" />
-                       </button>
-                       <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
+                       {renomeandoId === sub.id ? (
+                         <div
+                           className="min-w-0 flex-1 py-2"
+                           onClick={(e) => e.stopPropagation()}
+                         >
+                           <Input
+                             autoFocus
+                             value={nomeEditado}
+                             onClick={(e) => e.stopPropagation()}
+                             onChange={(e) => setNomeEditado(e.target.value)}
+                             onBlur={salvarRenomeacao}
+                             onKeyDown={(e) => {
+                               e.stopPropagation();
+                               if (e.key === "Enter") {
+                                 e.preventDefault();
+                                 salvarRenomeacao();
+                               }
+                               if (e.key === "Escape") {
+                                 setRenomeandoId(null);
+                                 setNomeEditado("");
+                               }
+                             }}
+                             aria-label="Novo nome da subcategoria"
+                             className="h-10 text-lg font-bold"
+                           />
+                         </div>
+                       ) : (
+                         <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
                         <span className="flex min-w-0 flex-1 flex-col gap-1.5">
-                          {renomeandoId === sub.id ? (
-                            <span className="text-base text-muted-foreground">Renomeando…</span>
-                          ) : (
                             <span className="flex min-w-0 flex-row items-center gap-3">
                               <span className="truncate text-2xl font-bold tracking-tight">{sub.nome}</span>
                               {sub.arquivada ? (
@@ -266,7 +282,6 @@ export function SubcategoriasAccordion({
                                 concluidos={concluidos}
                               />
                             </span>
-                          )}
                           <span className="text-sm text-muted-foreground">
                             {sub.itens.length === 0
                               ? "Lista vazia"
@@ -280,71 +295,19 @@ export function SubcategoriasAccordion({
                             </span>
                           )}
                         </span>
-                        {sub.arquivada ? (
-                          onRestaurarSubcategoria && (
-                            <span
-                              role="button"
-                              tabIndex={0}
-                              aria-label={`Restaurar ${sub.nome}`}
-                              title="Restaurar"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onRestaurarSubcategoria(sub.id);
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  e.stopPropagation();
-                                  onRestaurarSubcategoria(sub.id);
-                                }
-                              }}
-                              className="ml-auto inline-flex shrink-0 items-center rounded-md border border-blue-300 bg-white p-1.5 text-blue-600 transition-colors hover:bg-blue-50"
-                            >
-                              <ArchiveRestore className="size-4" />
-                            </span>
-                          )
-                        ) : (
-                          onArquivarSubcategoria && (
-                            <span className="ml-auto flex shrink-0 items-center pl-3">
-                              <BotaoArquivar
-                                comoSpan
-                                rotulo={`Arquivar ${sub.nome}`}
-                                onArquivar={() => onArquivarSubcategoria(sub.id)}
-                              />
-                            </span>
-                          )
-                        )}
                       </AccordionTrigger>
+                       )}
 
                       <div className="flex min-w-0 flex-wrap items-center gap-2 xl:justify-end">
                         {alca}
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <button type="button" className={`${estiloBaseAcao} text-black`}>
-                              Editar Subcategoria
-                            </button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onSelect={() => {
-                                setRenomeandoId(sub.id);
-                                setNomeEditado(sub.nome);
-                              }}
-                            >
-                              Renomear
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="text-red-600 focus:text-red-600"
-                              onSelect={() => setSubParaExcluir(sub.id)}
-                            >
-                              Excluir
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
                         <button
                           type="button"
                           className={`${estiloBaseAcao} text-green-700 font-bold`}
                           disabled={sub.itens.length === 0}
-                          onClick={() => onMarcarTodos(sub.id, true)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onMarcarTodos(sub.id, true);
+                          }}
                         >
                           Marcar Tudo
                         </button>
@@ -352,35 +315,65 @@ export function SubcategoriasAccordion({
                           type="button"
                           className={`${estiloBaseAcao} text-red-700 font-bold`}
                           disabled={sub.itens.length === 0}
-                          onClick={() => onMarcarTodos(sub.id, false)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onMarcarTodos(sub.id, false);
+                          }}
                         >
                           Desmarcar Tudo
                         </button>
+
+                        <div className="flex shrink-0 items-center gap-2">
+                          <button
+                            type="button"
+                            aria-label={`Renomear ${sub.nome}`}
+                            title="Renomear"
+                            className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white text-black transition-colors hover:bg-black/5"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setRenomeandoId(sub.id);
+                              setNomeEditado(sub.nome);
+                            }}
+                          >
+                            <Pencil className="size-4" />
+                          </button>
+                          {sub.arquivada
+                            ? onRestaurarSubcategoria && (
+                                <button
+                                  type="button"
+                                  aria-label={`Restaurar ${sub.nome}`}
+                                  title="Restaurar"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onRestaurarSubcategoria(sub.id);
+                                  }}
+                                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-blue-300 bg-white text-blue-600 transition-colors hover:bg-blue-50"
+                                >
+                                  <ArchiveRestore className="size-4" />
+                                </button>
+                              )
+                            : onArquivarSubcategoria && (
+                                <BotaoArquivar
+                                  rotulo={`Arquivar ${sub.nome}`}
+                                  onArquivar={() => onArquivarSubcategoria(sub.id)}
+                                />
+                              )}
+                          <button
+                            type="button"
+                            aria-label={`Excluir ${sub.nome}`}
+                            title="Excluir"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSubParaExcluir(sub.id);
+                            }}
+                            className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-red-300 bg-white text-red-600 transition-colors hover:bg-red-50"
+                          >
+                            <Trash2 className="size-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
 
-                    {renomeandoId === sub.id && (
-                      <div className="pb-3">
-                        <Input
-                          autoFocus
-                          value={nomeEditado}
-                          onChange={(e) => setNomeEditado(e.target.value)}
-                          onBlur={salvarRenomeacao}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.preventDefault();
-                              salvarRenomeacao();
-                            }
-                            if (e.key === "Escape") {
-                              setRenomeandoId(null);
-                              setNomeEditado("");
-                            }
-                          }}
-                          aria-label="Novo nome da subcategoria"
-                          className="h-10"
-                        />
-                      </div>
-                    )}
 
                     <AccordionContent className="pb-5">
                       <div className="space-y-4 border-t border-border pt-4">
