@@ -68,14 +68,14 @@ export function ListaView({
     >
       {(alca) => (
         <li className="list-none py-3">
-          <div className="flex w-full max-w-full flex-col gap-1 bg-white p-1">
+          <div className="flex w-full max-w-full flex-col gap-1 bg-transparent p-1">
             <div className="flex w-full min-w-0 flex-wrap items-center">
               <ItemGestos
                 item={item}
                 onDefinirPrioridade={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
                 onTransferir={() => onTransferir(item)}
                 onAlternarConclusao={() => onAlternarItem(item.id)}
-                className="min-w-0 flex-1 truncate text-xs font-medium leading-relaxed no-underline"
+                className="min-w-0 flex-1 truncate text-[11px] font-medium leading-relaxed no-underline"
               >
                 {item.texto}
               </ItemGestos>
