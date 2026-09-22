@@ -277,7 +277,21 @@ export function SubcategoriasAccordion({
                       </AccordionTrigger>
                        )}
 
-                      <div className="-mt-3 flex w-full flex-nowrap items-center gap-3 xl:w-auto xl:justify-end">
+                      <div className="flex w-full flex-nowrap items-center gap-3 xl:w-auto xl:justify-end">
+                        {alca}
+                        <button
+                          type="button"
+                          aria-label={`Renomear ${sub.nome}`}
+                          title="Renomear"
+                          className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white text-black transition-colors hover:bg-black/5"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setRenomeandoId(sub.id);
+                            setNomeEditado(sub.nome);
+                          }}
+                        >
+                          <Pencil className="size-4" />
+                        </button>
                         <button
                           type="button"
                           className={`${estiloBaseAcao} text-green-700 font-bold`}
@@ -289,7 +303,6 @@ export function SubcategoriasAccordion({
                         >
                           Ok
                         </button>
-                        {alca}
                         <button
                           type="button"
                           aria-label="Desmarcar tudo"
@@ -307,19 +320,6 @@ export function SubcategoriasAccordion({
                         </button>
 
                         <div className="ml-auto flex shrink-0 items-center gap-2">
-                          <button
-                            type="button"
-                            aria-label={`Renomear ${sub.nome}`}
-                            title="Renomear"
-                            className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white text-black transition-colors hover:bg-black/5"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setRenomeandoId(sub.id);
-                              setNomeEditado(sub.nome);
-                            }}
-                          >
-                            <Pencil className="size-4" />
-                          </button>
                           {sub.arquivada
                             ? onRestaurarSubcategoria && (
                                 <button
