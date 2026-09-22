@@ -220,7 +220,7 @@ export function SubcategoriasAccordion({
                     value={sub.id}
                     className={cn(
                       "w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-border px-6 transition-colors hover:border-foreground/40",
-                      sub.arquivada ? "bg-gray-100 opacity-60" : "bg-card",
+                      sub.arquivada ? "bg-gray-100 opacity-60" : "bg-transparent",
                     )}
                   >
                      <div className="flex w-full min-w-0 max-w-full flex-col gap-1 bg-transparent pb-1 pt-2 xl:flex-row xl:items-center">
@@ -254,14 +254,14 @@ export function SubcategoriasAccordion({
                          <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
                         <span className="flex min-w-0 flex-1 flex-col gap-1.5">
                             <span className="flex min-w-0 flex-row items-center gap-3">
-                              <span className="truncate text-2xl font-bold tracking-tight">{sub.nome}</span>
+                              <span className="truncate text-sm font-semibold tracking-tight">{sub.nome}</span>
                               {sub.arquivada ? (
                                 <span className="shrink-0 rounded-full bg-gray-200 px-2 py-1 text-[10px] text-gray-600">
                                   ARQUIVADO
                                 </span>
                               ) : null}
                             </span>
-                          <span className="text-sm text-muted-foreground">
+                          <span className="text-[11px] text-muted-foreground">
                             {sub.itens.length === 0
                               ? "Lista vazia"
                               : `${pendentes} pendente${pendentes === 1 ? "" : "s"} · ${
@@ -269,7 +269,7 @@ export function SubcategoriasAccordion({
                                 } ${sub.itens.length === 1 ? "item" : "itens"}`}
                           </span>
                           {modoCompras && (
-                            <span className="block text-sm font-medium tabular-nums">
+                            <span className="block text-[11px] font-medium tabular-nums">
                               {formatarBRL(totalSubcategoria(sub))}
                             </span>
                           )}
@@ -427,7 +427,7 @@ export function SubcategoriasAccordion({
                                 onReordenarItens(sub.id, itensOrdenados, ativoId, sobreId)
                               }
                             >
-                              <ul className="divide-y divide-border border-y border-border bg-white">
+                              <ul className="divide-y divide-border border-y border-border">
                                 {itensMarcados.map(renderizarItem)}
                               </ul>
                             </ListaOrdenavel>
