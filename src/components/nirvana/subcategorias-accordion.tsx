@@ -320,27 +320,6 @@ export function SubcategoriasAccordion({
                         </button>
 
                         <div className="ml-auto flex shrink-0 items-center gap-2">
-                          {sub.arquivada
-                            ? onRestaurarSubcategoria && (
-                                <button
-                                  type="button"
-                                  aria-label={`Restaurar ${sub.nome}`}
-                                  title="Restaurar"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onRestaurarSubcategoria(sub.id);
-                                  }}
-                                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-blue-300 bg-white text-blue-600 transition-colors hover:bg-blue-50"
-                                >
-                                  <ArchiveRestore className="size-4" />
-                                </button>
-                              )
-                            : onArquivarSubcategoria && (
-                                <BotaoArquivar
-                                  rotulo={`Arquivar ${sub.nome}`}
-                                  onArquivar={() => onArquivarSubcategoria(sub.id)}
-                                />
-                              )}
                           <button
                             type="button"
                             aria-label={`Excluir ${sub.nome}`}
