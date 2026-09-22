@@ -781,7 +781,7 @@ function NirvanaPage() {
             <div>
               <h1 className="font-display text-3xl font-semibold tracking-tight">Arquivados</h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                Categorias e subcategorias guardadas aqui. Restaure quando quiser.
+                Pastas, categorias e subcategorias guardadas aqui. Restaure quando quiser.
               </p>
             </div>
 
