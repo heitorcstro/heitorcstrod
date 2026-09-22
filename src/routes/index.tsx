@@ -1396,11 +1396,11 @@ function NirvanaPage() {
               categorias.
             </DialogDescription>
           </DialogHeader>
-          {pastas.length === 0 ? (
+          {pastasVisiveis.length === 0 ? (
             <p className="text-sm text-muted-foreground">Nenhuma pasta para excluir.</p>
           ) : (
             <div className="max-h-80 space-y-2 overflow-y-auto">
-              {pastas.map((pasta) => (
+              {pastasVisiveis.map((pasta) => (
                 <div
                   key={pasta.id}
                   className="flex flex-row items-center justify-between gap-3 rounded-lg border border-border px-3 py-2"
