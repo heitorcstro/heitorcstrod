@@ -312,18 +312,22 @@ export function SubcategoriasAccordion({
                             onMarcarTodos(sub.id, true);
                           }}
                         >
-                          Marcar Tudo
+                          Ok
                         </button>
                         <button
                           type="button"
-                          className={`${estiloBaseAcao} text-red-700 font-bold`}
+                          aria-label="Desmarcar tudo"
+                          title="Desmarcar tudo"
+                          className="inline-flex shrink-0 select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-colors hover:bg-black/5 disabled:opacity-40 disabled:hover:bg-transparent"
                           disabled={sub.itens.length === 0}
                           onClick={(e) => {
                             e.stopPropagation();
                             onMarcarTodos(sub.id, false);
                           }}
                         >
-                          Desmarcar Tudo
+                          <div className="flex size-5 shrink-0 items-center justify-center rounded-sm border border-black bg-white">
+                            <span className="text-sm font-bold leading-none text-red-500">X</span>
+                          </div>
                         </button>
 
                         <div className="flex shrink-0 items-center gap-2">
