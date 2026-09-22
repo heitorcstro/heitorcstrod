@@ -345,9 +345,12 @@ export function SidebarCategorias({
                   <span className="text-sm font-medium">Deletar Categoria</span>
                 </div>
               </div>
+              ) : null}
 
               <AreaSoltavel id="raiz" tipo="categoria" classNameAtiva="bg-blue-50">
-                {categoriasSoltas.map((categoria) => linhaCategoria(categoria))}
+                {secaoCategoriasAberta
+                  ? categoriasSoltas.map((categoria) => linhaCategoria(categoria))
+                  : null}
               </AreaSoltavel>
             </ContextoArrasto>
           </>
