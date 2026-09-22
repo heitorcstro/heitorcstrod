@@ -171,6 +171,8 @@ export function CategoriaView({
         onReordenarSubcategorias={onReordenarSubcategorias}
         onRenomearSubcategoria={onRenomearSubcategoria}
         onExcluirSubcategoria={onExcluirSubcategoria}
+        onArquivarSubcategoria={onArquivarSubcategoria}
+        onRestaurarSubcategoria={onRestaurarSubcategoria}
         onMarcarTodos={onMarcarTodos}
         onAdicionarItem={onAdicionarItem}
         onAlternarItem={onAlternarItem}
