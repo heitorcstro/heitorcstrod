@@ -264,32 +264,23 @@ export function SidebarCategorias({
             </button>
             {secaoPastasAberta ? (
             <div>
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={onCriarPasta}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") onCriarPasta?.();
-                }}
-                className={CLASSE_ACAO}
-              >
-                <Plus className="size-[18px] shrink-0" strokeWidth={2.5} />
-                <span className="text-sm font-medium">Criar Pasta</span>
-              </div>
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={onDeletarPasta}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") onDeletarPasta?.();
-                }}
-                className={cn(CLASSE_ACAO, "group")}
-              >
-                <Trash2
-                  className="size-[18px] shrink-0 text-gray-500 transition-colors group-hover:text-red-500"
-                  strokeWidth={2.5}
-                />
-                <span className="text-sm font-medium">Deletar Pasta</span>
+              <div className="flex flex-row items-center gap-3 border-b border-gray-200 px-4 py-3">
+                <button
+                  type="button"
+                  onClick={onCriarPasta}
+                  className="inline-flex items-center justify-start gap-1.5 rounded-md bg-black pl-2 pr-3 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90"
+                >
+                  <Plus className="size-4 shrink-0" strokeWidth={2.5} />
+                  Criar
+                </button>
+                <button
+                  type="button"
+                  onClick={onDeletarPasta}
+                  className="inline-flex items-center justify-start gap-1.5 rounded-md bg-red-600 pl-2 pr-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                >
+                  <Trash2 className="size-4 shrink-0" strokeWidth={2.5} />
+                  Del.
+                </button>
               </div>
               {caixaPesquisa(
                 pesquisaPastasAtiva,

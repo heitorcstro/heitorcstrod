@@ -1086,18 +1086,22 @@ function NirvanaPage() {
               </button>
               {secaoPastasCentral ? (
                 <div className="flex flex-row items-center gap-3">
-                  <Button size="lg" onClick={() => setModalPastaAberto(true)}>
-                    <Plus className="size-4" />
-                    Criar Pasta
-                  </Button>
-                  <Button
-                    size="lg"
-                    onClick={() => setModalDeletarPastaAberto(true)}
-                    className="bg-red-600 text-white hover:bg-red-700"
+                  <button
+                    type="button"
+                    onClick={() => setModalPastaAberto(true)}
+                    className="inline-flex items-center justify-start gap-1.5 rounded-md bg-black pl-2 pr-3 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90"
                   >
-                    <Trash2 className="size-4" />
-                    Deletar Pasta
-                  </Button>
+                    <Plus className="size-4 shrink-0" strokeWidth={2.5} />
+                    Criar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModalDeletarPastaAberto(true)}
+                    className="inline-flex items-center justify-start gap-1.5 rounded-md bg-red-600 pl-2 pr-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                  >
+                    <Trash2 className="size-4 shrink-0" strokeWidth={2.5} />
+                    Del.
+                  </button>
                 </div>
               ) : null}
             </div>
