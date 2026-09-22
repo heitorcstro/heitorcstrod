@@ -170,9 +170,9 @@ export function SubcategoriasAccordion({
               >
                 {(alcaItem) => (
                   <li className="list-none py-3">
-                    <div className="flex w-full max-w-full flex-wrap items-center justify-between gap-y-2 p-1">
-                      {/* ESQUERDA */}
-                      <div className="flex min-w-0 flex-1 items-center">
+                    <div className="group flex w-full max-w-full flex-col border-b border-gray-100 p-1 hover:bg-gray-50">
+                      {/* LINHA DE CIMA: dados e info principal */}
+                      <div className="flex w-full min-w-0 flex-wrap items-center">
                         <div className="shrink-0">
                           <SeletorPrioridade
                             prioridade={item.prioridade}
@@ -198,21 +198,21 @@ export function SubcategoriasAccordion({
                         >
                           {item.texto}
                         </label>
+
+                        {modoCompras && (
+                          <div className="flex w-full flex-wrap items-end gap-2 sm:ml-2 sm:w-auto">
+                            <CamposCompra
+                              item={item}
+                              onAtualizarValores={(itemId, valores) =>
+                                onAtualizarValores?.(sub.id, itemId, valores)
+                              }
+                            />
+                          </div>
+                        )}
                       </div>
 
-                      {modoCompras && (
-                        <div className="order-last ml-9 flex w-full flex-wrap items-end gap-2 sm:order-none sm:ml-2 sm:w-auto">
-                          <CamposCompra
-                            item={item}
-                            onAtualizarValores={(itemId, valores) =>
-                              onAtualizarValores?.(sub.id, itemId, valores)
-                            }
-                          />
-                        </div>
-                      )}
-
-                      {/* DIREITA (AÇÕES) */}
-                      <div className="ml-2 flex shrink-0 items-center gap-1">
+                      {/* LINHA DE BAIXO: alça "M" e Lixeira */}
+                      <div className="mt-1 flex w-full items-center justify-end gap-1 pt-1">
                         {alcaItem}
                         <Button
                           variant="ghost"
