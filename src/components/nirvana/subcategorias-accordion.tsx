@@ -19,8 +19,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ArchiveRestore } from "lucide-react";
-import { BotaoArquivar } from "./botao-arquivar";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
 import { ItemGestos } from "./item-gestos";
 import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
@@ -320,27 +318,6 @@ export function SubcategoriasAccordion({
                         </button>
 
                         <div className="ml-auto flex shrink-0 items-center gap-2">
-                          {sub.arquivada
-                            ? onRestaurarSubcategoria && (
-                                <button
-                                  type="button"
-                                  aria-label={`Restaurar ${sub.nome}`}
-                                  title="Restaurar"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onRestaurarSubcategoria(sub.id);
-                                  }}
-                                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-blue-300 bg-white text-blue-600 transition-colors hover:bg-blue-50"
-                                >
-                                  <ArchiveRestore className="size-4" />
-                                </button>
-                              )
-                            : onArquivarSubcategoria && (
-                                <BotaoArquivar
-                                  rotulo={`Arquivar ${sub.nome}`}
-                                  onArquivar={() => onArquivarSubcategoria(sub.id)}
-                                />
-                              )}
                           <button
                             type="button"
                             aria-label={`Excluir ${sub.nome}`}
