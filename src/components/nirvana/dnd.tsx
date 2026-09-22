@@ -194,6 +194,7 @@ export function ItemOrdenavel({
   className,
   inline = false,
   alcaLetra,
+  alcaTexto,
   alcaClassName,
   children,
 }: ItemProps) {
