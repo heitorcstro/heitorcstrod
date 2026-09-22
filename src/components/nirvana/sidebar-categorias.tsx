@@ -5,7 +5,9 @@ import {
   ChevronRight,
   Folder,
   Plus,
+  Search,
   Trash2,
+  X,
 } from "lucide-react";
 import { AreaSoltavel, ContextoArrasto, ItemOrdenavel } from "./dnd";
 import { ESTILOS_COR_CATEGORIA } from "./cores-categoria";
