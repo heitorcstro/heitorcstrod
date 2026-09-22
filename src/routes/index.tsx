@@ -689,7 +689,7 @@ function NirvanaPage() {
                 />
               )}
             </div>
-            <AccordionContent className="mx-4 mb-4 mt-3 overflow-hidden rounded-lg bg-white bg-clip-padding p-2 pt-2">
+            <AccordionContent className="mx-4 mb-1 mt-3 overflow-hidden rounded-lg bg-white bg-clip-padding px-2 pt-[1px] pb-[1px]">
               <div className="space-y-4">
                 {categoria.subcategorias.length > 0 ? (
                   <SubcategoriasAccordion
