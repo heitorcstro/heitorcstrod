@@ -311,7 +311,6 @@ export function SidebarCategorias({
                     tipo="pasta"
                     textoAlca="Mover essa Pasta"
                     alcaLetra="M"
-                    alcaClassName="inline-flex size-8 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 text-sm font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
                     inline
                   >
                     {(alca) => (
@@ -328,7 +327,7 @@ export function SidebarCategorias({
                           <button
                             type="button"
                             onClick={() => onSelecionarPasta?.(pasta.id)}
-                            className="min-w-0 whitespace-normal break-words text-left text-sm font-medium"
+                            className="min-w-0 flex-1 whitespace-normal break-words text-left text-sm font-medium"
                           >
                             {pasta.nome}
                           </button>
