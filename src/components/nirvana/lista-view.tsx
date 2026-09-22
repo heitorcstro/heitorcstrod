@@ -76,7 +76,7 @@ export function ListaView({
             className="flex w-full max-w-full flex-col gap-1 p-1"
           >
             <div className="flex w-full min-w-0 flex-wrap items-center">
-              <span className="min-w-0 flex-1 truncate text-sm leading-relaxed no-underline">
+              <span className="min-w-0 flex-1 truncate text-[13px] leading-relaxed no-underline">
                 {item.texto}
               </span>
 

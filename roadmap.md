@@ -16,6 +16,8 @@
 - Prioridade dos itens convertida em botão cíclico 1 → 2 → 3 → D → T → 1, com cores próprias e abertura automática da transferência em T.
 - Quadrados de prioridade e conclusão removidos: toque curto no item avança a prioridade e colore a linha; pressão de 2 segundos marca ou desmarca como feito.
 - Aparência branca preservada em toda a lista; somente o fundo do item muda conforme a prioridade.
+- Removida a barra de progresso (BarraProgressoSubcategoria) e seu preenchimento azul; nenhum fill dinâmico nas subcategorias. Fonte do nome do item reduzida para text-[13px] (subcategorias-accordion e lista-view). Tudo branco: nenhum quadrado de marcação; apenas o próprio item muda de cor ao tocar (verde→amarelo→roxo→laranja→abre "Mover para").
+
 - Ações em massa: "Marcar Tudo" virou "Ok"; "Desmarcar Tudo" virou quadrado branco com borda preta e "X" vermelho (sem padding). Funções onMarcarTodos e layout flex preservados.
 
 ## Aberto
