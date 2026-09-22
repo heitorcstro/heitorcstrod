@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
 import { ItemGestos } from "./item-gestos";
 import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
