@@ -275,7 +275,7 @@ export function SubcategoriasAccordion({
                       </AccordionTrigger>
                        )}
 
-                      <div className="mt-0.5 flex w-full flex-nowrap items-center gap-3 bg-transparent xl:mt-0 xl:w-auto xl:justify-end">
+                      <div className="mt-0.5 flex w-full max-w-full flex-wrap items-center gap-3 bg-transparent xl:mt-0 xl:w-auto xl:justify-end">
                         {alca}
                         <button
                           type="button"
@@ -316,21 +316,20 @@ export function SubcategoriasAccordion({
                             <span className="text-sm font-bold leading-none text-red-500">X</span>
                           </div>
                         </button>
-
-                        <div className="ml-auto flex shrink-0 items-center gap-2">
-                          <button
-                            type="button"
-                            aria-label={`Excluir ${sub.nome}`}
-                            title="Excluir"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSubParaExcluir(sub.id);
-                            }}
-                            className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-red-300 bg-white text-red-600 transition-colors hover:bg-red-50"
-                          >
-                            <Trash2 className="size-4" />
-                          </button>
-                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Excluir ${sub.nome}`}
+                          title="Excluir"
+                          className="inline-flex shrink-0 select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-colors hover:bg-black/5"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSubParaExcluir(sub.id);
+                          }}
+                        >
+                          <div className="flex size-5 shrink-0 items-center justify-center rounded-sm border border-black bg-white">
+                            <Trash2 className="size-3.5 text-red-500" />
+                          </div>
+                        </button>
                       </div>
                     </div>
 
