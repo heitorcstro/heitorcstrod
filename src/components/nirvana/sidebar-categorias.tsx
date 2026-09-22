@@ -189,9 +189,19 @@ export function SidebarCategorias({
         {expandido ? (
           <>
             {/* Seção 1: Pastas */}
-            <div className="px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider">
+            <button
+              type="button"
+              onClick={() => setSecaoPastasAberta((v) => !v)}
+              className="flex w-full cursor-pointer flex-row items-center justify-between px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+            >
               PASTAS
-            </div>
+              {secaoPastasAberta ? (
+                <ChevronDown className="size-4" strokeWidth={2.5} />
+              ) : (
+                <ChevronRight className="size-4" strokeWidth={2.5} />
+              )}
+            </button>
+            {secaoPastasAberta ? (
             <div>
               <div
                 role="button"
