@@ -188,7 +188,8 @@ export function SidebarCategorias({
         id={idArrasto}
         tipo="categoria"
         textoAlca="Mover essa Categoria"
-        alcaLetra="M"
+        alcaTexto="Mudar de Posição"
+        alcaClassName={CLASSE_ALCA_SIDEBAR}
         inline
       >
         {(alca) => conteudoCategoria(categoria, dentroDePasta, alca)}
