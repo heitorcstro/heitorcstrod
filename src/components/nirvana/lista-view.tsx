@@ -75,7 +75,7 @@ export function ListaView({
                 onDefinirPrioridade={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
                 onTransferir={() => onTransferir(item)}
                 onAlternarConclusao={() => onAlternarItem(item.id)}
-                className="min-w-0 flex-1 truncate text-[13px] font-medium leading-relaxed no-underline"
+                className="min-w-0 flex-1 truncate text-xs font-medium leading-relaxed no-underline"
               >
                 {item.texto}
               </ItemGestos>
