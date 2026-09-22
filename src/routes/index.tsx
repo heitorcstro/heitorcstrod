@@ -961,7 +961,7 @@ function NirvanaPage() {
               ]}
               onSoltar={aoSoltarHierarquia}
             >
-              {pastas.length > 0 ? (
+              {!secaoPastasCentral ? null : pastas.length > 0 ? (
                 <div className="mt-6 space-y-3">
                   {pastas.map((pasta) => {
                     const dentro = categoriasVisiveis.filter((c) => c.pastaId === pasta.id);
