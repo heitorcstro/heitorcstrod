@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PRIORIDADES, ROTULOS_PRIORIDADE, type Prioridade } from "./types";
 
@@ -10,66 +9,37 @@ type Props = {
 };
 
 export function SeletorPrioridade({ prioridade, onSelecionar, onTransferir }: Props) {
-  const [aberto, setAberto] = useState(false);
-
-  const escolher = (opcao: Prioridade | "T") => {
-    setAberto(false);
-    if (opcao === "T") onTransferir();
-    else onSelecionar(opcao);
+  const avancar = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    const indiceAtual = prioridade ? PRIORIDADES.indexOf(prioridade) : -1;
+    const proxima = PRIORIDADES[(indiceAtual + 1) % PRIORIDADES.length] ?? "1";
+    onSelecionar(proxima);
+    if (proxima === "T") onTransferir();
   };
 
   return (
-    <Popover open={aberto} onOpenChange={setAberto}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          aria-label={
-            prioridade
-              ? `Prioridade atual: ${ROTULOS_PRIORIDADE[prioridade]}. Alterar`
-              : "Definir prioridade"
-          }
-          className={cn(
-            "flex size-6 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold transition-colors",
-            prioridade
-              ? "border-primary bg-primary text-primary-foreground"
-              : "border-border text-muted-foreground hover:border-foreground/50 hover:text-foreground",
-          )}
-        >
-          {prioridade ?? ""}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-44 p-1">
-        <p className="px-2 py-1.5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-          Prioridade
-        </p>
-        {PRIORIDADES.map((opcao) => (
-          <button
-            key={opcao}
-            type="button"
-            onClick={() => escolher(opcao)}
-            className={cn(
-              "flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-secondary",
-              prioridade === opcao && "bg-secondary font-medium",
-            )}
-          >
-            <span className="flex size-5 items-center justify-center rounded-full border border-border text-[11px] font-semibold">
-              {opcao}
-            </span>
-            {ROTULOS_PRIORIDADE[opcao]}
-          </button>
-        ))}
-        <div className="my-1 h-px bg-border" />
-        <button
-          type="button"
-          onClick={() => escolher("T")}
-          className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-secondary"
-        >
-          <span className="flex size-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
-            T
-          </span>
-          Transferir
-        </button>
-      </PopoverContent>
-    </Popover>
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon"
+      onClick={avancar}
+      aria-label={
+        prioridade
+          ? `Prioridade atual: ${ROTULOS_PRIORIDADE[prioridade]}. Avançar prioridade`
+          : "Definir prioridade 1"
+      }
+      className={cn(
+        "size-6 shrink-0 rounded text-xs font-bold text-white shadow-none transition-colors hover:text-white",
+        prioridade === "1" && "bg-green-500 hover:bg-green-500",
+        prioridade === "2" && "bg-yellow-500 hover:bg-yellow-500",
+        prioridade === "3" && "bg-purple-500 hover:bg-purple-500",
+        prioridade === "D" && "bg-orange-500 hover:bg-orange-500",
+        prioridade === "T" && "bg-red-500 hover:bg-red-500",
+        prioridade === null &&
+          "border border-border bg-background text-muted-foreground hover:bg-background hover:text-foreground",
+      )}
+    >
+      {prioridade ?? ""}
+    </Button>
   );
 }
