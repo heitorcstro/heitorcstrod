@@ -116,6 +116,7 @@ function NirvanaPage() {
   const [secaoPastasCentral, setSecaoPastasCentral] = useState(true);
   const [secaoCategoriasCentral, setSecaoCategoriasCentral] = useState(true);
   const [pastaAtivaId, setPastaAtivaId] = useState<string | null>(null);
+  const [confirmarExcluirPastaAtiva, setConfirmarExcluirPastaAtiva] = useState(false);
   const [modalRemoverDaPastaAberto, setModalRemoverDaPastaAberto] = useState(false);
   const [modalImportarAberto, setModalImportarAberto] = useState(false);
   const [categoriasParaImportar, setCategoriasParaImportar] = useState<string[]>([]);
