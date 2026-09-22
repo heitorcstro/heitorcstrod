@@ -183,7 +183,7 @@ export function SidebarCategorias({
         id={idArrasto}
         tipo="categoria"
         textoAlca="Mover essa Categoria"
-        alcaLetra="M"
+        alcaIcone
         inline
       >
         {(alca) => conteudoCategoria(categoria, dentroDePasta, alca)}
@@ -314,7 +314,7 @@ export function SidebarCategorias({
                     id={`pasta:${pasta.id}`}
                     tipo="pasta"
                     textoAlca="Mover essa Pasta"
-                    alcaLetra="M"
+                    alcaIcone
                     inline
                   >
                     {(alca) => (
