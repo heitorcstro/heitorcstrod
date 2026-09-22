@@ -236,11 +236,11 @@ export function SubcategoriasAccordion({
                   <AccordionItem
                     value={sub.id}
                     className={cn(
-                      "rounded-xl border border-border px-6 transition-colors hover:border-foreground/40",
+                      "w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-border px-6 transition-colors hover:border-foreground/40",
                       sub.arquivada ? "bg-gray-100 opacity-60" : "bg-card",
                     )}
                   >
-                     <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-center">
+                     <div className="flex w-full min-w-0 max-w-full flex-col gap-3 py-4 xl:flex-row xl:items-center">
                        <button
                          type="button"
                          aria-label={`Excluir ${sub.nome}`}
