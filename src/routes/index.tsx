@@ -615,13 +615,13 @@ function NirvanaPage() {
         {(alca) => (
           <AccordionItem
             value={idArrasto}
-            className={`group relative flex min-h-[100px] flex-col overflow-hidden rounded-xl border border-black transition-colors hover:border-foreground/40 lg:min-h-[132px] ${
+            className={`group relative flex min-h-[100px] w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-black transition-colors hover:border-foreground/40 lg:min-h-[132px] ${
               categoria.arquivada ? "bg-gray-100 opacity-60" : "bg-white"
             }`}
           >
             <AccordionTrigger
               showChevron={false}
-              className="relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start pr-[260px] text-left text-white hover:no-underline"
+              className="relative flex min-h-[68px] w-full min-w-0 max-w-full flex-1 flex-col items-start pr-[120px] text-left text-white hover:no-underline sm:pr-[260px]"
             >
               <div className={`absolute inset-y-0 left-0 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}>
                 <span className="flex w-full min-w-0 items-center gap-2 font-medium tracking-tight text-white">
@@ -769,7 +769,7 @@ function NirvanaPage() {
         expandido={sidebarExpandida}
         onAlternarExpansao={() => setSidebarExpandida((v) => !v)}
       />
-      <main className="relative h-screen w-full overflow-y-auto bg-background">
+      <main className="relative h-screen w-full max-w-full overflow-x-hidden overflow-y-auto bg-background">
       <header className="border-b border-border bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-6 py-5">
           <button
@@ -821,7 +821,7 @@ function NirvanaPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-5xl px-6 py-10">
+      <div className="mx-auto w-full min-w-0 max-w-5xl overflow-x-hidden px-6 py-10">
         {mostrandoArquivados ? (
           <section className="space-y-6">
             <div>
@@ -975,7 +975,7 @@ function NirvanaPage() {
             onAtualizarValores={atualizarValoresItem}
           />
         ) : pastaAtiva ? (
-          <section>
+          <section className="w-full min-w-0 max-w-full">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div className="flex flex-row items-center gap-3">
                 <button
@@ -1069,7 +1069,7 @@ function NirvanaPage() {
                   type="multiple"
                   value={categoriasAbertas}
                   onValueChange={atualizarCategoriasAbertas}
-                  className="mt-8 grid gap-3 lg:grid-cols-2"
+                  className="mt-8 grid w-full min-w-0 max-w-full gap-3 pr-4 lg:grid-cols-2"
                 >
                   {categoriasDaPastaAtiva.map((categoria) => cartaoCategoria(categoria))}
                 </Accordion>
@@ -1247,7 +1247,7 @@ function NirvanaPage() {
                   type="multiple"
                   value={categoriasAbertas}
                   onValueChange={atualizarCategoriasAbertas}
-                  className="mt-8 grid gap-3 lg:grid-cols-2"
+                  className="mt-8 grid w-full min-w-0 max-w-full gap-3 pr-4 lg:grid-cols-2"
                 >
                   {secaoCategoriasCentral
                     ? categoriasVisiveis
