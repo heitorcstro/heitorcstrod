@@ -9,5 +9,7 @@
 - Sidebar à direita + header gigante + subcategorias ampliadas (depois revertida).
 - Sidebar recolhível à ESQUERDA: border-r border-black; estado isSidebarExpanded (default true); largura w-72 expandida / w-16 recolhida com transition-all duration-300 ease-in-out overflow-hidden; botão toggle (ChevronLeft/ChevronRight) no topo-direito do header (w-8 h-8 quadrado bg-white border border-black text-black rounded-md); quando recolhida, nomes, alças "M" e "+" ficam ocultos, restando apenas seta de expandir e indicadores de cor; cabeçalhos gigantes e subcategorias ampliadas preservados e aproveitam o espaço extra.
 
+- Sidebar em overlay: <aside> virou fixed top-0 left-0 h-screen z-50 w-72 bg-white shadow-2xl transition-transform; toggle entre translate-x-0 (aberta) e -translate-x-full (fechada) via estado sidebarExpandida. Wrapper principal deixou de ser flex (relative h-screen w-full); <main> agora relative w-full h-screen (100% largura, sem squeeze). Hambúrguer Menu universal (sem md:hidden) no topo-esquerdo do header, alternando sidebarExpandida. Chevron "Recolher" interno continua fechando. Layout interno, alinhamento das alças "M" e DnD preservados.
+
 ## Aberto
 (nada)
