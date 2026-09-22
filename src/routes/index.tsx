@@ -609,6 +609,8 @@ function NirvanaPage() {
         textoAlca="Mover categoria"
         inline
         alcaIcone
+        alcaBoxClassName="h-8 w-8"
+        alcaImgClassName="h-7 w-7"
       >
         {(alca) => (
           <AccordionItem
