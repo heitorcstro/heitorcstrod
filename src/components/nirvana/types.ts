@@ -158,7 +158,7 @@ export const normalizarPastas = (pastas: unknown): Pasta[] =>
         )
         .map((p) => ({
           id: p.id,
-          nome: p.nome,
+          nome: p.nome === "Levar de Manhã" ? "Manhã" : p.nome,
           cor: ehCorCategoria((p as { cor?: unknown }).cor)
             ? ((p as Pasta).cor as CorCategoria)
             : corCategoriaAleatoria(),
