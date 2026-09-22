@@ -1,6 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, ChevronDown, ChevronRight, Folder, Plus, Trash2 } from "lucide-react";
+import {
+  Archive,
+  ArrowLeft,
+  Bookmark,
+  ChevronDown,
+  ChevronRight,
+  Folder,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -924,6 +933,15 @@ function NirvanaPage() {
                   className="rounded-md bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700"
                 >
                   Excluir Categoria da Pasta
+                </button>
+                <button
+                  type="button"
+                  aria-label="Arquivar Pasta"
+                  title="Arquivar Pasta"
+                  onClick={() => arquivarPasta(pastaAtiva.id)}
+                  className="rounded-md border border-gray-300 p-2 text-gray-700 transition-colors hover:bg-gray-100"
+                >
+                  <Archive className="size-5" />
                 </button>
                 <button
                   type="button"
