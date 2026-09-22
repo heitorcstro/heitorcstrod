@@ -213,6 +213,8 @@ export function ItemOrdenavel({
   alcaTexto,
   alcaClassName,
   alcaIcone,
+  alcaBoxClassName,
+  alcaImgClassName,
   children,
 }: ItemProps) {
   const {
