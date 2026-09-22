@@ -64,6 +64,8 @@ export type Pasta = {
   id: string;
   nome: string;
   cor: CorCategoria;
+  /** true quando a pasta foi enviada para "Arquivados". */
+  arquivada?: boolean;
 };
 
 export type Categoria = {
@@ -160,6 +162,7 @@ export const normalizarPastas = (pastas: unknown): Pasta[] =>
           cor: ehCorCategoria((p as { cor?: unknown }).cor)
             ? ((p as Pasta).cor as CorCategoria)
             : corCategoriaAleatoria(),
+          arquivada: (p as { arquivada?: unknown }).arquivada === true,
         }))
     : [];
 
