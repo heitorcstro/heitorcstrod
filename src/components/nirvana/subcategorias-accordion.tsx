@@ -155,7 +155,7 @@ export function SubcategoriasAccordion({
           type="multiple"
           {...accordionControle}
           className={cn(
-            "grid w-full max-w-full gap-3 border-l border-border pl-3 pr-4 sm:pl-4",
+            "grid w-full max-w-full grid-cols-1 gap-3 border-l border-border pl-3 pr-4 sm:pl-4",
             className,
           )}
         >
