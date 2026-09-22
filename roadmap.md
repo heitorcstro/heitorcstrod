@@ -12,6 +12,7 @@
 - Sidebar em overlay: <aside> virou fixed top-0 left-0 h-screen z-50 w-72 bg-white shadow-2xl transition-transform; toggle entre translate-x-0 (aberta) e -translate-x-full (fechada) via estado sidebarExpandida. Wrapper principal deixou de ser flex (relative h-screen w-full); <main> agora relative w-full h-screen (100% largura, sem squeeze). Hambúrguer Menu universal (sem md:hidden) no topo-esquerdo do header, alternando sidebarExpandida. Chevron "Recolher" interno continua fechando. Layout interno, alinhamento das alças "M" e DnD preservados.
 - Espaçamento apertado na sidebar: removido justify-between do cabeçalho (Nirvana + "<" colados), dos headers PASTAS/CATEGORIAS (chevron colado ao texto com gap-1) e dos contadores das pastas (número colado ao fim do nome, sem flex-1). Slots w-5 (chevron) e w-6 (M) preservados — alças "M" continuam alinhadas em coluna reta (left=28px).
 - Renomear categoria "Fazer de Maneira Urgente" -> "Urgente": atualizado em CATEGORIAS_PADRAO e via migração idempotente em normalizarCategorias (preserva id, cor, pastaId e subcategorias; só o nome muda). Badge urgente (nome contém "Urgente") continua funcionando.
+- Largura mínima dinâmica da sidebar (w-fit): removida a largura fixa w-72 do <aside> overlay, agora w-fit + pr-4 (encolhe até a maior linha). Textos de nomes e headers PASTAS/CATEGORIAS/Arquivados ganharam whitespace-nowrap para não quebrar em duas linhas. Espaçamento apertado (gap-1) e alinhamento esquerdo (slots w-5 chevron + w-6 M) preservados — alças "M" permanecem em coluna reta (left=28px).
 
 ## Aberto
 (nada)
