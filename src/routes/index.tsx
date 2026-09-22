@@ -1141,7 +1141,7 @@ function NirvanaPage() {
                               <button
                                 type="button"
                                 onClick={() => abrirPasta(pasta.id)}
-                                className="min-w-0 flex-1 text-left"
+                                className="min-w-0 text-left"
                               >
                                 <span className="block truncate text-sm font-semibold text-black">
                                   {pasta.nome}
