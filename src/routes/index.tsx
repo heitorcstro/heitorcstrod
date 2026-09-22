@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bookmark, ChevronDown, Folder, Plus, Trash2 } from "lucide-react";
+import { Bookmark, ChevronDown, ChevronRight, Folder, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
