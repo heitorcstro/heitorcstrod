@@ -231,6 +231,7 @@ export function SidebarCategorias({
                 <span className="text-sm font-medium">Deletar Pasta</span>
               </div>
             </div>
+            ) : null}
 
             <ContextoArrasto
               ids={[
