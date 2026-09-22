@@ -612,13 +612,13 @@ function NirvanaPage() {
         {(alca) => (
           <AccordionItem
             value={idArrasto}
-            className={`group relative box-border flex min-h-[100px] w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-black bg-clip-padding ring-1 ring-inset ring-black transition-colors hover:border-foreground/40 data-[state=open]:pb-[0.5cm] lg:min-h-[132px] ${
+            className={`group relative box-border flex min-h-[100px] w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-black bg-clip-padding ring-1 ring-inset ring-black transition-colors hover:border-foreground/40 lg:min-h-[132px] ${
               categoria.arquivada ? "bg-gray-100 opacity-60" : "bg-transparent"
             }`}
           >
             <AccordionTrigger
               showChevron={false}
-              className="relative z-10 flex min-h-[68px] w-full min-w-0 max-w-full flex-1 flex-col items-start pr-[120px] text-left text-white hover:no-underline sm:pr-[260px]"
+              className="relative z-10 flex h-[100px] w-full min-w-0 max-w-full shrink-0 flex-col items-start pr-[120px] text-left text-white hover:no-underline sm:pr-[260px] lg:h-[132px]"
             >
               <div className={`absolute inset-y-0 left-0 z-10 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}>
                 <span className="flex w-full min-w-0 items-center gap-2 font-medium tracking-tight text-white">
