@@ -87,7 +87,6 @@ export function ItemGestos({
       className={cn(
         "cursor-pointer select-none transition-colors",
         item.prioridade ? corDaPrioridade[item.prioridade] : "bg-card text-foreground",
-        item.concluido && "text-red-600",
         className,
       )}
     >

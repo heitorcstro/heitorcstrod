@@ -77,13 +77,8 @@ export function ListaView({
             className="flex w-full max-w-full flex-col gap-1 p-1"
           >
             <div className="flex w-full min-w-0 flex-wrap items-center">
-              <span
-              className={cn(
-                "min-w-0 flex-1 truncate text-sm leading-relaxed no-underline",
-                item.concluido && "text-red-600",
-              )}
-            >
-              {item.texto}
+              <span className="min-w-0 flex-1 truncate text-sm leading-relaxed no-underline">
+                {item.texto}
               </span>
 
               {modoCompras && (
@@ -207,7 +202,7 @@ export function ListaView({
                   ids={itensMarcados.map((i) => i.id)}
                   onReordenar={onReordenarItens}
                 >
-                  <ul className="divide-y divide-border border-y border-border bg-secondary/40">
+                  <ul className="divide-y divide-border border-y border-border bg-white">
                     {itensMarcados.map(renderizarItem)}
                   </ul>
                 </ListaOrdenavel>
