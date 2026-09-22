@@ -17,13 +17,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ArchiveRestore } from "lucide-react";
 import { BotaoArquivar } from "./botao-arquivar";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
-import { SeletorPrioridade } from "./seletor-prioridade";
+import { ItemGestos } from "./item-gestos";
 import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
 import type { Categoria, Item, Prioridade } from "./types";
 
@@ -170,37 +169,32 @@ export function SubcategoriasAccordion({
               >
                 {(alcaItem) => (
                   <li className="list-none py-3">
-                    <div className="group flex w-full max-w-full flex-col border-b border-gray-100 p-1 hover:bg-gray-50">
+                    <ItemGestos
+                      item={item}
+                      onDefinirPrioridade={(prioridade) =>
+                        onDefinirPrioridade(sub.id, item.id, prioridade)
+                      }
+                      onTransferir={() => onTransferir(sub.id, item)}
+                      onAlternarConclusao={() => onAlternarItem(sub.id, item.id)}
+                      className="group flex w-full max-w-full flex-col border-b border-border p-1"
+                    >
                       {/* LINHA DE CIMA: dados e info principal */}
                       <div className="flex w-full min-w-0 flex-wrap items-center">
-                        <div className="shrink-0">
-                          <SeletorPrioridade
-                            prioridade={item.prioridade}
-                            onSelecionar={(prioridade) =>
-                              onDefinirPrioridade(sub.id, item.id, prioridade)
-                            }
-                            onTransferir={() => onTransferir(sub.id, item)}
-                          />
-                        </div>
-                        <div className="ml-1 shrink-0">
-                          <Checkbox
-                            id={`${sub.id}-${item.id}`}
-                            checked={item.concluido}
-                            onCheckedChange={() => onAlternarItem(sub.id, item.id)}
-                          />
-                        </div>
-                        <label
-                          htmlFor={`${sub.id}-${item.id}`}
+                        <span
                           className={cn(
-                            "ml-2 min-w-0 flex-1 cursor-pointer truncate text-sm leading-relaxed no-underline",
-                            item.concluido ? "text-red-600" : "text-foreground",
+                            "min-w-0 flex-1 truncate text-sm leading-relaxed no-underline",
+                            item.concluido && "text-red-600",
                           )}
                         >
                           {item.texto}
-                        </label>
+                        </span>
 
                         {modoCompras && (
-                          <div className="flex w-full flex-wrap items-end gap-2 sm:ml-2 sm:w-auto">
+                          <div
+                            className="flex w-full flex-wrap items-end gap-2 sm:ml-2 sm:w-auto"
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <CamposCompra
                               item={item}
                               onAtualizarValores={(itemId, valores) =>
@@ -212,7 +206,11 @@ export function SubcategoriasAccordion({
                       </div>
 
                       {/* LINHA DE BAIXO: alça "M" e Lixeira */}
-                      <div className="mt-1 flex w-full items-center justify-end gap-1 pt-1">
+                      <div
+                        className="mt-1 flex w-full items-center justify-end gap-1 pt-1"
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         {alcaItem}
                         <Button
                           variant="ghost"
@@ -227,7 +225,7 @@ export function SubcategoriasAccordion({
                           <Trash2 className="size-4" />
                         </Button>
                       </div>
-                    </div>
+                    </ItemGestos>
                   </li>
                 )}
               </ItemOrdenavel>

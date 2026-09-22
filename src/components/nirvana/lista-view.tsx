@@ -8,10 +8,9 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { SeletorPrioridade } from "./seletor-prioridade";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
+import { ItemGestos } from "./item-gestos";
 import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
 import type { Item, Prioridade, Subcategoria } from "./types";
 
@@ -70,44 +69,51 @@ export function ListaView({
     >
       {(alca) => (
         <li className="list-none py-3">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            {alca}
-            <SeletorPrioridade
-              prioridade={item.prioridade}
-              onSelecionar={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
-              onTransferir={() => onTransferir(item)}
-            />
-            <Checkbox
-              id={item.id}
-              checked={item.concluido}
-              onCheckedChange={() => onAlternarItem(item.id)}
-            />
-            <label
-              htmlFor={item.id}
+          <ItemGestos
+            item={item}
+            onDefinirPrioridade={(prioridade) => onDefinirPrioridade(item.id, prioridade)}
+            onTransferir={() => onTransferir(item)}
+            onAlternarConclusao={() => onAlternarItem(item.id)}
+            className="flex w-full max-w-full flex-col gap-1 p-1"
+          >
+            <div className="flex w-full min-w-0 flex-wrap items-center">
+              <span
               className={cn(
-                "min-w-0 flex-1 cursor-pointer text-sm leading-relaxed no-underline",
-                item.concluido ? "text-red-600" : "text-foreground",
+                "min-w-0 flex-1 truncate text-sm leading-relaxed no-underline",
+                item.concluido && "text-red-600",
               )}
             >
               {item.texto}
-            </label>
+              </span>
 
-            {modoCompras && (
-              <div className="order-last ml-9 flex w-full flex-wrap items-end gap-2 sm:order-none sm:ml-0 sm:w-auto">
-                <CamposCompra item={item} onAtualizarValores={onAtualizarValores} />
-              </div>
-            )}
+              {modoCompras && (
+                <div
+                  className="flex w-full flex-wrap items-end gap-2 sm:ml-2 sm:w-auto"
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <CamposCompra item={item} onAtualizarValores={onAtualizarValores} />
+                </div>
+              )}
+            </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={`Excluir ${item.texto}`}
-              onClick={() => onRemoverItem(item.id)}
-              className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
+            <div
+              className="flex w-full items-center justify-end gap-1"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
             >
-              <Trash2 className="size-4" />
-            </Button>
-          </div>
+              {alca}
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`Excluir ${item.texto}`}
+                onClick={() => onRemoverItem(item.id)}
+                className="shrink-0 text-muted-foreground hover:text-destructive"
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            </div>
+          </ItemGestos>
         </li>
       )}
     </ItemOrdenavel>
