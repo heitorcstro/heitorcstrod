@@ -616,10 +616,6 @@ function NirvanaPage() {
               categoria.arquivada ? "bg-gray-100 opacity-60" : "bg-white"
             }`}
           >
-            <div
-              aria-hidden
-              className={`pointer-events-none absolute inset-y-0 left-0 hidden w-[60%] group-data-[state=open]:block lg:w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
-            />
             <AccordionTrigger
               showChevron={false}
               className="relative flex min-h-[68px] w-full min-w-0 max-w-full flex-1 flex-col items-start pr-[120px] text-left text-white hover:no-underline sm:pr-[260px]"
@@ -693,7 +689,7 @@ function NirvanaPage() {
                 />
               )}
             </div>
-            <AccordionContent className="relative mb-4 mx-4 mt-3 rounded-lg bg-white/70 p-4 pb-5">
+            <AccordionContent className="mb-4 mx-4 mt-3 rounded-lg bg-card p-4 pb-5">
               <div className="space-y-4">
                 {categoria.subcategorias.length > 0 ? (
                   <SubcategoriasAccordion
