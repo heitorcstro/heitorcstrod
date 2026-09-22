@@ -612,7 +612,7 @@ function NirvanaPage() {
         {(alca) => (
           <AccordionItem
             value={idArrasto}
-            className={`group relative flex min-h-[100px] w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-black bg-clip-padding transition-colors hover:border-foreground/40 lg:min-h-[132px] ${
+            className={`group relative flex min-h-[100px] w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-black bg-clip-padding transition-colors hover:border-foreground/40 data-[state=open]:pb-[0.5cm] lg:min-h-[132px] ${
               categoria.arquivada ? "bg-gray-100 opacity-60" : "bg-transparent"
             }`}
           >
