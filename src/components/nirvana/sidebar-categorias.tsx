@@ -34,7 +34,7 @@ type Props = {
 };
 
 const CLASSE_ACAO =
-  "flex cursor-pointer flex-row items-center gap-3 border-b border-gray-200 px-4 py-3 text-black hover:bg-slate-100";
+  "flex cursor-pointer flex-row items-center gap-3 border-b border-gray-200 px-2 py-3 text-black hover:bg-slate-100";
 
 export function SidebarCategorias({
   categorias,
@@ -144,15 +144,20 @@ export function SidebarCategorias({
   const conteudoCategoria = (categoria: Categoria, dentroDePasta: boolean, alca: ReactNode) => (
     <div
       className={cn(
-        "flex flex-row items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 text-black",
-        dentroDePasta && "bg-slate-50 pl-9",
+        "flex flex-row items-center gap-2 border-b border-gray-200 px-2 py-3 text-black",
+        dentroDePasta && "bg-slate-50",
         categoria.arquivada && "bg-gray-100 opacity-60",
       )}
     >
+      {/* Slot fixo do chevron: vazio em categorias para alinhar o "M" com as pastas. */}
+      <div className="flex shrink-0 items-center">
+        <div className="flex w-5 shrink-0 items-center justify-center" aria-hidden />
+        {alca}
+      </div>
       <button
         type="button"
         onClick={() => onSelecionarCategoria(categoria.id)}
-        className="flex min-w-0 flex-1 items-center gap-2 pr-3 text-left"
+        className="flex min-w-0 flex-1 items-center gap-2 text-left"
       >
         <span
           className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
@@ -164,7 +169,6 @@ export function SidebarCategorias({
           </span>
         ) : null}
       </button>
-      {alca}
     </div>
   );
 
@@ -253,7 +257,7 @@ export function SidebarCategorias({
             <button
               type="button"
               onClick={() => setSecaoPastasAberta((v) => !v)}
-              className="flex w-full cursor-pointer flex-row items-center justify-between px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+              className="flex w-full cursor-pointer flex-row items-center justify-between px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
             >
               PASTAS
               {secaoPastasAberta ? (
@@ -264,7 +268,7 @@ export function SidebarCategorias({
             </button>
             {secaoPastasAberta ? (
             <div>
-              <div className="flex flex-row items-center gap-3 border-b border-gray-200 px-4 py-3">
+              <div className="flex flex-row items-center gap-3 border-b border-gray-200 px-2 py-3">
                 <button
                   type="button"
                   onClick={onCriarPasta}
@@ -315,44 +319,49 @@ export function SidebarCategorias({
                   >
                     {(alca) => (
                       <div>
-                        <div className="flex w-full flex-row items-center gap-3 border-b border-gray-200 px-4 py-3 text-left text-black hover:bg-slate-100">
-                          <Folder
-                            className={cn(
-                              "size-[18px] shrink-0",
-                              ESTILOS_COR_CATEGORIA[pasta.cor]?.texto,
-                            )}
-                            strokeWidth={2.5}
-                            fill="currentColor"
-                          />
+                        <div className="flex w-full flex-row items-center gap-2 border-b border-gray-200 px-2 py-3 text-left text-black hover:bg-slate-100">
+                          {/* Slot fixo do chevron da pasta: garante o alinhamento do "M". */}
+                          <div className="flex shrink-0 items-center">
+                            <div className="flex w-5 shrink-0 items-center justify-center">
+                              <button
+                                type="button"
+                                onClick={() => alternarPasta(pasta.id)}
+                                aria-label={`Expandir ${pasta.nome}`}
+                                className="flex items-center justify-center"
+                              >
+                                <ChevronDown
+                                  className={cn(
+                                    "size-[18px] shrink-0 transition-transform duration-200",
+                                    aberta && "rotate-180",
+                                  )}
+                                  strokeWidth={2.5}
+                                />
+                              </button>
+                            </div>
+                            {alca}
+                          </div>
                           <button
                             type="button"
                             onClick={() => onSelecionarPasta?.(pasta.id)}
-                            className="min-w-0 flex-1 whitespace-normal break-words text-left text-sm font-medium"
+                            className="flex min-w-0 flex-1 items-center gap-2 text-left text-sm font-medium"
                           >
-                            {pasta.nome}
-                          </button>
-                          <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
-                          <button
-                            type="button"
-                            onClick={() => alternarPasta(pasta.id)}
-                            aria-label={`Expandir ${pasta.nome}`}
-                            className="shrink-0"
-                          >
-                            <ChevronDown
+                            <Folder
                               className={cn(
-                                "size-[18px] shrink-0 transition-transform duration-200",
-                                aberta && "rotate-180",
+                                "size-[18px] shrink-0",
+                                ESTILOS_COR_CATEGORIA[pasta.cor]?.texto,
                               )}
                               strokeWidth={2.5}
+                              fill="currentColor"
                             />
+                            <span className="whitespace-normal break-words">{pasta.nome}</span>
                           </button>
-                          {alca}
+                          <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
                         </div>
                         {aberta && dentro.length > 0
                           ? dentro.map((categoria) => linhaCategoria(categoria, true))
                           : null}
                         {aberta && dentro.length === 0 ? (
-                          <p className="border-b border-gray-200 bg-slate-50 px-4 py-3 pl-9 text-xs text-black/50">
+                          <p className="border-b border-gray-200 bg-slate-50 px-2 py-3 text-xs text-black/50">
                             Arraste uma categoria para cá.
                           </p>
                         ) : null}
@@ -367,7 +376,7 @@ export function SidebarCategorias({
               <button
                 type="button"
                 onClick={() => setSecaoCategoriasAberta((v) => !v)}
-                className="flex w-full cursor-pointer flex-row items-center justify-between px-4 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+                className="flex w-full cursor-pointer flex-row items-center justify-between px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
               >
                 CATEGORIAS
                 {secaoCategoriasAberta ? (
@@ -378,7 +387,7 @@ export function SidebarCategorias({
               </button>
               {secaoCategoriasAberta ? (
               <div>
-                <div className="flex flex-row items-center gap-3 border-b border-gray-200 px-4 py-3">
+                <div className="flex flex-row items-center gap-3 border-b border-gray-200 px-2 py-3">
                   <button
                     type="button"
                     onClick={onCriarCategoria}
@@ -436,7 +445,7 @@ export function SidebarCategorias({
           type="button"
           onClick={onAbrirArquivados}
           className={cn(
-            "flex w-full flex-row items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 text-left text-black transition-colors hover:bg-black/5",
+            "flex w-full flex-row items-center justify-between gap-2 border-b border-gray-200 px-2 py-3 text-left text-black transition-colors hover:bg-black/5",
             !expandido && "justify-center px-0",
           )}
         >
