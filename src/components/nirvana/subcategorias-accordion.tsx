@@ -60,30 +60,6 @@ type Props = {
 const estiloBaseAcao =
   "inline-flex shrink-0 select-none items-center rounded-md border border-black bg-white px-2 py-1 text-xs font-medium whitespace-nowrap transition-colors hover:bg-black/5 disabled:opacity-40 disabled:hover:bg-transparent";
 
-function BarraProgressoSubcategoria({
-  total,
-  concluidos,
-}: {
-  total: number;
-  concluidos: number;
-}) {
-  const progressPercentage = total === 0 ? 0 : (concluidos / total) * 100;
-  return (
-    <span
-      className="flex shrink-0 items-center"
-      aria-label={`${concluidos} de ${total} concluídos`}
-    >
-      <span className="h-3 w-28 overflow-hidden rounded-sm border border-black bg-gray-200">
-        <span
-          className="block h-full bg-blue-600 transition-all duration-300 ease-in-out"
-          style={{ width: `${progressPercentage}%` }}
-        />
-      </span>
-    </span>
-  );
-}
-
-
 export function SubcategoriasAccordion({
   categoria,
   modoCompras = false,
@@ -157,7 +133,6 @@ export function SubcategoriasAccordion({
             const itensOrdenados = itensExibidos(sub);
             const itensAtivos = itensOrdenados.filter((item) => !item.concluido);
             const itensMarcados = itensOrdenados.filter((item) => item.concluido);
-            const concluidos = sub.itens.length - pendentes;
             const renderizarItem = (item: Item) => (
               <ItemOrdenavel
                 key={item.id}
@@ -180,7 +155,7 @@ export function SubcategoriasAccordion({
                     >
                       {/* LINHA DE CIMA: dados e info principal */}
                       <div className="flex w-full min-w-0 flex-wrap items-center">
-                        <span className="min-w-0 flex-1 truncate text-sm leading-relaxed no-underline">
+                        <span className="min-w-0 flex-1 truncate text-[13px] leading-relaxed no-underline">
                           {item.texto}
                         </span>
 
@@ -280,10 +255,6 @@ export function SubcategoriasAccordion({
                                   ARQUIVADO
                                 </span>
                               ) : null}
-                              <BarraProgressoSubcategoria
-                                total={sub.itens.length}
-                                concluidos={concluidos}
-                              />
                             </span>
                           <span className="text-sm text-muted-foreground">
                             {sub.itens.length === 0
