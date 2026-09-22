@@ -329,7 +329,8 @@ export function SidebarCategorias({
                     id={`pasta:${pasta.id}`}
                     tipo="pasta"
                     textoAlca="Mover essa Pasta"
-                    alcaLetra="M"
+                    alcaTexto="Mudar de Posição"
+                    alcaClassName={CLASSE_ALCA_SIDEBAR}
                     inline
                   >
                     {(alca) => (
