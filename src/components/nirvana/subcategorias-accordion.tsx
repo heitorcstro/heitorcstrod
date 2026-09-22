@@ -164,36 +164,44 @@ export function SubcategoriasAccordion({
                 key={item.id}
                 id={item.id}
                 textoAlca="Mover item"
+                inline
+                alcaLetra="M"
                 className="group border-b border-border last:border-b-0"
               >
                 {(alcaItem) => (
                   <li className="list-none py-3">
-                    <div className="flex w-full max-w-full flex-wrap items-center gap-x-3 gap-y-2">
-                      {alcaItem}
-                      <SeletorPrioridade
-                        prioridade={item.prioridade}
-                        onSelecionar={(prioridade) =>
-                          onDefinirPrioridade(sub.id, item.id, prioridade)
-                        }
-                        onTransferir={() => onTransferir(sub.id, item)}
-                      />
-                      <Checkbox
-                        id={`${sub.id}-${item.id}`}
-                        checked={item.concluido}
-                        onCheckedChange={() => onAlternarItem(sub.id, item.id)}
-                      />
-                      <label
-                        htmlFor={`${sub.id}-${item.id}`}
-                        className={cn(
-                          "min-w-0 flex-1 cursor-pointer truncate text-sm leading-relaxed no-underline",
-                          item.concluido ? "text-red-600" : "text-foreground",
-                        )}
-                      >
-                        {item.texto}
-                      </label>
+                    <div className="flex w-full max-w-full flex-wrap items-center justify-between gap-y-2 p-1">
+                      {/* ESQUERDA */}
+                      <div className="flex min-w-0 flex-1 items-center">
+                        <div className="shrink-0">
+                          <SeletorPrioridade
+                            prioridade={item.prioridade}
+                            onSelecionar={(prioridade) =>
+                              onDefinirPrioridade(sub.id, item.id, prioridade)
+                            }
+                            onTransferir={() => onTransferir(sub.id, item)}
+                          />
+                        </div>
+                        <div className="ml-1 shrink-0">
+                          <Checkbox
+                            id={`${sub.id}-${item.id}`}
+                            checked={item.concluido}
+                            onCheckedChange={() => onAlternarItem(sub.id, item.id)}
+                          />
+                        </div>
+                        <label
+                          htmlFor={`${sub.id}-${item.id}`}
+                          className={cn(
+                            "ml-2 min-w-0 flex-1 cursor-pointer truncate text-sm leading-relaxed no-underline",
+                            item.concluido ? "text-red-600" : "text-foreground",
+                          )}
+                        >
+                          {item.texto}
+                        </label>
+                      </div>
 
                       {modoCompras && (
-                        <div className="order-last ml-9 flex w-full flex-wrap items-end gap-2 sm:order-none sm:ml-0 sm:w-auto">
+                        <div className="order-last ml-9 flex w-full flex-wrap items-end gap-2 sm:order-none sm:ml-2 sm:w-auto">
                           <CamposCompra
                             item={item}
                             onAtualizarValores={(itemId, valores) =>
@@ -203,20 +211,28 @@ export function SubcategoriasAccordion({
                         </div>
                       )}
 
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label={`Excluir ${item.texto}`}
-                        onClick={() => onRemoverItem(sub.id, item.id)}
-                        className="shrink-0 text-muted-foreground hover:text-destructive"
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
+                      {/* DIREITA (AÇÕES) */}
+                      <div className="ml-2 flex shrink-0 items-center gap-1">
+                        {alcaItem}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label={`Excluir ${item.texto}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRemoverItem(sub.id, item.id);
+                          }}
+                          className="size-8 shrink-0 text-muted-foreground hover:text-destructive"
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      </div>
                     </div>
                   </li>
                 )}
               </ItemOrdenavel>
             );
+
 
             return (
               <ItemOrdenavel
