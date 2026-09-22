@@ -52,6 +52,8 @@ export function CategoriaView({
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
+  onArquivarSubcategoria,
+  onRestaurarSubcategoria,
   onMarcarTodos,
   onAdicionarItem,
   onAlternarItem,
