@@ -8,6 +8,7 @@ import {
   ChevronDown,
   ChevronRight,
   Folder,
+  Menu,
   Plus,
   Trash2,
 } from "lucide-react";
@@ -740,7 +741,7 @@ function NirvanaPage() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-white">
+    <div className="relative h-screen w-full bg-white">
       <SidebarCategorias
         categorias={categoriasVisiveis}
         pastas={pastasVisiveis}
@@ -766,9 +767,17 @@ function NirvanaPage() {
         expandido={sidebarExpandida}
         onAlternarExpansao={() => setSidebarExpandida((v) => !v)}
       />
-      <main className="flex-1 overflow-y-auto bg-background">
+      <main className="relative h-screen w-full overflow-y-auto bg-background">
       <header className="border-b border-border bg-primary text-primary-foreground">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+        <div className="mx-auto flex max-w-5xl items-center gap-3 px-6 py-5">
+          <button
+            type="button"
+            onClick={() => setSidebarExpandida((v) => !v)}
+            aria-label="Abrir menu"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20"
+          >
+            <Menu className="size-5" strokeWidth={2.5} />
+          </button>
           <button
             type="button"
             onClick={() => {

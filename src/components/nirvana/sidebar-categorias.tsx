@@ -194,8 +194,8 @@ export function SidebarCategorias({
   return (
     <aside
       className={cn(
-        "flex shrink-0 flex-col overflow-hidden border-r border-black bg-white transition-all duration-300 ease-in-out",
-        expandido ? "w-72" : "w-16",
+        "fixed left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-hidden border-r border-black bg-white shadow-2xl transition-transform duration-300 ease-in-out",
+        expandido ? "translate-x-0" : "-translate-x-full",
       )}
     >
       <div className="relative flex flex-row items-center justify-between gap-2 border-b border-black px-3 py-4">
