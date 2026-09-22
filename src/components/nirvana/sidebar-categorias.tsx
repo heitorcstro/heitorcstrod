@@ -36,6 +36,11 @@ type Props = {
 const CLASSE_ACAO =
   "flex cursor-pointer flex-row items-center gap-3 border-b border-gray-200 px-4 py-3 text-black hover:bg-slate-100";
 
+/**
+ * Alça de arrasto da sidebar com texto "Mudar Posição".
+ */
+const CLASSE_ALCA_SIDEBAR =
+  "ml-auto inline-flex shrink-0 cursor-grab touch-none select-none items-center whitespace-nowrap rounded-md border border-black bg-white px-2 py-1 text-[10px] font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing";
 
 export function SidebarCategorias({
   categorias,
@@ -180,7 +185,8 @@ export function SidebarCategorias({
         id={idArrasto}
         tipo="categoria"
         textoAlca="Mover essa Categoria"
-        alcaLetra="M"
+        alcaTexto="Mudar Posição"
+        alcaClassName={CLASSE_ALCA_SIDEBAR}
         inline
       >
         {(alca) => conteudoCategoria(categoria, dentroDePasta, alca)}
@@ -320,7 +326,8 @@ export function SidebarCategorias({
                     id={`pasta:${pasta.id}`}
                     tipo="pasta"
                     textoAlca="Mover essa Pasta"
-                    alcaLetra="M"
+                    alcaTexto="Mudar Posição"
+                    alcaClassName={CLASSE_ALCA_SIDEBAR}
                     inline
                   >
                     {(alca) => (
