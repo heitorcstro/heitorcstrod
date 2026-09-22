@@ -183,6 +183,12 @@ type ItemProps = {
    * (apenas quando `alcaLetra` não é informado).
    */
   alcaClassName?: string;
+  /**
+   * Quando verdadeiro, renderiza o ícone PNG (/drag-icon.png) dentro da
+   * caixa fixa w-6 h-6, substituindo qualquer texto visível. `textoAlca`
+   * permanece como rótulo acessível (aria-label).
+   */
+  alcaIcone?: boolean;
   children: (alca: ReactNode) => ReactNode;
 };
 
@@ -196,6 +202,7 @@ export function ItemOrdenavel({
   alcaLetra,
   alcaTexto,
   alcaClassName,
+  alcaIcone,
   children,
 }: ItemProps) {
   const {
@@ -226,14 +233,25 @@ export function ItemOrdenavel({
       aria-label={textoAlca}
       tabIndex={0}
       className={
-        alcaClassName ??
-        (alcaLetra
-          ? "inline-flex h-6 w-6 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 text-xs font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
-          : "inline-flex shrink-0 cursor-grab touch-none select-none items-center rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
-        )
+        alcaIcone
+          ? "group inline-flex h-6 w-6 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-colors hover:bg-black/5 active:cursor-grabbing"
+          : alcaClassName ??
+            (alcaLetra
+              ? "inline-flex h-6 w-6 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 text-xs font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
+              : "inline-flex shrink-0 cursor-grab touch-none select-none items-center rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
+            )
       }
     >
-      {alcaLetra ?? alcaTexto ?? textoAlca}
+      {alcaIcone ? (
+        <img
+          src="/drag-icon.png"
+          alt=""
+          draggable={false}
+          className="pointer-events-none h-4 w-4 select-none object-contain opacity-60 transition-opacity group-hover:opacity-100"
+        />
+      ) : (
+        (alcaLetra ?? alcaTexto ?? textoAlca)
+      )}
     </span>
   ) : (
     <Button
