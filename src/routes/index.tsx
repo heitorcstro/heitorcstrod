@@ -612,8 +612,8 @@ function NirvanaPage() {
         {(alca) => (
           <AccordionItem
             value={idArrasto}
-            className={`group relative flex min-h-[100px] w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-black transition-colors hover:border-foreground/40 lg:min-h-[132px] ${
-              categoria.arquivada ? "bg-gray-100 opacity-60" : "bg-white"
+            className={`group relative flex min-h-[100px] w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-black bg-clip-padding transition-colors hover:border-foreground/40 lg:min-h-[132px] ${
+              categoria.arquivada ? "bg-gray-100 opacity-60" : "bg-transparent"
             }`}
           >
             <AccordionTrigger
@@ -689,7 +689,7 @@ function NirvanaPage() {
                 />
               )}
             </div>
-            <AccordionContent className="mb-4 mx-4 mt-3 rounded-lg bg-card p-4 pb-5">
+            <AccordionContent className="mx-4 mb-4 mt-3 overflow-hidden rounded-lg bg-white bg-clip-padding p-2 pt-2">
               <div className="space-y-4">
                 {categoria.subcategorias.length > 0 ? (
                   <SubcategoriasAccordion
