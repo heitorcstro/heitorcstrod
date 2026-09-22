@@ -708,7 +708,7 @@ function NirvanaPage() {
     <div className="flex h-screen w-full bg-white">
       <SidebarCategorias
         categorias={categoriasVisiveis}
-        pastas={pastas}
+        pastas={pastasVisiveis}
         onCriarPasta={() => {
           setNomeNovaPasta("");
           setModalPastaAberto(true);
@@ -1010,14 +1010,10 @@ function NirvanaPage() {
 
             <ContextoArrasto
               ids={[
-                ...pastas.map((p) => `pasta:${p.id}`),
-                ...categoriasVisiveis.map((c) => c.id),
-              ]}
-              onSoltar={aoSoltarHierarquia}
-            >
-              {!secaoPastasCentral ? null : pastas.length > 0 ? (
-                <div className="mt-6 space-y-3">
-                  {pastas.map((pasta) => {
+                ...pastasVisiveis.map((p) => `pasta:${p.id}`),
+...
+              {!secaoPastasCentral ? null : pastasVisiveis.length > 0 ? (
+                  {pastasVisiveis.map((pasta) => {
                     const dentro = categoriasVisiveis.filter((c) => c.pastaId === pasta.id);
                     const aberta = pastasAbertasCentral.includes(pasta.id);
                     return (
