@@ -304,7 +304,9 @@ export function SidebarCategorias({
             <ContextoArrasto
               ids={[
                 ...pastas.map((p) => `pasta:${p.id}`),
-                ...categorias.map((c) => c.id),
+                ...categorias.flatMap((c) =>
+                  c.pastaId && c.manterEmCategorias !== false ? [c.id, `eco:${c.id}`] : [c.id],
+                ),
               ]}
               onSoltar={aoSoltar}
             >

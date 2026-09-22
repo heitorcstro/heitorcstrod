@@ -1105,7 +1105,9 @@ function NirvanaPage() {
             <ContextoArrasto
               ids={[
                 ...pastasVisiveis.map((p) => `pasta:${p.id}`),
-                ...categoriasVisiveis.map((c) => c.id),
+                ...categoriasVisiveis.flatMap((c) =>
+                  c.pastaId && c.manterEmCategorias !== false ? [c.id, `eco:${c.id}`] : [c.id],
+                ),
               ]}
               onSoltar={aoSoltarHierarquia}
             >
