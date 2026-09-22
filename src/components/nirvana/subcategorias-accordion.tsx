@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { ArchiveRestore } from "lucide-react";
 import { BotaoArquivar } from "./botao-arquivar";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
 import { SeletorPrioridade } from "./seletor-prioridade";
@@ -42,6 +43,7 @@ type Props = {
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
   onArquivarSubcategoria?: (subcategoriaId: string) => void;
+  onRestaurarSubcategoria?: (subcategoriaId: string) => void;
   onMarcarTodos: (subcategoriaId: string, concluido: boolean) => void;
   onAdicionarItem: (subcategoriaId: string, texto: string) => void;
   onAlternarItem: (subcategoriaId: string, itemId: string) => void;
@@ -99,6 +101,7 @@ export function SubcategoriasAccordion({
   onRenomearSubcategoria,
   onExcluirSubcategoria,
   onArquivarSubcategoria,
+  onRestaurarSubcategoria,
   onMarcarTodos,
   onAdicionarItem,
   onAlternarItem,
@@ -114,7 +117,8 @@ export function SubcategoriasAccordion({
   const [subParaExcluir, setSubParaExcluir] = useState<string | null>(null);
   const [novosItens, setNovosItens] = useState<Record<string, string>>({});
 
-  const subcategoriasVisiveis = categoria.subcategorias.filter((s) => !s.arquivada);
+  // Arquivar é apenas um status: a subcategoria continua visível na categoria.
+  const subcategoriasVisiveis = categoria.subcategorias;
   const subExcluindo = categoria.subcategorias.find((s) => s.id === subParaExcluir) ?? null;
   const accordionControle =
     subcategoriasAbertas && onSubcategoriasAbertasChange
@@ -228,7 +232,10 @@ export function SubcategoriasAccordion({
                 {(alca) => (
                   <AccordionItem
                     value={sub.id}
-                    className="rounded-xl border border-border bg-card px-6 transition-colors hover:border-foreground/40"
+                    className={cn(
+                      "rounded-xl border border-border px-6 transition-colors hover:border-foreground/40",
+                      sub.arquivada ? "bg-gray-100 opacity-60" : "bg-card",
+                    )}
                   >
                      <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-center">
                        <button
@@ -246,6 +253,11 @@ export function SubcategoriasAccordion({
                           ) : (
                             <span className="flex min-w-0 flex-row items-center gap-3">
                               <span className="truncate text-2xl font-bold tracking-tight">{sub.nome}</span>
+                              {sub.arquivada ? (
+                                <span className="shrink-0 rounded-full bg-gray-200 px-2 py-1 text-[10px] text-gray-600">
+                                  ARQUIVADO
+                                </span>
+                              ) : null}
                               <BarraProgressoSubcategoria
                                 total={sub.itens.length}
                                 concluidos={concluidos}
@@ -265,14 +277,38 @@ export function SubcategoriasAccordion({
                             </span>
                           )}
                         </span>
-                        {onArquivarSubcategoria && (
-                          <span className="ml-auto flex shrink-0 items-center pl-3">
-                            <BotaoArquivar
-                              comoSpan
-                              rotulo={`Arquivar ${sub.nome}`}
-                              onArquivar={() => onArquivarSubcategoria(sub.id)}
-                            />
-                          </span>
+                        {sub.arquivada ? (
+                          onRestaurarSubcategoria && (
+                            <span
+                              role="button"
+                              tabIndex={0}
+                              aria-label={`Restaurar ${sub.nome}`}
+                              title="Restaurar"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onRestaurarSubcategoria(sub.id);
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.stopPropagation();
+                                  onRestaurarSubcategoria(sub.id);
+                                }
+                              }}
+                              className="ml-auto inline-flex shrink-0 items-center rounded-md border border-blue-300 bg-white p-1.5 text-blue-600 transition-colors hover:bg-blue-50"
+                            >
+                              <ArchiveRestore className="size-4" />
+                            </span>
+                          )
+                        ) : (
+                          onArquivarSubcategoria && (
+                            <span className="ml-auto flex shrink-0 items-center pl-3">
+                              <BotaoArquivar
+                                comoSpan
+                                rotulo={`Arquivar ${sub.nome}`}
+                                onArquivar={() => onArquivarSubcategoria(sub.id)}
+                              />
+                            </span>
+                          )
                         )}
                       </AccordionTrigger>
 

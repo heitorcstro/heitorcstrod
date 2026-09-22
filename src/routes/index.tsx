@@ -177,7 +177,8 @@ function NirvanaPage() {
   const subcategoriaAtiva =
     categoriaAtiva?.subcategorias.find((s) => s.id === subcategoriaAtivaId) ?? null;
 
-  const categoriasVisiveis = categorias.filter((c) => !c.arquivada);
+  // Arquivar é apenas um status: a categoria continua no lugar original.
+  const categoriasVisiveis = categorias;
   const categoriasArquivadas = categorias.filter((c) => c.arquivada);
   const subcategoriasArquivadas = categorias.flatMap((c) =>
     c.subcategorias.filter((s) => s.arquivada).map((s) => ({ categoria: c, sub: s })),
@@ -250,7 +251,6 @@ function NirvanaPage() {
       atual.map((c) => (c.id === categoriaId ? { ...c, arquivada: true } : c)),
     );
     setCategoriasAbertas((atual) => atual.filter((id) => id !== categoriaId));
-    abrirArquivados();
   };
 
   const restaurarCategoria = (categoriaId: string) =>
@@ -261,7 +261,6 @@ function NirvanaPage() {
   const arquivarSubcategoria = (subcategoriaId: string) => {
     patchSubcategoria(subcategoriaId, (sub) => ({ ...sub, arquivada: true }));
     if (subcategoriaAtivaId === subcategoriaId) setSubcategoriaAtivaId(null);
-    abrirArquivados();
   };
 
   const restaurarSubcategoria = (subcategoriaId: string) =>
@@ -606,15 +605,22 @@ function NirvanaPage() {
         {(alca) => (
           <AccordionItem
             value={idArrasto}
-            className="group relative flex min-h-[100px] flex-col overflow-hidden rounded-xl border border-black bg-white transition-colors hover:border-foreground/40 lg:min-h-[132px]"
+            className={`group relative flex min-h-[100px] flex-col overflow-hidden rounded-xl border border-black transition-colors hover:border-foreground/40 lg:min-h-[132px] ${
+              categoria.arquivada ? "bg-gray-100 opacity-60" : "bg-white"
+            }`}
           >
             <AccordionTrigger
               showChevron={false}
               className="relative flex min-h-[68px] min-w-0 flex-1 flex-col items-start pr-[260px] text-left text-white hover:no-underline"
             >
               <div className={`absolute inset-y-0 left-0 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}>
-                <span className="w-full truncate font-medium tracking-tight text-white">
-                  {categoria.nome}
+                <span className="flex w-full min-w-0 items-center gap-2 font-medium tracking-tight text-white">
+                  <span className="truncate">{categoria.nome}</span>
+                  {categoria.arquivada ? (
+                    <span className="shrink-0 rounded-full bg-white/90 px-2 py-0.5 text-[10px] text-gray-700">
+                      ARQUIVADO
+                    </span>
+                  ) : null}
                 </span>
                 <span className="text-xs text-white/80">
                   {categoria.subcategorias.length} subcategoria
@@ -657,10 +663,22 @@ function NirvanaPage() {
                 >
                   <Plus className="size-[18px]" strokeWidth={2.5} />
                 </button>
-                <BotaoArquivar
-                  rotulo={`Arquivar ${categoria.nome}`}
-                  onArquivar={() => arquivarCategoria(categoria.id)}
-                />
+                {categoria.arquivada ? (
+                  <button
+                    type="button"
+                    aria-label={`Restaurar ${categoria.nome}`}
+                    title="Restaurar"
+                    onClick={() => restaurarCategoria(categoria.id)}
+                    className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-blue-300 bg-white p-0 text-blue-600 transition-colors hover:bg-blue-50"
+                  >
+                    <ArchiveRestore className="size-[18px]" strokeWidth={2.5} />
+                  </button>
+                ) : (
+                  <BotaoArquivar
+                    rotulo={`Arquivar ${categoria.nome}`}
+                    onArquivar={() => arquivarCategoria(categoria.id)}
+                  />
+                )}
               </div>
             </div>
             <AccordionContent className="mb-4 mx-4 mt-3 rounded-lg bg-card p-4 pb-5">
@@ -679,6 +697,7 @@ function NirvanaPage() {
                     onRenomearSubcategoria={renomearSubcategoria}
                     onExcluirSubcategoria={excluirSubcategoria}
                     onArquivarSubcategoria={arquivarSubcategoria}
+                    onRestaurarSubcategoria={restaurarSubcategoria}
                     onMarcarTodos={marcarTodosItens}
                     onAdicionarItem={adicionarItem}
                     onAlternarItem={alternarItem}
