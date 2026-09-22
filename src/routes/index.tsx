@@ -607,7 +607,7 @@ function NirvanaPage() {
         tipo="categoria"
         textoAlca="Mover categoria"
         inline
-        alcaTexto="Trocar de Posição"
+        alcaTexto="Mudar Posição"
         alcaClassName="ml-auto inline-flex shrink-0 cursor-grab touch-none select-none items-center whitespace-nowrap rounded-md border border-blue-500 bg-white px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 active:cursor-grabbing"
       >
         {(alca) => (
@@ -1123,7 +1123,7 @@ function NirvanaPage() {
                         tipo="pasta"
                         textoAlca="Mover pasta"
                         inline
-                        alcaTexto="Trocar de Posição"
+                        alcaTexto="Mudar Posição"
                         alcaClassName="inline-flex shrink-0 cursor-grab touch-none select-none items-center whitespace-nowrap rounded-md border border-blue-500 bg-white px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 active:cursor-grabbing"
                       >
                         {(alca) => (
