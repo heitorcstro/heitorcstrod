@@ -964,6 +964,8 @@ function NirvanaPage() {
             }
             onRenomearSubcategoria={renomearSubcategoria}
             onExcluirSubcategoria={excluirSubcategoria}
+            onArquivarSubcategoria={arquivarSubcategoria}
+            onRestaurarSubcategoria={restaurarSubcategoria}
             onMarcarTodos={marcarTodosItens}
             onAdicionarItem={adicionarItem}
             onAlternarItem={alternarItem}
