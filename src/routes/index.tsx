@@ -1039,23 +1039,34 @@ function NirvanaPage() {
               )}
 
               <div className="mt-10 flex flex-wrap items-end justify-between gap-4">
-                <div>
+                <button
+                  type="button"
+                  onClick={() => setSecaoCategoriasCentral((v) => !v)}
+                  className="flex cursor-pointer items-center gap-2 text-left"
+                >
                   <h1 className="font-display text-3xl font-semibold tracking-tight">Categorias</h1>
-                </div>
-                <div className="flex flex-row items-center gap-3">
-                  <Button size="lg" onClick={() => setModalAberto(true)}>
-                    <Plus className="size-4" />
-                    Criar Categoria
-                  </Button>
-                  <Button
-                    size="lg"
-                    onClick={() => setModalDeletarAberto(true)}
-                    className="bg-red-600 text-white hover:bg-red-700"
-                  >
-                    <Trash2 className="size-4" />
-                    Deletar Categoria
-                  </Button>
-                </div>
+                  {secaoCategoriasCentral ? (
+                    <ChevronDown className="size-6" strokeWidth={3} />
+                  ) : (
+                    <ChevronRight className="size-6" strokeWidth={3} />
+                  )}
+                </button>
+                {secaoCategoriasCentral ? (
+                  <div className="flex flex-row items-center gap-3">
+                    <Button size="lg" onClick={() => setModalAberto(true)}>
+                      <Plus className="size-4" />
+                      Criar Categoria
+                    </Button>
+                    <Button
+                      size="lg"
+                      onClick={() => setModalDeletarAberto(true)}
+                      className="bg-red-600 text-white hover:bg-red-700"
+                    >
+                      <Trash2 className="size-4" />
+                      Deletar Categoria
+                    </Button>
+                  </div>
+                ) : null}
               </div>
 
               <AreaSoltavel
@@ -1069,9 +1080,11 @@ function NirvanaPage() {
                   onValueChange={atualizarCategoriasAbertas}
                   className="mt-8 grid gap-3 lg:grid-cols-2"
                 >
-                  {categoriasVisiveis
-                    .filter((c) => !c.pastaId || c.manterEmCategorias !== false)
-                    .map((categoria) => cartaoCategoria(categoria, !!categoria.pastaId))}
+                  {secaoCategoriasCentral
+                    ? categoriasVisiveis
+                        .filter((c) => !c.pastaId || c.manterEmCategorias !== false)
+                        .map((categoria) => cartaoCategoria(categoria, !!categoria.pastaId))
+                    : []}
                 </Accordion>
               </AreaSoltavel>
             </ContextoArrasto>
