@@ -50,7 +50,6 @@ import {
   ItemOrdenavel,
   ListaOrdenavel,
 } from "@/components/nirvana/dnd";
-import { BotaoArquivar } from "@/components/nirvana/botao-arquivar";
 import {
   ESTILOS_COR_CATEGORIA,
   GradeCoresCategoria,
@@ -682,12 +681,7 @@ function NirvanaPage() {
                 >
                   <ArchiveRestore className="size-[18px]" strokeWidth={2.5} />
                 </button>
-              ) : (
-                <BotaoArquivar
-                  rotulo={`Arquivar ${categoria.nome}`}
-                  onArquivar={() => arquivarCategoria(categoria.id)}
-                />
-              )}
+              ) : null}
             </div>
             <AccordionContent className="relative z-0 mx-4 mb-1 mt-[8px] overflow-hidden rounded-lg bg-white bg-clip-padding px-2 pb-[50px]">
               <div className="space-y-4">
