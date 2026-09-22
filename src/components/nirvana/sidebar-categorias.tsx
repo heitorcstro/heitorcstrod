@@ -52,6 +52,8 @@ export function SidebarCategorias({
   onAlternarExpansao,
 }: Props) {
   const [pastasAbertas, setPastasAbertas] = useState<string[]>([]);
+  const [secaoPastasAberta, setSecaoPastasAberta] = useState(true);
+  const [secaoCategoriasAberta, setSecaoCategoriasAberta] = useState(true);
 
   const alternarPasta = (pastaId: string) =>
     setPastasAbertas((atual) =>
