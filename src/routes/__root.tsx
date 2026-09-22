@@ -12,6 +12,20 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+const SPLASH_IOS: { w: number; h: number; dw: number; dh: number; ratio: number }[] = [
+  { w: 750, h: 1334, dw: 375, dh: 667, ratio: 2 },
+  { w: 828, h: 1792, dw: 414, dh: 896, ratio: 2 },
+  { w: 1125, h: 2436, dw: 375, dh: 812, ratio: 3 },
+  { w: 1242, h: 2688, dw: 414, dh: 896, ratio: 3 },
+  { w: 1170, h: 2532, dw: 390, dh: 844, ratio: 3 },
+  { w: 1179, h: 2556, dw: 393, dh: 852, ratio: 3 },
+  { w: 1284, h: 2778, dw: 428, dh: 926, ratio: 3 },
+  { w: 1290, h: 2796, dw: 430, dh: 932, ratio: 3 },
+  { w: 1536, h: 2048, dw: 768, dh: 1024, ratio: 2 },
+  { w: 1668, h: 2388, dw: 834, dh: 1194, ratio: 2 },
+  { w: 2048, h: 2732, dw: 1024, dh: 1366, ratio: 2 },
+];
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -92,6 +106,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#0B192C" },
+      { name: "application-name", content: "Nirvana" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-title", content: "Nirvana" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
     ],
     links: [
       {
@@ -111,7 +131,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/icons/apple-touch-icon.png" },
+      ...SPLASH_IOS.map(({ w, h, dw, dh, ratio }) => ({
+        rel: "apple-touch-startup-image",
+        href: `/splash/splash-${w}x${h}.png`,
+        media: `(device-width: ${dw}px) and (device-height: ${dh}px) and (-webkit-device-pixel-ratio: ${ratio}) and (orientation: portrait)`,
+      })),
     ],
   }),
   shellComponent: RootShell,
