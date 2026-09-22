@@ -189,6 +189,16 @@ type ItemProps = {
    * permanece como rótulo acessível (aria-label).
    */
   alcaIcone?: boolean;
+  /**
+   * Classes para sobrescrever as dimensões da caixa do ícone (ex.: "h-8 w-8").
+   * Por padrão a caixa é h-6 w-6.
+   */
+  alcaBoxClassName?: string;
+  /**
+   * Classes para sobrescrever as dimensões do ícone PNG (ex.: "h-7 w-7").
+   * Por padrão o ícone é h-5 w-5 (preto sólido).
+   */
+  alcaImgClassName?: string;
   children: (alca: ReactNode) => ReactNode;
 };
 
@@ -203,6 +213,8 @@ export function ItemOrdenavel({
   alcaTexto,
   alcaClassName,
   alcaIcone,
+  alcaBoxClassName,
+  alcaImgClassName,
   children,
 }: ItemProps) {
   const {
@@ -234,7 +246,10 @@ export function ItemOrdenavel({
       tabIndex={0}
       className={
         alcaIcone
-          ? "group inline-flex h-6 w-6 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-colors hover:bg-black/5 active:cursor-grabbing"
+          ? cn(
+              "group inline-flex h-6 w-6 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-colors hover:bg-black/5 active:cursor-grabbing",
+              alcaBoxClassName,
+            )
           : alcaClassName ??
             (alcaLetra
               ? "inline-flex h-6 w-6 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 text-xs font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
@@ -247,7 +262,10 @@ export function ItemOrdenavel({
           src="/drag-icon.png"
           alt=""
           draggable={false}
-          className="pointer-events-none h-4 w-4 select-none object-contain opacity-60 transition-opacity group-hover:opacity-100"
+          className={cn(
+            "pointer-events-none h-5 w-5 select-none object-contain opacity-100 transition-transform group-hover:scale-105",
+            alcaImgClassName,
+          )}
         />
       ) : (
         (alcaLetra ?? alcaTexto ?? textoAlca)
