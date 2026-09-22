@@ -663,11 +663,9 @@ function NirvanaPage() {
                 className="pointer-events-none h-7 w-7 text-black transition-transform duration-200"
               />
             </div>
-            <div className="absolute top-3 right-3 z-10 flex flex-row items-start gap-6">
-              <div className="flex flex-col items-end gap-1.5">
+            <div className="absolute top-3 right-3 z-10 flex flex-row items-center gap-1.5">
+              <div className="flex flex-row items-center">
                 {alca}
-              </div>
-              <div className="flex flex-row items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => abrirCriarSubcategoria(categoria.id)}
@@ -676,23 +674,23 @@ function NirvanaPage() {
                 >
                   <Plus className="size-[18px]" strokeWidth={2.5} />
                 </button>
-                {categoria.arquivada ? (
-                  <button
-                    type="button"
-                    aria-label={`Restaurar ${categoria.nome}`}
-                    title="Restaurar"
-                    onClick={() => restaurarCategoria(categoria.id)}
-                    className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-blue-300 bg-white p-0 text-blue-600 transition-colors hover:bg-blue-50"
-                  >
-                    <ArchiveRestore className="size-[18px]" strokeWidth={2.5} />
-                  </button>
-                ) : (
-                  <BotaoArquivar
-                    rotulo={`Arquivar ${categoria.nome}`}
-                    onArquivar={() => arquivarCategoria(categoria.id)}
-                  />
-                )}
               </div>
+              {categoria.arquivada ? (
+                <button
+                  type="button"
+                  aria-label={`Restaurar ${categoria.nome}`}
+                  title="Restaurar"
+                  onClick={() => restaurarCategoria(categoria.id)}
+                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-blue-300 bg-white p-0 text-blue-600 transition-colors hover:bg-blue-50"
+                >
+                  <ArchiveRestore className="size-[18px]" strokeWidth={2.5} />
+                </button>
+              ) : (
+                <BotaoArquivar
+                  rotulo={`Arquivar ${categoria.nome}`}
+                  onArquivar={() => arquivarCategoria(categoria.id)}
+                />
+              )}
             </div>
             <AccordionContent className="mb-4 mx-4 mt-3 rounded-lg bg-card p-4 pb-5">
               <div className="space-y-4">
