@@ -289,6 +289,13 @@ export function SidebarCategorias({
                 />
                 <span className="text-sm font-medium">Deletar Pasta</span>
               </div>
+              {caixaPesquisa(
+                pesquisaPastasAtiva,
+                setPesquisaPastasAtiva,
+                buscaPastas,
+                setBuscaPastas,
+                "Pesquisar pastas",
+              )}
             </div>
             ) : null}
 
@@ -299,7 +306,7 @@ export function SidebarCategorias({
               ]}
               onSoltar={aoSoltar}
             >
-              {secaoPastasAberta && pastas.map((pasta) => {
+              {secaoPastasAberta && pastasFiltradas.map((pasta) => {
                 const aberta = pastasAbertas.includes(pasta.id);
                 const dentro = categoriasDaPasta(pasta.id);
                 return (
@@ -403,12 +410,19 @@ export function SidebarCategorias({
                   />
                   <span className="text-sm font-medium">Deletar Categoria</span>
                 </div>
+                {caixaPesquisa(
+                  pesquisaCategoriasAtiva,
+                  setPesquisaCategoriasAtiva,
+                  buscaCategorias,
+                  setBuscaCategorias,
+                  "Pesquisar categorias",
+                )}
               </div>
               ) : null}
 
               <AreaSoltavel id="raiz" tipo="categoria" classNameAtiva="bg-blue-50">
                 {secaoCategoriasAberta
-                  ? categoriasSoltas.map((categoria) => linhaCategoria(categoria))
+                  ? categoriasSoltasFiltradas.map((categoria) => linhaCategoria(categoria))
                   : null}
               </AreaSoltavel>
             </ContextoArrasto>
