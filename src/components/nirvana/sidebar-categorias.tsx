@@ -157,7 +157,7 @@ export function SidebarCategorias({
       <button
         type="button"
         onClick={() => onSelecionarCategoria(categoria.id)}
-        className="flex min-w-0 flex-1 items-center gap-2 text-left"
+        className="flex min-w-0 items-center gap-2 text-left"
       >
         <span
           className={`size-3 shrink-0 rounded-sm border border-black ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}
@@ -198,7 +198,7 @@ export function SidebarCategorias({
         expandido ? "translate-x-0" : "-translate-x-full",
       )}
     >
-      <div className="relative flex flex-row items-center justify-between gap-2 border-b border-black px-3 py-4">
+      <div className="relative flex flex-row items-center gap-2 border-b border-black px-3 py-4">
         {expandido && (
           <div className="flex min-w-0 flex-row items-center gap-3">
             <svg
@@ -257,7 +257,7 @@ export function SidebarCategorias({
             <button
               type="button"
               onClick={() => setSecaoPastasAberta((v) => !v)}
-              className="flex w-full cursor-pointer flex-row items-center justify-between px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+              className="flex w-full cursor-pointer flex-row items-center gap-1 px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
             >
               PASTAS
               {secaoPastasAberta ? (
@@ -343,7 +343,7 @@ export function SidebarCategorias({
                           <button
                             type="button"
                             onClick={() => onSelecionarPasta?.(pasta.id)}
-                            className="flex min-w-0 flex-1 items-center gap-2 text-left text-sm font-medium"
+                            className="flex min-w-0 items-center gap-2 text-left text-sm font-medium"
                           >
                             <Folder
                               className={cn(
@@ -354,8 +354,8 @@ export function SidebarCategorias({
                               fill="currentColor"
                             />
                             <span className="whitespace-normal break-words">{pasta.nome}</span>
+                            <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
                           </button>
-                          <span className="shrink-0 text-xs text-black/60">{dentro.length}</span>
                         </div>
                         {aberta && dentro.length > 0
                           ? dentro.map((categoria) => linhaCategoria(categoria, true))
@@ -376,7 +376,7 @@ export function SidebarCategorias({
               <button
                 type="button"
                 onClick={() => setSecaoCategoriasAberta((v) => !v)}
-                className="flex w-full cursor-pointer flex-row items-center justify-between px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
+                className="flex w-full cursor-pointer flex-row items-center gap-1 px-2 pt-6 pb-2 text-xs font-bold text-gray-500 tracking-wider"
               >
                 CATEGORIAS
                 {secaoCategoriasAberta ? (
