@@ -341,9 +341,8 @@ export function SubcategoriasAccordion({
                           <Input
                             value={novosItens[sub.id] ?? ""}
                             onChange={(e) => atualizarTextoItem(sub.id, e.target.value)}
-                            placeholder="Adicionar um item..."
                             aria-label={`Novo item em ${sub.nome}`}
-                            className="h-11"
+                            className="h-11 bg-white"
                           />
                           <Button type="submit" size="lg" className="h-11 px-4">
                             <Plus className="size-4" />
