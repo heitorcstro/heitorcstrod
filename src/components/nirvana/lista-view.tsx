@@ -147,9 +147,8 @@ export function ListaView({
               <Input
                 value={texto}
                 onChange={(e) => setTexto(e.target.value)}
-                placeholder="Adicionar um item..."
                 aria-label="Novo item"
-                className="h-11"
+                className="h-11 bg-white"
               />
               <Button type="submit" size="lg" className="h-11 px-4">
                 <Plus className="size-4" />

@@ -7,6 +7,7 @@ import {
   Bookmark,
   ChevronDown,
   ChevronRight,
+  ChevronUp,
   Folder,
   Menu,
   Plus,
@@ -458,6 +459,13 @@ function NirvanaPage() {
     setCategoriasAbertas(novasCategoriasAbertas);
   };
 
+  const alternarCategoriaAberta = (id: string) => {
+    const proximo = categoriasAbertas.includes(id)
+      ? categoriasAbertas.filter((aberta) => aberta !== id)
+      : [...categoriasAbertas, id];
+    atualizarCategoriasAbertas(proximo);
+  };
+
   const atualizarSubcategoriasAbertas = (
     categoriaId: string,
     novasSubcategoriasAbertas: string[],
@@ -597,6 +605,7 @@ function NirvanaPage() {
     const total = contarItens(categoria);
     const pendentes = contarPendentes(categoria);
     const idArrasto = eco ? `eco:${categoria.id}` : categoria.id;
+    const aberta = categoriasAbertas.includes(idArrasto);
     return (
       <ItemOrdenavel
         key={idArrasto}
@@ -653,11 +662,22 @@ function NirvanaPage() {
                 onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
                 rotulo="cor"
               />
-              <ChevronDown
-                size={28}
-                strokeWidth={3}
-                className="pointer-events-none h-7 w-7 text-black transition-transform duration-200"
-              />
+              <button
+                type="button"
+                aria-label={aberta ? `Fechar ${categoria.nome}` : `Abrir ${categoria.nome}`}
+                title={aberta ? "Fechar" : "Abrir"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  alternarCategoriaAberta(idArrasto);
+                }}
+                className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-black transition-colors hover:bg-black/5"
+              >
+                {aberta ? (
+                  <ChevronUp size={28} strokeWidth={3} className="h-7 w-7" />
+                ) : (
+                  <ChevronDown size={28} strokeWidth={3} className="h-7 w-7" />
+                )}
+              </button>
             </div>
             <div className="absolute top-3 right-3 z-10 flex flex-row items-center gap-1.5">
               <div className="flex flex-row items-center">
