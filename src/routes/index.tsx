@@ -7,6 +7,7 @@ import {
   Bookmark,
   ChevronDown,
   ChevronRight,
+  ChevronUp,
   Folder,
   Menu,
   Plus,
