@@ -22,4 +22,6 @@
 - Minimalismo extremo do item: removidos badge de prioridade e checkbox; a extrema esquerda da linha agora começa direto no nome do item, que virou o gatilho clicável (cursor-pointer select-none, stopPropagation). A cor agora é só do TEXTO (fundo sempre branco, sem hover). Ciclo: sem prioridade (text-gray-900) → 1 (text-green-600) → 2 (text-yellow-500) → 3 (text-purple-600) → D (text-orange-500) → T (text-red-600, abre "Mover para") → volta ao sem prioridade. ItemGestos passou a envolver apenas o nome; onDefinirPrioridade aceita Prioridade | null; definirPrioridade simplificado (set direto, sem toggle).
 
 ## Aberto
-(nada)
+- Chevron do cartão de categoria clicável (toggle abrir/fechar), apontando para cima quando aberto.
+- Input "Adicionar um item..." sem placeholder e com fundo branco.
+- (Concluído) Remover botão "Arquivar/Restaurar" das subcategorias — mantém só "M" e Lixeira.
