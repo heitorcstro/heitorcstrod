@@ -606,6 +606,7 @@ function NirvanaPage() {
     const total = contarItens(categoria);
     const pendentes = contarPendentes(categoria);
     const idArrasto = eco ? `eco:${categoria.id}` : categoria.id;
+    const aberta = categoriasAbertas.includes(idArrasto);
     return (
       <ItemOrdenavel
         key={idArrasto}
