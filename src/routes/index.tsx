@@ -460,6 +460,13 @@ function NirvanaPage() {
     setCategoriasAbertas(novasCategoriasAbertas);
   };
 
+  const alternarCategoriaAberta = (id: string) => {
+    const proximo = categoriasAbertas.includes(id)
+      ? categoriasAbertas.filter((aberta) => aberta !== id)
+      : [...categoriasAbertas, id];
+    atualizarCategoriasAbertas(proximo);
+  };
+
   const atualizarSubcategoriasAbertas = (
     categoriaId: string,
     novasSubcategoriasAbertas: string[],
