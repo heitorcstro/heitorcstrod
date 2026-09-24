@@ -308,6 +308,9 @@ function NirvanaPage() {
     });
   };
 
+  const trocarCorPasta = (pastaId: string, cor: CorCategoria) =>
+    setPastas((atual) => atual.map((pasta) => (pasta.id === pastaId ? { ...pasta, cor } : pasta)));
+
   const moverCategoriaParaPasta = (categoriaId: string, pastaId: string | null) =>
     setCategorias((atual) =>
       atual.map((c) => (c.id === categoriaId ? { ...c, pastaId } : c)),
@@ -1155,7 +1158,7 @@ function NirvanaPage() {
                       >
                         {(alca) => (
                           <div className="rounded-xl border border-black bg-white">
-                            <div className="flex flex-row items-center gap-3 px-4 py-3">
+                            <div className="flex min-w-0 flex-row items-center gap-3 overflow-hidden px-4 py-3">
                               <Folder
                                 className={`size-5 shrink-0 ${ESTILOS_COR_CATEGORIA[pasta.cor].texto}`}
                                 strokeWidth={2.5}
@@ -1164,7 +1167,7 @@ function NirvanaPage() {
                               <button
                                 type="button"
                                 onClick={() => abrirPasta(pasta.id)}
-                                className="min-w-0 text-left"
+                                className="min-w-0 flex-1 text-left"
                               >
                                 <span className="block truncate text-sm font-semibold text-black">
                                   {pasta.nome}
@@ -1173,18 +1176,25 @@ function NirvanaPage() {
                                   {dentro.length} {dentro.length === 1 ? "categoria" : "categorias"}
                                 </span>
                               </button>
-                              <button
-                                type="button"
-                                onClick={() => alternarPastaCentral(pasta.id)}
-                                aria-label={`Expandir ${pasta.nome}`}
-                                className="shrink-0"
-                              >
-                                <ChevronDown
-                                  className={`size-5 shrink-0 text-black transition-transform duration-200 ${aberta ? "rotate-180" : ""}`}
-                                  strokeWidth={3}
+                              <div className="ml-auto flex shrink-0 items-center gap-2">
+                                <TrocarCorCategoria
+                                  corAtual={pasta.cor}
+                                  onSelecionar={(cor) => trocarCorPasta(pasta.id, cor)}
+                                  rotulo="cor"
                                 />
-                              </button>
-                              {alca}
+                                <button
+                                  type="button"
+                                  onClick={() => alternarPastaCentral(pasta.id)}
+                                  aria-label={`Expandir ${pasta.nome}`}
+                                  className="shrink-0"
+                                >
+                                  <ChevronDown
+                                    className={`size-5 shrink-0 text-black transition-transform duration-200 ${aberta ? "rotate-180" : ""}`}
+                                    strokeWidth={3}
+                                  />
+                                </button>
+                                {alca}
+                              </div>
                             </div>
                             {aberta ? (
                               <div className="border-t border-black/20 p-3">
