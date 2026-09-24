@@ -1177,23 +1177,12 @@ function NirvanaPage() {
                                 </span>
                               </button>
                               <div className="ml-auto flex shrink-0 items-center gap-2">
+                                {alca}
                                 <TrocarCorCategoria
                                   corAtual={pasta.cor}
                                   onSelecionar={(cor) => trocarCorPasta(pasta.id, cor)}
                                   rotulo="cor"
                                 />
-                                <button
-                                  type="button"
-                                  onClick={() => alternarPastaCentral(pasta.id)}
-                                  aria-label={`Expandir ${pasta.nome}`}
-                                  className="shrink-0"
-                                >
-                                  <ChevronDown
-                                    className={`size-5 shrink-0 text-black transition-transform duration-200 ${aberta ? "rotate-180" : ""}`}
-                                    strokeWidth={3}
-                                  />
-                                </button>
-                                {alca}
                               </div>
                             </div>
                             {aberta ? (
