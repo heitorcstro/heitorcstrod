@@ -24,6 +24,7 @@
 - Removido botão "Arquivar/Restaurar" das subcategorias (mantém só "M" e Lixeira); imports/onClick limpos.
 - Chevron do cartão de categoria vira botão clicável que abre/fecha (stopPropagation); aponta para cima quando aberto (ChevronUp) e para baixo quando fechado (ChevronDown). Header (AccordionTrigger) continua togglando.
 - Input "Adicionar um item..." sem placeholder e com fundo branco (subcategorias-accordion e lista-view).
+- Botão “cor” adicionado aos cartões centrais de Pastas, reutilizando o seletor das Categorias e atualizando dinamicamente a cor do ícone da pasta.
 
 ## Aberto
 (nada)
