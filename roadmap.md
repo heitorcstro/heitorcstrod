@@ -25,6 +25,7 @@
 - Chevron do cartão de categoria vira botão clicável que abre/fecha (stopPropagation); aponta para cima quando aberto (ChevronUp) e para baixo quando fechado (ChevronDown). Header (AccordionTrigger) continua togglando.
 - Input "Adicionar um item..." sem placeholder e com fundo branco (subcategorias-accordion e lista-view).
 - Botão “cor” adicionado aos cartões centrais de Pastas, reutilizando o seletor das Categorias e atualizando dinamicamente a cor do ícone da pasta.
+- Cabeçalho da subcategoria com botão “T” isolado à direita; transferência integral para uma categoria solta ou dentro de Pasta; ações em linha única na ordem Mov. Sub → Ok → X → lápis → lixeira; exclusão continua protegida por confirmação.
 
 ## Aberto
 (nada)

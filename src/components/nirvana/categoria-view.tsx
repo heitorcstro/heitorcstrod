@@ -8,10 +8,12 @@ import {
 } from "./cores-categoria";
 import { SubcategoriasAccordion } from "./subcategorias-accordion";
 import { formatarBRL, totalCategoria } from "./types";
-import type { Categoria, CorCategoria, Item, Prioridade } from "./types";
+import type { Categoria, CorCategoria, Item, Pasta, Prioridade } from "./types";
 
 type Props = {
   categoria: Categoria;
+  categorias: Categoria[];
+  pastas: Pasta[];
   onVoltar: () => void;
   onArquivar?: () => void;
   onRestaurar?: () => void;
@@ -20,6 +22,7 @@ type Props = {
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
+  onTransferirSubcategoria: (subcategoriaId: string, categoriaDestinoId: string) => void;
   onArquivarSubcategoria?: (subcategoriaId: string) => void;
   onRestaurarSubcategoria?: (subcategoriaId: string) => void;
   onMarcarTodos: (subcategoriaId: string, concluido: boolean) => void;
@@ -48,6 +51,8 @@ type Props = {
 
 export function CategoriaView({
   categoria,
+  categorias,
+  pastas,
   onVoltar,
   onArquivar,
   onRestaurar,
@@ -56,6 +61,7 @@ export function CategoriaView({
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
+  onTransferirSubcategoria,
   onArquivarSubcategoria,
   onRestaurarSubcategoria,
   onMarcarTodos,
@@ -170,11 +176,14 @@ export function CategoriaView({
 
       <SubcategoriasAccordion
         categoria={categoria}
+        categorias={categorias}
+        pastas={pastas}
         modoCompras={modoCompras}
         className="mt-8"
         onReordenarSubcategorias={onReordenarSubcategorias}
         onRenomearSubcategoria={onRenomearSubcategoria}
         onExcluirSubcategoria={onExcluirSubcategoria}
+        onTransferirSubcategoria={onTransferirSubcategoria}
         onArquivarSubcategoria={onArquivarSubcategoria}
         onRestaurarSubcategoria={onRestaurarSubcategoria}
         onMarcarTodos={onMarcarTodos}
