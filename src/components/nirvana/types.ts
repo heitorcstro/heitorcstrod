@@ -139,14 +139,20 @@ export const categoriasIniciais = (): Categoria[] =>
 export const normalizarCategorias = (categorias: Categoria[]): Categoria[] =>
   categorias.map((categoria) => {
     const corExistente = (categoria as { cor?: unknown }).cor;
-    const cor = ehCorCategoria(corExistente) ? corExistente : corCategoriaAleatoria();
-    // Migração de nome: "Fazer de Maneira Urgente" -> "Urgente".
-    // Preserva id, cor, pastaId e subcategorias — apenas o nome muda.
-    const nome =
+    const nomeNormalizado =
       categoria.nome === "Fazer de Maneira Urgente" ? "Urgente" : categoria.nome;
+    const ehUrgente = nomeNormalizado.trim().toLowerCase() === "urgente";
+    let cor: CorCategoria;
+    if (ehCorCategoria(corExistente)) {
+      cor = corExistente;
+    } else if (ehUrgente) {
+      cor = "Red";
+    } else {
+      cor = corCategoriaAleatoria();
+    }
     return {
       ...categoria,
-      nome,
+      nome: nomeNormalizado,
       cor,
       isShoppingList: cor === "Gold",
       pastaId: typeof categoria.pastaId === "string" ? categoria.pastaId : null,
