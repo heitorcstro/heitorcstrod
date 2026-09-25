@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/dialog";
 import { ListaView } from "@/components/nirvana/lista-view";
 import { CategoriaView } from "@/components/nirvana/categoria-view";
+import { PainelCorCategoria } from "@/components/nirvana/painel-cor-categoria";
 import { SubcategoriasAccordion } from "@/components/nirvana/subcategorias-accordion";
 import { SidebarCategorias } from "@/components/nirvana/sidebar-categorias";
 import { DialogoTransferir } from "@/components/nirvana/dialogo-transferir";
@@ -663,7 +664,11 @@ function NirvanaPage() {
               showChevron={false}
               className="relative z-10 flex h-[100px] w-full min-w-0 max-w-full shrink-0 flex-col items-start pr-[120px] text-left text-white hover:no-underline sm:pr-[260px] lg:h-[132px]"
             >
-              <div className={`absolute inset-y-0 left-0 z-10 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%] ${ESTILOS_COR_CATEGORIA[categoria.cor].fundo}`}>
+              <PainelCorCategoria
+                categoria={categoria}
+                pendentes={pendentes}
+                className="absolute inset-y-0 left-0 z-10 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%]"
+              >
                 <span className="flex w-full min-w-0 items-center gap-2 font-medium tracking-tight text-white">
                   <span className="truncate">{categoria.nome}</span>
                   {categoria.arquivada ? (
@@ -689,7 +694,7 @@ function NirvanaPage() {
                     </span>
                   </span>
                 )}
-              </div>
+              </PainelCorCategoria>
             </AccordionTrigger>
             <div className="absolute bottom-3 right-3 z-10 flex items-center gap-2">
               <TrocarCorCategoria
