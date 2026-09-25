@@ -542,6 +542,38 @@ function NirvanaPage() {
     if (subcategoriaAtivaId === subcategoriaId) setSubcategoriaAtivaId(null);
   };
 
+  const transferirSubcategoria = (subcategoriaId: string, categoriaDestinoId: string) => {
+    setCategorias((atual) => {
+      const categoriaOrigem = atual.find((categoria) =>
+        categoria.subcategorias.some((subcategoria) => subcategoria.id === subcategoriaId),
+      );
+      const subcategoria = categoriaOrigem?.subcategorias.find(
+        (item) => item.id === subcategoriaId,
+      );
+      if (!categoriaOrigem || !subcategoria || categoriaOrigem.id === categoriaDestinoId) {
+        return atual;
+      }
+      if (!atual.some((categoria) => categoria.id === categoriaDestinoId)) return atual;
+
+      return atual.map((categoria) => {
+        if (categoria.id === categoriaOrigem.id) {
+          return {
+            ...categoria,
+            subcategorias: categoria.subcategorias.filter((item) => item.id !== subcategoriaId),
+          };
+        }
+        if (categoria.id === categoriaDestinoId) {
+          return { ...categoria, subcategorias: [...categoria.subcategorias, subcategoria] };
+        }
+        return categoria;
+      });
+    });
+    setSubcategoriasAbertasPorCategoria((atual) => ({
+      ...atual,
+      [categoriaDestinoId]: [...(atual[categoriaDestinoId] ?? []), subcategoriaId],
+    }));
+  };
+
   const adicionarItem = (subcategoriaId: string, texto: string) =>
     atualizarSubcategoria(subcategoriaId, (itens) => [
       ...itens,
@@ -711,6 +743,8 @@ function NirvanaPage() {
                 {categoria.subcategorias.length > 0 ? (
                   <SubcategoriasAccordion
                     categoria={categoria}
+                    categorias={categorias}
+                    pastas={pastas}
                     modoCompras={categoria.cor === "Gold"}
                     subcategoriasAbertas={subcategoriasAbertasPorCategoria[categoria.id] ?? []}
                     onSubcategoriasAbertasChange={(subcategoriasAbertas) =>
@@ -721,6 +755,7 @@ function NirvanaPage() {
                     }
                     onRenomearSubcategoria={renomearSubcategoria}
                     onExcluirSubcategoria={excluirSubcategoria}
+                    onTransferirSubcategoria={transferirSubcategoria}
                     onArquivarSubcategoria={arquivarSubcategoria}
                     onRestaurarSubcategoria={restaurarSubcategoria}
                     onMarcarTodos={marcarTodosItens}
@@ -964,6 +999,8 @@ function NirvanaPage() {
         ) : categoriaAtiva ? (
           <CategoriaView
             categoria={categoriaAtiva}
+            categorias={categorias}
+            pastas={pastas}
             onVoltar={() => setCategoriaAtivaId(null)}
             onArquivar={() =>
               setCategorias((atual) =>
@@ -978,6 +1015,7 @@ function NirvanaPage() {
             }
             onRenomearSubcategoria={renomearSubcategoria}
             onExcluirSubcategoria={excluirSubcategoria}
+            onTransferirSubcategoria={transferirSubcategoria}
             onArquivarSubcategoria={arquivarSubcategoria}
             onRestaurarSubcategoria={restaurarSubcategoria}
             onMarcarTodos={marcarTodosItens}

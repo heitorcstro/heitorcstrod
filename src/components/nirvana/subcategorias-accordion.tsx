@@ -20,12 +20,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ItemOrdenavel, ListaOrdenavel } from "./dnd";
+import { DialogoTransferirSubcategoria } from "./dialogo-transferir-subcategoria";
 import { ItemGestos } from "./item-gestos";
 import { formatarBRL, itensExibidos, totalItem, totalSubcategoria } from "./types";
-import type { Categoria, Item, Prioridade } from "./types";
+import type { Categoria, Item, Pasta, Prioridade } from "./types";
 
 type Props = {
   categoria: Categoria;
+  categorias: Categoria[];
+  pastas: Pasta[];
   modoCompras?: boolean;
   className?: string;
   subcategoriasAbertas?: string[];
@@ -33,6 +36,7 @@ type Props = {
   onReordenarSubcategorias: (ativoId: string, sobreId: string) => void;
   onRenomearSubcategoria: (subcategoriaId: string, nome: string) => void;
   onExcluirSubcategoria: (subcategoriaId: string) => void;
+  onTransferirSubcategoria: (subcategoriaId: string, categoriaDestinoId: string) => void;
   onArquivarSubcategoria?: ((subcategoriaId: string) => void) | undefined;
   onRestaurarSubcategoria?: ((subcategoriaId: string) => void) | undefined;
   onMarcarTodos: (subcategoriaId: string, concluido: boolean) => void;
@@ -64,6 +68,8 @@ const estiloBaseAcao =
 
 export function SubcategoriasAccordion({
   categoria,
+  categorias,
+  pastas,
   modoCompras = false,
   className,
   subcategoriasAbertas,
@@ -71,6 +77,7 @@ export function SubcategoriasAccordion({
   onReordenarSubcategorias,
   onRenomearSubcategoria,
   onExcluirSubcategoria,
+  onTransferirSubcategoria,
   onArquivarSubcategoria,
   onRestaurarSubcategoria,
   onMarcarTodos,
@@ -86,11 +93,14 @@ export function SubcategoriasAccordion({
   const [renomeandoId, setRenomeandoId] = useState<string | null>(null);
   const [nomeEditado, setNomeEditado] = useState("");
   const [subParaExcluir, setSubParaExcluir] = useState<string | null>(null);
+  const [subParaTransferir, setSubParaTransferir] = useState<string | null>(null);
   const [novosItens, setNovosItens] = useState<Record<string, string>>({});
 
   // Arquivar é apenas um status: a subcategoria continua visível na categoria.
   const subcategoriasVisiveis = categoria.subcategorias;
   const subExcluindo = categoria.subcategorias.find((s) => s.id === subParaExcluir) ?? null;
+  const subTransferindo =
+    categoria.subcategorias.find((s) => s.id === subParaTransferir) ?? null;
   const accordionControle =
     subcategoriasAbertas && onSubcategoriasAbertasChange
       ? { value: subcategoriasAbertas, onValueChange: onSubcategoriasAbertasChange }
@@ -221,10 +231,11 @@ export function SubcategoriasAccordion({
                       sub.arquivada ? "bg-gray-100 opacity-60" : "bg-transparent",
                     )}
                   >
-                     <div className="flex w-full min-w-0 max-w-full flex-col gap-1 bg-transparent pb-1 pt-2 xl:flex-row xl:items-center">
+                     <div className="flex w-full min-w-0 max-w-full flex-col gap-1 bg-transparent pb-1 pt-2">
+                       <div className="flex w-full items-start justify-between gap-2">
                        {renomeandoId === sub.id ? (
                          <div
-                           className="min-w-0 flex-1 py-2"
+                            className="min-w-0 flex-1 py-2"
                            onClick={(e) => e.stopPropagation()}
                          >
                            <Input
@@ -249,7 +260,7 @@ export function SubcategoriasAccordion({
                            />
                          </div>
                        ) : (
-                         <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
+                          <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
                         <span className="flex min-w-0 flex-1 flex-col gap-1.5">
                             <span className="flex min-w-0 flex-row items-center gap-3">
                               <span className="truncate text-sm font-semibold tracking-tight">{sub.nome}</span>
@@ -275,21 +286,25 @@ export function SubcategoriasAccordion({
                       </AccordionTrigger>
                        )}
 
-                      <div className="mt-0.5 flex w-full max-w-full flex-wrap items-center gap-3 bg-transparent xl:mt-0 xl:w-auto xl:justify-end">
-                        {alca}
-                        <button
+                        <Button
                           type="button"
-                          aria-label={`Renomear ${sub.nome}`}
-                          title="Renomear"
-                          className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white text-black transition-colors hover:bg-black/5"
+                          variant="outline"
+                          size="sm"
+                          aria-label={`Transferir ${sub.nome}`}
+                          title="Transferir subcategoria"
+                          onPointerDown={(e) => e.stopPropagation()}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setRenomeandoId(sub.id);
-                            setNomeEditado(sub.nome);
+                            setSubParaTransferir(sub.id);
                           }}
+                          className="mt-3 shrink-0 border-blue-500 bg-white px-3 font-bold text-blue-600 hover:bg-blue-50 hover:text-blue-700"
                         >
-                          <Pencil className="size-4" />
-                        </button>
+                          T
+                        </Button>
+                       </div>
+
+                       <div className="mt-0.5 flex w-full max-w-full flex-row flex-nowrap items-center gap-2 overflow-x-auto bg-transparent">
+                        {alca}
                         <button
                           type="button"
                           className={`${estiloBaseAcao} text-green-700 font-bold`}
@@ -316,6 +331,19 @@ export function SubcategoriasAccordion({
                             <span className="text-sm font-bold leading-none text-red-500">X</span>
                           </div>
                         </button>
+                         <button
+                           type="button"
+                           aria-label={`Renomear ${sub.nome}`}
+                           title="Renomear"
+                           className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white text-black transition-colors hover:bg-black/5"
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             setRenomeandoId(sub.id);
+                             setNomeEditado(sub.nome);
+                           }}
+                         >
+                           <Pencil className="size-4" />
+                         </button>
                         <button
                           type="button"
                           aria-label={`Excluir ${sub.nome}`}
@@ -433,6 +461,21 @@ export function SubcategoriasAccordion({
           )}
         </Accordion>
       </ListaOrdenavel>
+
+      <DialogoTransferirSubcategoria
+        aberto={subParaTransferir !== null}
+        categorias={categorias}
+        pastas={pastas}
+        categoriaAtualId={categoria.id}
+        nomeSubcategoria={subTransferindo?.nome ?? ""}
+        onFechar={() => setSubParaTransferir(null)}
+        onEscolher={(categoriaDestinoId) => {
+          if (subParaTransferir) {
+            onTransferirSubcategoria(subParaTransferir, categoriaDestinoId);
+          }
+          setSubParaTransferir(null);
+        }}
+      />
 
       <AlertDialog
         open={subParaExcluir !== null}
