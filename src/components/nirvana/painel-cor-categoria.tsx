@@ -4,7 +4,6 @@ import { ESTILOS_COR_CATEGORIA } from "./cores-categoria";
 
 const CORES_CICLO = [
   "bg-blue-500",
-  "bg-purple-500",
   "bg-green-500",
   "bg-yellow-500",
   "bg-red-500",
@@ -33,11 +32,9 @@ export function PainelCorCategoria({
     return () => clearInterval(interval);
   }, [deveCiclar]);
 
-  const corValida = ESTILOS_COR_CATEGORIA[categoria.cor]?.fundo;
-  const corEfetiva = ehUrgente && !corValida ? "Red" : categoria.cor;
   const fundo = deveCiclar
     ? CORES_CICLO[indiceCiclo]
-    : ESTILOS_COR_CATEGORIA[corEfetiva].fundo;
+    : ESTILOS_COR_CATEGORIA[categoria.cor].fundo;
 
   return (
     <div className={`${className} ${fundo}`}>
