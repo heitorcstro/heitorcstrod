@@ -702,6 +702,7 @@ function NirvanaPage() {
               <TrocarCorCategoria
                 corAtual={categoria.cor}
                 onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
+                rotulo="cor"
               />
               <button
                 type="button"
