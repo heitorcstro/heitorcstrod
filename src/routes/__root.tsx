@@ -164,6 +164,13 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // Register the app-shell service worker once, on the client only. The wrapper
+  // itself refuses to register in dev, the Lovable preview, iframes, or with
+  // ?sw=off. Dynamic import keeps the SW code out of the SSR bundle.
+  useEffect(() => {
+    void import("../lib/register-sw").then((mod) => mod.registerSW());
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
