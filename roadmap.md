@@ -27,5 +27,7 @@
 - Botão “cor” adicionado aos cartões centrais de Pastas, reutilizando o seletor das Categorias e atualizando dinamicamente a cor do ícone da pasta.
 - Cabeçalho da subcategoria com botão “T” isolado à direita; transferência integral para uma categoria solta ou dentro de Pasta; ações em linha única na ordem Mov. Sub → Ok → X → lápis → lixeira; exclusão continua protegida por confirmação.
 
+- Service Worker (PWA offline): /sw.js gerado por vite-plugin-pwa (generateSW), nunca escrito à mão em public/. Registro único pelo wrapper src/lib/register-sw.ts (ligado em __root.tsx via useEffect + dynamic import); recusa registro em dev, iframe, hostnames do Lovable e com ?sw=off, limpando SW antigo nesses contextos. Estratégias: NetworkFirst para navegação/HTML (nunca cache-first), CacheFirst só para assets hasheados same-origin e Google Fonts; navigateFallback desativado (app SSR sem app shell estático); /~oauth e /api/ excluídos do fallback. devOptions.enabled=false mantém o preview livre de SW.
+
 ## Aberto
 (nada)
