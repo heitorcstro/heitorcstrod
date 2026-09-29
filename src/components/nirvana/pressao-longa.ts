@@ -12,10 +12,15 @@ const cancelar = () => {
 };
 
 /**
- * Handlers de pressão longa (300ms). Soltar, sair ou cancelar antes do tempo
+ * Handlers de pressão longa. Soltar, sair ou cancelar antes do tempo
  * aborta a ação. Clique instantâneo é ignorado. Teclado (Enter/Espaço) aciona direto.
+ * O atraso é configurável por botão (padrão 300ms).
  */
-export function pressaoLonga(acao: () => void, opcoes?: { prevenirPadrao?: boolean }) {
+export function pressaoLonga(
+  acao: () => void,
+  opcoes?: { prevenirPadrao?: boolean; atraso?: number },
+) {
+  const atraso = opcoes?.atraso ?? TEMPO_PRESSAO_BOTAO;
   return {
     onPointerDown: (e: PointerEvent<HTMLElement>) => {
       e.stopPropagation();
@@ -25,7 +30,7 @@ export function pressaoLonga(acao: () => void, opcoes?: { prevenirPadrao?: boole
       temporizador = setTimeout(() => {
         temporizador = null;
         acao();
-      }, TEMPO_PRESSAO_BOTAO);
+      }, atraso);
     },
     onPointerUp: cancelar,
     onPointerLeave: cancelar,
