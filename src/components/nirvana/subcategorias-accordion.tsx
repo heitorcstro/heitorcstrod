@@ -294,7 +294,7 @@ export function SubcategoriasAccordion({
                           aria-label={`Transferir ${sub.nome}`}
                           title="Transferir subcategoria"
                           {...pressaoLonga(() => setSubParaTransferir(sub.id))}
-                          className="mt-3 shrink-0 ${FEEDBACK_PRESSAO}  border-blue-500 bg-white px-3 font-bold text-blue-600 hover:bg-blue-50 hover:text-blue-700`}
+                          className={`mt-3 shrink-0 ${FEEDBACK_PRESSAO}  border-blue-500 bg-white px-3 font-bold text-blue-600 hover:bg-blue-50 hover:text-blue-700`}
                         >
                           T
                         </Button>
