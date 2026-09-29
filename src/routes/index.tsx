@@ -193,7 +193,7 @@ function NirvanaPage() {
 
   const pastaAtiva = pastas.find((p) => p.id === pastaAtivaId) ?? null;
   const categoriasDaPastaAtiva = pastaAtiva
-    ? categoriasVisiveis.filter((c) => c.pastaId === pastaAtiva.id)
+    ? categoriasVisiveis.filter((c) => (c.pastaIds ?? []).includes(pastaAtiva.id))
     : [];
 
   /** Arquiva a pasta e sai da vista interna. */
@@ -220,11 +220,14 @@ function NirvanaPage() {
     setPastaAtivaId(pastaId);
   };
 
-  /** Remove a categoria da pasta sem excluí-la: ela volta para a página principal. */
+  /** Remove a categoria desta pasta sem excluí-la: ela continua nas demais. */
   const removerCategoriaDaPasta = (categoriaId: string) => {
+    if (!pastaAtivaId) return;
     setCategorias((atual) =>
       atual.map((c) =>
-        c.id === categoriaId ? { ...c, pastaId: null, manterEmCategorias: true } : c,
+        c.id === categoriaId
+          ? { ...c, pastaIds: (c.pastaIds ?? []).filter((id) => id !== pastaAtivaId) }
+          : c,
       ),
     );
     setCategoriaParaRemoverDaPasta(null);
@@ -235,7 +238,9 @@ function NirvanaPage() {
     if (!pastaAtivaId || categoriasParaImportar.length === 0) return;
     setCategorias((atual) =>
       atual.map((c) =>
-        categoriasParaImportar.includes(c.id) ? { ...c, pastaId: pastaAtivaId } : c,
+        categoriasParaImportar.includes(c.id)
+          ? { ...c, pastaIds: [...new Set([...(c.pastaIds ?? []), pastaAtivaId])] }
+          : c,
       ),
     );
     setCategoriasParaImportar([]);
@@ -301,12 +306,16 @@ function NirvanaPage() {
   const excluirPasta = (pastaId: string) => {
     setPastas((atual) => atual.filter((p) => p.id !== pastaId));
     setCategorias((atual) =>
-      atual.map((c) => (c.pastaId === pastaId ? { ...c, pastaId: null } : c)),
+      atual.map((c) =>
+        c.id === pastaId
+          ? c
+          : { ...c, pastaIds: (c.pastaIds ?? []).filter((id) => id !== pastaId) },
+      ),
     );
     setPastaAtivaId((atual) => (atual === pastaId ? null : atual));
     setCategoriaAtivaId((atual) => {
       const categoria = categorias.find((c) => c.id === atual);
-      return categoria?.pastaId === pastaId ? null : atual;
+      return categoria && (categoria.pastaIds ?? []).includes(pastaId) ? null : atual;
     });
   };
 
@@ -315,7 +324,11 @@ function NirvanaPage() {
 
   const moverCategoriaParaPasta = (categoriaId: string, pastaId: string | null) =>
     setCategorias((atual) =>
-      atual.map((c) => (c.id === categoriaId ? { ...c, pastaId } : c)),
+      atual.map((c) =>
+        c.id === categoriaId
+          ? { ...c, pastaIds: pastaId ? [pastaId] : [] }
+          : c,
+      ),
     );
 
   // ===== Reordenação por arrastar-e-soltar =====
@@ -370,10 +383,14 @@ function NirvanaPage() {
     const alvo = categorias.find((c) => c.id === categoriaAlvoId);
     const ativa = categorias.find((c) => c.id === categoriaAtivaId);
     if (!alvo || !ativa) return;
-    const destino = alvo.pastaId ?? null;
-    if ((ativa.pastaId ?? null) !== destino) {
-      if (destino) {
-        setPendenteMoverPasta({ categoriaId: categoriaAtivaId, pastaId: destino });
+    const destino = alvo.pastaIds ?? [];
+    const ativaPastas = ativa.pastaIds ?? [];
+    const mesmaPasta =
+      ativaPastas.length === destino.length &&
+      ativaPastas.every((id) => destino.includes(id));
+    if (!mesmaPasta) {
+      if (destino.length > 0) {
+        setPendenteMoverPasta({ categoriaId: categoriaAtivaId, pastaId: destino[0]! });
         return;
       }
       moverCategoriaParaPasta(categoriaAtivaId, null);
@@ -381,12 +398,15 @@ function NirvanaPage() {
     reordenarCategorias(categoriaAtivaId, categoriaAlvoId);
   };
 
-  /** Aplica a escolha do modal: a categoria sempre entra na pasta. */
   const confirmarMoverParaPasta = (manterEmCategorias: boolean) => {
     if (!pendenteMoverPasta) return;
     const { categoriaId, pastaId } = pendenteMoverPasta;
     setCategorias((atual) =>
-      atual.map((c) => (c.id === categoriaId ? { ...c, pastaId, manterEmCategorias } : c)),
+      atual.map((c) =>
+        c.id === categoriaId
+          ? { ...c, pastaIds: [...new Set([...(c.pastaIds ?? []), pastaId])], manterEmCategorias }
+          : c,
+      ),
     );
     setPendenteMoverPasta(null);
   };
@@ -1180,7 +1200,7 @@ function NirvanaPage() {
               ids={[
                 ...pastasVisiveis.map((p) => `pasta:${p.id}`),
                 ...categoriasVisiveis.flatMap((c) =>
-                  c.pastaId && c.manterEmCategorias !== false ? [c.id, `eco:${c.id}`] : [c.id],
+                  (c.pastaIds ?? []).length > 0 && c.manterEmCategorias !== false ? [c.id, `eco:${c.id}`] : [c.id],
                 ),
               ]}
               onSoltar={aoSoltarHierarquia}
@@ -1188,7 +1208,7 @@ function NirvanaPage() {
               {!secaoPastasCentral ? null : pastasVisiveis.length > 0 ? (
                 <div className="mt-6 space-y-3">
                   {pastasVisiveis.map((pasta) => {
-                    const dentro = categoriasVisiveis.filter((c) => c.pastaId === pasta.id);
+                    const dentro = categoriasVisiveis.filter((c) => (c.pastaIds ?? []).includes(pasta.id));
                     const aberta = pastasAbertasCentral.includes(pasta.id);
                     return (
                       <ItemOrdenavel
@@ -1306,8 +1326,8 @@ function NirvanaPage() {
                 >
                   {secaoCategoriasCentral
                     ? categoriasVisiveis
-                        .filter((c) => !c.pastaId || c.manterEmCategorias !== false)
-                        .map((categoria) => cartaoCategoria(categoria, !!categoria.pastaId))
+                        .filter((c) => (c.pastaIds ?? []).length === 0 || c.manterEmCategorias !== false)
+                        .map((categoria) => cartaoCategoria(categoria, (categoria.pastaIds ?? []).length > 0))
                     : []}
                 </Accordion>
               </AreaSoltavel>
@@ -1681,13 +1701,13 @@ function NirvanaPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
-            {categoriasVisiveis.filter((c) => c.pastaId !== pastaAtivaId).length === 0 ? (
+            {categoriasVisiveis.filter((c) => !(c.pastaIds ?? []).includes(pastaAtivaId ?? "")).length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 Nenhuma categoria disponível fora desta pasta.
               </p>
             ) : (
               categoriasVisiveis
-                .filter((c) => c.pastaId !== pastaAtivaId)
+                .filter((c) => !(c.pastaIds ?? []).includes(pastaAtivaId ?? ""))
                 .map((categoria) => (
                   <label
                     key={categoria.id}

@@ -70,14 +70,14 @@ export function SidebarCategorias({
     nome.toLowerCase().includes(busca.trim().toLowerCase());
 
   const categoriasSoltas = categorias.filter(
-    (c) => !c.pastaId || c.manterEmCategorias !== false,
+    (c) => (c.pastaIds ?? []).length === 0 || c.manterEmCategorias !== false,
   );
   const pastasFiltradas = pastas.filter((p) => contem(p.nome, buscaPastas));
   const categoriasSoltasFiltradas = categoriasSoltas.filter((c) =>
     contem(c.nome, buscaCategorias),
   );
   const categoriasDaPasta = (pastaId: string) =>
-    categorias.filter((c) => c.pastaId === pastaId);
+    categorias.filter((c) => (c.pastaIds ?? []).includes(pastaId));
 
   /** Caixa de ação "Pesquisar" que se transforma em campo de texto ao clicar. */
   const caixaPesquisa = (
@@ -175,7 +175,7 @@ export function SidebarCategorias({
   const linhaCategoria = (categoria: Categoria, dentroDePasta = false) => {
     // Quando a mesma categoria também aparece no menu principal, o prefixo
     // mantém ids únicos no DnD sem retirar sua alça nem sua mobilidade.
-    const eco = !dentroDePasta && !!categoria.pastaId;
+    const eco = !dentroDePasta && (categoria.pastaIds ?? []).length > 0;
     const idArrasto = eco ? `eco:${categoria.id}` : categoria.id;
     return (
       <ItemOrdenavel
@@ -300,7 +300,7 @@ export function SidebarCategorias({
               ids={[
                 ...pastas.map((p) => `pasta:${p.id}`),
                 ...categorias.flatMap((c) =>
-                  c.pastaId && c.manterEmCategorias !== false ? [c.id, `eco:${c.id}`] : [c.id],
+                  (c.pastaIds ?? []).length > 0 && c.manterEmCategorias !== false ? [c.id, `eco:${c.id}`] : [c.id],
                 ),
               ]}
               onSoltar={aoSoltar}

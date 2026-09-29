@@ -77,8 +77,8 @@ export type Categoria = {
   isShoppingList?: boolean;
   /** true quando a categoria foi enviada para "Arquivados". */
   arquivada?: boolean;
-  /** Quando preenchido, a categoria pertence a esta Pasta. */
-  pastaId?: string | null;
+  /** IDs das Pastas às quais esta categoria pertence (many-to-many). */
+  pastaIds?: string[];
   /**
    * Quando a categoria está dentro de uma Pasta: define se ela continua
    * aparecendo também na lista principal "Categorias".
@@ -140,16 +140,21 @@ export const normalizarCategorias = (categorias: Categoria[]): Categoria[] =>
   categorias.map((categoria) => {
     const corExistente = (categoria as { cor?: unknown }).cor;
     const cor = ehCorCategoria(corExistente) ? corExistente : corCategoriaAleatoria();
-    // Migração de nome: "Fazer de Maneira Urgente" -> "Urgente".
-    // Preserva id, cor, pastaId e subcategorias — apenas o nome muda.
     const nome =
       categoria.nome === "Fazer de Maneira Urgente" ? "Urgente" : categoria.nome;
+    // Migração: converte o antigo pastaId (string única) em pastaIds (array).
+    const pastaIdsAntigo = (categoria as { pastaId?: unknown }).pastaId;
+    const pastaIds = Array.isArray(categoria.pastaIds)
+      ? categoria.pastaIds
+      : typeof pastaIdsAntigo === "string"
+        ? [pastaIdsAntigo]
+        : [];
     return {
       ...categoria,
       nome,
       cor,
       isShoppingList: cor === "Gold",
-      pastaId: typeof categoria.pastaId === "string" ? categoria.pastaId : null,
+      pastaIds,
       manterEmCategorias: categoria.manterEmCategorias !== false,
       subcategorias: Array.isArray(categoria.subcategorias) ? categoria.subcategorias : [],
     };

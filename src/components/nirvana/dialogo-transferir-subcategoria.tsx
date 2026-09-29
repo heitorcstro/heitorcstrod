@@ -31,7 +31,7 @@ export function DialogoTransferirSubcategoria({
   onEscolher,
 }: Props) {
   const [pastaExpandidaId, setPastaExpandidaId] = useState<string | null>(null);
-  const categoriasSoltas = categorias.filter((categoria) => !categoria.pastaId);
+  const categoriasSoltas = categorias.filter((categoria) => (categoria.pastaIds ?? []).length === 0);
 
   const escolher = (categoriaId: string) => {
     if (categoriaId === categoriaAtualId) return;
@@ -88,7 +88,7 @@ export function DialogoTransferirSubcategoria({
               {pastas.map((pasta) => {
                 const aberta = pastaExpandidaId === pasta.id;
                 const categoriasDaPasta = categorias.filter(
-                  (categoria) => categoria.pastaId === pasta.id,
+                  (categoria) => (categoria.pastaIds ?? []).includes(pasta.id),
                 );
                 return (
                   <div key={pasta.id}>
