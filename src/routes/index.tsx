@@ -119,7 +119,7 @@ function NirvanaPage() {
   const [categoriaCriandoSubId, setCategoriaCriandoSubId] = useState<string | null>(null);
   const [nomeNovaSub, setNomeNovaSub] = useState("");
   const [mostrandoArquivados, setMostrandoArquivados] = useState(false);
-  const [sidebarExpandida, setSidebarExpandida] = useState(true);
+  const [sidebarExpandida, setSidebarExpandida] = useState(false);
   const [pastas, setPastas] = useState<Pasta[]>([]);
   const [modalPastaAberto, setModalPastaAberto] = useState(false);
   const [modalDeletarPastaAberto, setModalDeletarPastaAberto] = useState(false);
