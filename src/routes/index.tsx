@@ -1,3 +1,4 @@
+import { pressaoLonga } from "@/components/nirvana/pressao-longa";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
@@ -708,11 +709,8 @@ function NirvanaPage() {
                 type="button"
                 aria-label={aberta ? `Fechar ${categoria.nome}` : `Abrir ${categoria.nome}`}
                 title={aberta ? "Fechar" : "Abrir"}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  alternarCategoriaAberta(idArrasto);
-                }}
-                className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-black transition-colors hover:bg-black/5"
+                {...pressaoLonga(() => alternarCategoriaAberta(idArrasto))}
+                className="inline-flex size-8 shrink-0 cursor-pointer select-none active:scale-95 active:opacity-75 items-center justify-center rounded-md text-black transition-colors hover:bg-black/5"
               >
                 {aberta ? (
                   <ChevronUp size={28} strokeWidth={3} className="h-7 w-7" />
@@ -726,9 +724,9 @@ function NirvanaPage() {
                 {alca}
                 <button
                   type="button"
-                  onClick={() => abrirCriarSubcategoria(categoria.id)}
+                  {...pressaoLonga(() => abrirCriarSubcategoria(categoria.id))}
                   aria-label="Adicionar Subcategoria"
-                  className="ml-[0.05cm] inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white p-0 text-black transition-colors hover:bg-black/5"
+                  className="ml-[0.05cm] select-none active:scale-95 active:opacity-75 inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white p-0 text-black transition-colors hover:bg-black/5"
                 >
                   <Plus className="size-[18px]" strokeWidth={2.5} />
                 </button>

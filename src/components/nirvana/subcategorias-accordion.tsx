@@ -1,3 +1,4 @@
+import { FEEDBACK_PRESSAO, pressaoLonga } from "./pressao-longa";
 import { useState, type FormEvent } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import {
@@ -292,12 +293,8 @@ export function SubcategoriasAccordion({
                           size="sm"
                           aria-label={`Transferir ${sub.nome}`}
                           title="Transferir subcategoria"
-                          onPointerDown={(e) => e.stopPropagation()}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSubParaTransferir(sub.id);
-                          }}
-                          className="mt-3 shrink-0 border-blue-500 bg-white px-3 font-bold text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                          {...pressaoLonga(() => setSubParaTransferir(sub.id))}
+                          className={`mt-3 shrink-0 ${FEEDBACK_PRESSAO}  border-blue-500 bg-white px-3 font-bold text-blue-600 hover:bg-blue-50 hover:text-blue-700`}
                         >
                           T
                         </Button>
@@ -307,12 +304,9 @@ export function SubcategoriasAccordion({
                         {alca}
                         <button
                           type="button"
-                          className={`${estiloBaseAcao} text-green-700 font-bold`}
+                          className={`${estiloBaseAcao} ${FEEDBACK_PRESSAO} text-green-700 font-bold`}
                           disabled={sub.itens.length === 0}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onMarcarTodos(sub.id, true);
-                          }}
+                          {...pressaoLonga(() => onMarcarTodos(sub.id, true))}
                         >
                           Ok
                         </button>
@@ -320,12 +314,9 @@ export function SubcategoriasAccordion({
                           type="button"
                           aria-label="Desmarcar tudo"
                           title="Desmarcar tudo"
-                          className="inline-flex shrink-0 select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-colors hover:bg-black/5 disabled:opacity-40 disabled:hover:bg-transparent"
+                          className="inline-flex shrink-0 select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-all hover:bg-black/5 active:scale-95 active:opacity-75 disabled:opacity-40 disabled:hover:bg-transparent"
                           disabled={sub.itens.length === 0}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onMarcarTodos(sub.id, false);
-                          }}
+                          {...pressaoLonga(() => onMarcarTodos(sub.id, false))}
                         >
                           <div className="flex size-5 shrink-0 items-center justify-center rounded-sm border border-black bg-white">
                             <span className="text-sm font-bold leading-none text-red-500">X</span>
@@ -335,12 +326,11 @@ export function SubcategoriasAccordion({
                            type="button"
                            aria-label={`Renomear ${sub.nome}`}
                            title="Renomear"
-                           className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white text-black transition-colors hover:bg-black/5"
-                           onClick={(e) => {
-                             e.stopPropagation();
+                           className="inline-flex size-8 shrink-0 select-none items-center justify-center rounded-md border border-black bg-white text-black transition-all hover:bg-black/5 active:scale-95 active:opacity-75"
+                           {...pressaoLonga(() => {
                              setRenomeandoId(sub.id);
                              setNomeEditado(sub.nome);
-                           }}
+                           })}
                          >
                            <Pencil className="size-4" />
                          </button>
@@ -348,11 +338,8 @@ export function SubcategoriasAccordion({
                           type="button"
                           aria-label={`Excluir ${sub.nome}`}
                           title="Excluir"
-                          className="inline-flex shrink-0 select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-colors hover:bg-black/5"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSubParaExcluir(sub.id);
-                          }}
+                          className="inline-flex shrink-0 select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-all hover:bg-black/5 active:scale-95 active:opacity-75"
+                          {...pressaoLonga(() => setSubParaExcluir(sub.id))}
                         >
                           <div className="flex size-5 shrink-0 items-center justify-center rounded-sm border border-black bg-white">
                             <Trash2 className="size-3.5 text-red-500" />

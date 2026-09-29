@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { FEEDBACK_PRESSAO, pressaoLonga } from "./pressao-longa";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -148,10 +149,15 @@ export function TrocarCorCategoria({
   onSelecionar: (cor: CorCategoria) => void;
   rotulo?: string;
 }) {
+  const [aberto, setAberto] = useState(false);
   return (
-    <DropdownMenu>
+    <DropdownMenu open={aberto} onOpenChange={setAberto}>
       <DropdownMenuTrigger asChild>
-        <button type="button" className={estiloBotaoCorCategoria}>
+        <button
+          type="button"
+          {...pressaoLonga(() => setAberto(true), { prevenirPadrao: true })}
+          className={cn(estiloBotaoCorCategoria, FEEDBACK_PRESSAO)}
+        >
           {rotulo}
         </button>
       </DropdownMenuTrigger>
