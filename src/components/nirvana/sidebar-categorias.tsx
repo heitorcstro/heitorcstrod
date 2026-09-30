@@ -134,10 +134,8 @@ export function SidebarCategorias({
       onMoverCategoriaParaPasta?.(ativoId, sobreId.slice("pasta:".length));
       return;
     }
-    if (sobreId === "raiz") {
-      onMoverCategoriaParaPasta?.(ativoId, null);
-      return;
-    }
+    // Soltar na área geral não remove a categoria das pastas.
+    if (sobreId === "raiz") return;
     onReordenarCategorias(ativoId, sobreId);
   };
 

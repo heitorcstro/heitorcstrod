@@ -375,26 +375,11 @@ function NirvanaPage() {
       return;
     }
 
-    if (sobreId === "raiz") {
-      moverCategoriaParaPasta(categoriaAtivaId, null);
-      return;
-    }
+    // Soltar na área geral não remove a categoria das pastas.
+    if (sobreId === "raiz") return;
 
-    const alvo = categorias.find((c) => c.id === categoriaAlvoId);
-    const ativa = categorias.find((c) => c.id === categoriaAtivaId);
-    if (!alvo || !ativa) return;
-    const destino = alvo.pastaIds ?? [];
-    const ativaPastas = ativa.pastaIds ?? [];
-    const mesmaPasta =
-      ativaPastas.length === destino.length &&
-      ativaPastas.every((id) => destino.includes(id));
-    if (!mesmaPasta) {
-      if (destino.length > 0) {
-        setPendenteMoverPasta({ categoriaId: categoriaAtivaId, pastaId: destino[0]! });
-        return;
-      }
-      moverCategoriaParaPasta(categoriaAtivaId, null);
-    }
+    // Reordenar só troca a posição: as pastas (pastaIds) ficam intactas.
+    if (categoriaAtivaId === categoriaAlvoId) return;
     reordenarCategorias(categoriaAtivaId, categoriaAlvoId);
   };
 
