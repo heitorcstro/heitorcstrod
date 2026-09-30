@@ -684,18 +684,6 @@ function NirvanaPage() {
                     </span>
                   ) : null}
                 </span>
-                <span className="text-xs text-white/80">
-                  {categoria.subcategorias.length} subcategoria
-                  {categoria.subcategorias.length === 1 ? "" : "s"}
-                  {total > 0 && ` · ${pendentes} pendente${pendentes === 1 ? "" : "s"}`}
-                </span>
-                {categoria.nome.includes("Urgente") && (
-                  <span className="mt-1 flex flex-row items-center animate-heartbeat">
-                    <span className="text-2xl font-black text-red-600 tabular-nums drop-shadow-[0_0_10px_rgba(220,38,38,0.9)]">
-                      {pendentes}
-                    </span>
-                  </span>
-                )}
               </PainelCorCategoria>
             </AccordionTrigger>
             <div className="absolute bottom-3 right-3 z-10 flex items-center gap-2">
