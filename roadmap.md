@@ -31,3 +31,4 @@
 
 ## Aberto
 (nada)
+- [x] Verificar perda de vínculo categoria→pasta ao reordenar/renomear: código usa `pastaId` único (não `folderIds[]`); reordenação (`moverPorId`) só move referências e todas as atualizações usam spread parcial `{ ...c, ... }` — nenhum campo é descartado. Nenhum bug encontrado.
