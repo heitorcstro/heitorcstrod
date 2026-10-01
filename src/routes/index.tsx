@@ -657,78 +657,73 @@ function NirvanaPage() {
         textoAlca="Mover categoria"
         inline
         alcaIcone
-        alcaBoxClassName="h-8 w-8 -translate-x-[0.1cm]"
-        alcaImgClassName="h-7 w-7"
+        alcaBoxClassName="h-8 w-8 rounded-lg border border-black bg-white"
+        alcaImgClassName="h-5 w-5"
       >
         {(alca) => (
           <AccordionItem
             value={idArrasto}
-            className={`group relative box-border flex min-h-[100px] w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-black bg-clip-padding ring-1 ring-inset ring-black transition-colors hover:border-foreground/40 lg:min-h-[132px] ${
-              categoria.arquivada ? "bg-gray-100 opacity-60" : "bg-transparent"
+            className={`group relative box-border flex w-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-neutral-400 bg-white shadow-sm transition-colors ${
+              categoria.arquivada ? "bg-gray-100 opacity-60" : ""
             }`}
           >
-            <AccordionTrigger
-              showChevron={false}
-              className="relative z-10 flex h-[100px] w-full min-w-0 max-w-full shrink-0 flex-col items-start pr-[120px] text-left text-white hover:no-underline sm:pr-[260px] lg:h-[132px]"
-            >
-              <PainelCorCategoria
-                categoria={categoria}
-                pendentes={pendentes}
-                className="absolute inset-y-0 left-0 z-10 flex min-w-0 max-w-[60%] flex-col items-start gap-1 border-r border-black py-4 pl-4 pr-6 lg:max-w-[40%]"
+            <div className="relative z-10 flex h-12 w-full min-w-0 shrink-0 items-stretch">
+              <AccordionTrigger
+                showChevron={false}
+                className="flex h-12 w-fit min-w-0 shrink-0 items-stretch p-0 text-left hover:no-underline"
               >
-                <span className="flex w-full min-w-0 items-center gap-2 font-medium tracking-tight text-white">
-                  <span className="truncate">{categoria.nome}</span>
+                <PainelCorCategoria
+                  categoria={categoria}
+                  pendentes={pendentes}
+                  className="flex h-full w-fit min-w-[95px] max-w-[45vw] shrink-0 items-center justify-start border-r border-black px-4"
+                >
+                  <span className="truncate whitespace-nowrap text-sm font-medium text-white">
+                    {categoria.nome}
+                  </span>
+                </PainelCorCategoria>
+              </AccordionTrigger>
+              <div className="flex min-w-0 flex-1 items-center justify-end bg-white px-3">
+                <div className="flex shrink-0 flex-row items-center gap-1.5">
+                  {alca}
+                  <button
+                    type="button"
+                    {...pressaoLonga(() => abrirCriarSubcategoria(categoria.id))}
+                    aria-label="Adicionar Subcategoria"
+                    className="inline-flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-lg border border-black bg-white p-0 text-black active:scale-95 active:opacity-75"
+                  >
+                    <Plus className="size-[18px]" strokeWidth={2.5} />
+                  </button>
+                  <TrocarCorCategoria
+                    corAtual={categoria.cor}
+                    onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
+                    rotulo="cor"
+                  />
+                  <button
+                    type="button"
+                    aria-label={aberta ? `Fechar ${categoria.nome}` : `Abrir ${categoria.nome}`}
+                    title={aberta ? "Fechar" : "Abrir"}
+                    {...pressaoLonga(() => alternarCategoriaAberta(idArrasto))}
+                    className="inline-flex h-8 w-8 shrink-0 cursor-pointer select-none items-center justify-center rounded-lg border border-black bg-white text-black active:scale-95 active:opacity-75"
+                  >
+                    {aberta ? (
+                      <ChevronUp className="size-5" strokeWidth={2.5} />
+                    ) : (
+                      <ChevronDown className="size-5" strokeWidth={2.5} />
+                    )}
+                  </button>
                   {categoria.arquivada ? (
-                    <span className="shrink-0 rounded-full bg-white/90 px-2 py-0.5 text-[10px] text-gray-700">
-                      ARQUIVADO
-                    </span>
+                    <button
+                      type="button"
+                      aria-label={`Restaurar ${categoria.nome}`}
+                      title="Restaurar"
+                      onClick={() => restaurarCategoria(categoria.id)}
+                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-300 bg-white p-0 text-blue-600"
+                    >
+                      <ArchiveRestore className="size-[18px]" strokeWidth={2.5} />
+                    </button>
                   ) : null}
-                </span>
-              </PainelCorCategoria>
-            </AccordionTrigger>
-            <div className="absolute bottom-3 right-3 z-10 flex items-center gap-2">
-              <TrocarCorCategoria
-                corAtual={categoria.cor}
-                onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
-                rotulo="cor"
-              />
-              <button
-                type="button"
-                aria-label={aberta ? `Fechar ${categoria.nome}` : `Abrir ${categoria.nome}`}
-                title={aberta ? "Fechar" : "Abrir"}
-                {...pressaoLonga(() => alternarCategoriaAberta(idArrasto))}
-                className="inline-flex size-8 shrink-0 cursor-pointer select-none active:scale-95 active:opacity-75 items-center justify-center rounded-md text-black transition-colors hover:bg-black/5"
-              >
-                {aberta ? (
-                  <ChevronUp size={28} strokeWidth={3} className="h-7 w-7" />
-                ) : (
-                  <ChevronDown size={28} strokeWidth={3} className="h-7 w-7" />
-                )}
-              </button>
-            </div>
-            <div className="absolute top-3 right-3 z-10 flex flex-row items-center gap-1.5">
-              <div className="flex flex-row items-center">
-                {alca}
-                <button
-                  type="button"
-                  {...pressaoLonga(() => abrirCriarSubcategoria(categoria.id))}
-                  aria-label="Adicionar Subcategoria"
-                  className="ml-[0.05cm] select-none active:scale-95 active:opacity-75 inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-black bg-white p-0 text-black transition-colors hover:bg-black/5"
-                >
-                  <Plus className="size-[18px]" strokeWidth={2.5} />
-                </button>
+                </div>
               </div>
-              {categoria.arquivada ? (
-                <button
-                  type="button"
-                  aria-label={`Restaurar ${categoria.nome}`}
-                  title="Restaurar"
-                  onClick={() => restaurarCategoria(categoria.id)}
-                  className="inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-blue-300 bg-white p-0 text-blue-600 transition-colors hover:bg-blue-50"
-                >
-                  <ArchiveRestore className="size-[18px]" strokeWidth={2.5} />
-                </button>
-              ) : null}
             </div>
             <AccordionContent className="relative z-0 mx-4 mb-1 mt-[8px] overflow-hidden rounded-lg bg-white bg-clip-padding px-2 pb-[50px]">
               <div className="space-y-4">

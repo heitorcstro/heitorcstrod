@@ -11,7 +11,7 @@ type Props = {
   children: ReactNode;
 };
 
-const TEMPO_PRESSAO_LONGA = 2_000;
+const TEMPO_PRESSAO_LONGA = 150;
 
 /**
  * Ciclo completo de prioridades, incluindo o estado inicial (sem prioridade).
@@ -81,6 +81,7 @@ export function ItemGestos({
       }.`}
       onPointerDown={iniciarPressao}
       onPointerUp={cancelarTemporizador}
+      onPointerMove={(e) => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 4) cancelarTemporizador(); }}
       onPointerLeave={cancelarTemporizador}
       onPointerCancel={cancelarTemporizador}
       onClick={avancarPrioridade}
