@@ -74,7 +74,7 @@ export const ESTILOS_COR_CATEGORIA: Record<CorCategoria, EstiloCorCategoria> = {
 };
 
 export const estiloBotaoCorCategoria =
-  "inline-flex shrink-0 select-none items-center whitespace-nowrap rounded-md border border-blue-500 bg-white px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50";
+  "inline-flex h-7 shrink-0 select-none items-center justify-center whitespace-nowrap rounded-full border border-blue-900 bg-white px-2.5 text-xs font-medium text-blue-900";
 
 export function IndicadorCorCategoria({
   cor,
