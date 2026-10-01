@@ -306,7 +306,7 @@ export function SubcategoriasAccordion({
                           type="button"
                           className={`${estiloBaseAcao} ${FEEDBACK_PRESSAO} text-green-700 font-bold`}
                           disabled={sub.itens.length === 0}
-                          {...pressaoLonga(() => onMarcarTodos(sub.id, true), { atraso: 50 })}
+                          {...pressaoLonga(() => onMarcarTodos(sub.id, true), { atraso: 225 })}
                         >
                           Ok
                         </button>
