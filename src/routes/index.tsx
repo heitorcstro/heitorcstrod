@@ -861,6 +861,14 @@ function NirvanaPage() {
         {mostrandoArquivados ? (
           <section className="space-y-6">
             <div>
+              <button
+                type="button"
+                onClick={() => setMostrandoArquivados(false)}
+                className="mb-4 flex items-center gap-2 rounded-lg border border-black bg-white px-3 py-1.5 text-sm font-medium text-black shadow-sm transition hover:bg-neutral-100 active:scale-95"
+              >
+                <ArrowLeft className="size-4" />
+                Voltar ao Dashboard
+              </button>
               <h1 className="font-display text-3xl font-semibold tracking-tight">Arquivados</h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Pastas, categorias e subcategorias guardadas aqui. Restaure quando quiser.
