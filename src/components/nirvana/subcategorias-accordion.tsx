@@ -137,11 +137,11 @@ export function SubcategoriasAccordion({
           type="multiple"
           {...accordionControle}
           className={cn(
-            "grid w-full max-w-full grid-cols-1 gap-3 border-l border-border pl-3 pr-4 sm:pl-4",
+            "mt-2 flex w-full max-w-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm",
             className,
           )}
         >
-          {subcategoriasVisiveis.map((sub) => {
+          {subcategoriasVisiveis.map((sub, indiceSub) => {
             const pendentes = sub.itens.filter((i) => !i.concluido).length;
             const itensOrdenados = itensExibidos(sub);
             const itensAtivos = itensOrdenados.filter((item) => !item.concluido);
@@ -221,14 +221,15 @@ export function SubcategoriasAccordion({
                 id={sub.id}
                 textoAlca="Mover subcategoria"
                 inline
-                alcaTexto="Mov. Sub"
-                alcaClassName={`${estiloBaseAcao} cursor-grab touch-none text-black active:cursor-grabbing`}
+                alcaTexto="M"
+                alcaClassName="inline-flex h-9 w-9 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-full border border-black bg-white text-sm font-medium text-black active:cursor-grabbing"
               >
                 {(alca) => (
                   <AccordionItem
                     value={sub.id}
                     className={cn(
-                      "w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-border px-6 transition-colors hover:border-foreground/40",
+                      "w-full min-w-0 max-w-full overflow-hidden border-0",
+                      indiceSub > 0 && "my-4 border-t border-black pt-4",
                       sub.arquivada ? "bg-gray-100 opacity-60" : "bg-transparent",
                     )}
                   >
@@ -261,10 +262,10 @@ export function SubcategoriasAccordion({
                            />
                          </div>
                        ) : (
-                          <AccordionTrigger className="min-w-0 flex-1 py-4 text-left hover:no-underline [&>svg]:text-foreground">
+                          <AccordionTrigger showChevron={false} className="min-w-0 flex-1 py-1 text-left hover:no-underline [&>svg]:text-foreground">
                         <span className="flex min-w-0 flex-1 flex-col gap-1.5">
                             <span className="flex min-w-0 flex-row items-center gap-3">
-                              <span className="truncate text-sm font-semibold tracking-tight">{sub.nome}</span>
+                              <span className="cursor-pointer select-none truncate text-lg font-bold uppercase tracking-tight text-neutral-900">{sub.nome}</span>
                               {sub.arquivada ? (
                                 <span className="shrink-0 rounded-full bg-gray-200 px-2 py-1 text-[10px] text-gray-600">
                                   ARQUIVADO
@@ -294,17 +295,17 @@ export function SubcategoriasAccordion({
                           aria-label={`Transferir ${sub.nome}`}
                           title="Transferir subcategoria"
                           {...pressaoLonga(() => setSubParaTransferir(sub.id))}
-                          className={`mt-3 shrink-0 ${FEEDBACK_PRESSAO}  border-blue-500 bg-white px-3 font-bold text-blue-600 hover:bg-blue-50 hover:text-blue-700`}
+                          className={`h-9 w-9 shrink-0 rounded-xl border border-[#2b6cb0] bg-white p-0 text-base font-semibold text-[#2b6cb0] hover:bg-white ${FEEDBACK_PRESSAO}`}
                         >
                           T
                         </Button>
                        </div>
 
-                       <div className="mt-0.5 flex w-full max-w-full flex-row flex-nowrap items-center gap-2 overflow-x-auto bg-transparent">
+                       <div className="mt-3 flex w-full max-w-full flex-row flex-nowrap items-center gap-3 overflow-x-auto bg-transparent">
                         {alca}
                         <button
                           type="button"
-                          className={`${estiloBaseAcao} ${FEEDBACK_PRESSAO} text-green-700 font-bold`}
+                          className={`inline-flex h-9 shrink-0 items-center justify-center rounded-xl border border-black bg-white px-3.5 text-sm font-medium text-emerald-700 disabled:opacity-40 ${FEEDBACK_PRESSAO}`}
                           disabled={sub.itens.length === 0}
                           {...pressaoLonga(() => onMarcarTodos(sub.id, true), { atraso: 225 })}
                         >
@@ -314,19 +315,17 @@ export function SubcategoriasAccordion({
                           type="button"
                           aria-label="Desmarcar tudo"
                           title="Desmarcar tudo"
-                          className="inline-flex shrink-0 select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-all hover:bg-black/5 active:scale-95 active:opacity-75 disabled:opacity-40 disabled:hover:bg-transparent"
+                          className="inline-flex h-9 w-9 shrink-0 select-none items-center justify-center rounded-full border border-black bg-white p-0 text-sm font-semibold text-red-600 transition-all active:scale-95 active:opacity-75 disabled:opacity-40"
                           disabled={sub.itens.length === 0}
                           {...pressaoLonga(() => onMarcarTodos(sub.id, false))}
                         >
-                          <div className="flex size-5 shrink-0 items-center justify-center rounded-sm border border-black bg-white">
-                            <span className="text-sm font-bold leading-none text-red-500">X</span>
-                          </div>
+                          X
                         </button>
                          <button
                            type="button"
                            aria-label={`Renomear ${sub.nome}`}
                            title="Renomear"
-                           className="inline-flex size-8 shrink-0 select-none items-center justify-center rounded-md border border-black bg-white text-black transition-all hover:bg-black/5 active:scale-95 active:opacity-75"
+                           className="inline-flex h-9 w-9 shrink-0 select-none items-center justify-center rounded-xl border border-black bg-white text-black transition-all active:scale-95 active:opacity-75"
                            {...pressaoLonga(() => {
                              setRenomeandoId(sub.id);
                              setNomeEditado(sub.nome);
