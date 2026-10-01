@@ -11,7 +11,7 @@ type Props = {
   children: ReactNode;
 };
 
-const TEMPO_PRESSAO_LONGA = 150;
+const TEMPO_PRESSAO_LONGA = 225;
 
 /**
  * Ciclo completo de prioridades, incluindo o estado inicial (sem prioridade).
