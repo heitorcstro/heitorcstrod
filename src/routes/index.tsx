@@ -760,6 +760,22 @@ function NirvanaPage() {
                 ) : (
                   <p className="text-sm text-muted-foreground">Nenhuma subcategoria ainda.</p>
                 )}
+                <div className="mt-4 flex items-center justify-end gap-3 pt-1">
+                  <TrocarCorCategoria
+                    corAtual={categoria.cor}
+                    onSelecionar={(cor) => trocarCorCategoria(categoria.id, cor)}
+                    rotulo="cor"
+                    classeBotao="inline-flex items-center justify-center rounded-full bg-[#3b76ad] px-3 py-1 text-xs font-medium text-white"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Fechar ${categoria.nome}`}
+                    {...pressaoLonga(() => alternarCategoriaAberta(idArrasto))}
+                    className="inline-flex cursor-pointer select-none items-center justify-center text-black active:scale-95"
+                  >
+                    <ChevronUp className="h-6 w-6" strokeWidth={3} />
+                  </button>
+                </div>
                 {categoria.cor === "Gold" && (
                   <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-secondary px-4 py-3">
                     <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
