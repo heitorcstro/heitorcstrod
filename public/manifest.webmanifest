@@ -6,7 +6,7 @@
   "dir": "ltr",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "portrait",
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#0B192C",
