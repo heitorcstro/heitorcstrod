@@ -144,7 +144,9 @@ export function TrocarCorCategoria({
   corAtual,
   onSelecionar,
   rotulo = "Trocar de cor",
+  classeBotao,
 }: {
+  classeBotao?: string;
   corAtual: CorCategoria;
   onSelecionar: (cor: CorCategoria) => void;
   rotulo?: string;
@@ -156,7 +158,7 @@ export function TrocarCorCategoria({
         <button
           type="button"
           {...pressaoLonga(() => setAberto(true), { prevenirPadrao: true })}
-          className={cn(estiloBotaoCorCategoria, FEEDBACK_PRESSAO)}
+          className={cn(classeBotao ?? estiloBotaoCorCategoria, FEEDBACK_PRESSAO)}
         >
           {rotulo}
         </button>

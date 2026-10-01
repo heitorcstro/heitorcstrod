@@ -337,12 +337,10 @@ export function SubcategoriasAccordion({
                           type="button"
                           aria-label={`Excluir ${sub.nome}`}
                           title="Excluir"
-                          className="inline-flex shrink-0 select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-all hover:bg-black/5 active:scale-95 active:opacity-75"
+                          className="inline-flex h-9 w-9 shrink-0 select-none items-center justify-center rounded-full border border-black bg-white p-0 text-red-600 transition-all active:scale-95 active:opacity-75"
                           {...pressaoLonga(() => setSubParaExcluir(sub.id))}
                         >
-                          <div className="flex size-5 shrink-0 items-center justify-center rounded-sm border border-black bg-white">
-                            <Trash2 className="size-3.5 text-red-500" />
-                          </div>
+                          <Trash2 className="size-4" />
                         </button>
                       </div>
                     </div>
