@@ -167,7 +167,7 @@ export function SubcategoriasAccordion({
                           }
                           onTransferir={() => onTransferir(sub.id, item)}
                           onAlternarConclusao={() => onAlternarItem(sub.id, item.id)}
-                          className="min-w-0 flex-1 truncate text-[11px] font-medium leading-relaxed no-underline"
+                          className="min-w-0 flex-1 truncate text-[17px] font-medium leading-snug no-underline"
                         >
                           {item.texto}
                         </ItemGestos>
