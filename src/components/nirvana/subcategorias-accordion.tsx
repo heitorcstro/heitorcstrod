@@ -137,7 +137,7 @@ export function SubcategoriasAccordion({
           type="multiple"
           {...accordionControle}
           className={cn(
-            "mt-2 flex w-full max-w-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm",
+            "mt-2 flex w-full max-w-full flex-col bg-white py-4",
             className,
           )}
         >
