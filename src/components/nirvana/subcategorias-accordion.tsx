@@ -137,7 +137,7 @@ export function SubcategoriasAccordion({
           type="multiple"
           {...accordionControle}
           className={cn(
-            "mt-2 flex w-full max-w-full flex-col bg-white py-4",
+            "mt-2 flex w-full max-w-full flex-col py-4",
             className,
           )}
         >
@@ -167,7 +167,7 @@ export function SubcategoriasAccordion({
                           }
                           onTransferir={() => onTransferir(sub.id, item)}
                           onAlternarConclusao={() => onAlternarItem(sub.id, item.id)}
-                          className="min-w-0 flex-1 truncate text-[17px] font-medium leading-snug no-underline"
+                          className="min-w-0 flex-1 truncate text-lg font-medium leading-snug no-underline"
                         >
                           {item.texto}
                         </ItemGestos>
