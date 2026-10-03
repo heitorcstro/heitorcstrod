@@ -381,8 +381,7 @@ export function SubcategoriasAccordion({
                           onReordenar={(ativoId, sobreId) =>
                             onReordenarItens(sub.id, itensOrdenados, ativoId, sobreId)
                           }
-                          atraso={400
-                          }
+                          atraso={400}
                         >
                           <ul className="divide-y divide-border border-y border-border">
                             {itensAtivos.map(renderizarItem)}
@@ -413,8 +412,7 @@ export function SubcategoriasAccordion({
                               onReordenar={(ativoId, sobreId) =>
                                 onReordenarItens(sub.id, itensOrdenados, ativoId, sobreId)
                           }
-                          atraso={400
-                              }
+                          atraso={400}
                             >
                               <ul className="divide-y divide-border border-y border-border">
                                 {itensMarcados.map(renderizarItem)}
