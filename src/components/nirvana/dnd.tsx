@@ -31,15 +31,17 @@ type ListaProps = {
   id: string;
   ids: string[];
   onReordenar: (ativoId: string, sobreId: string) => void;
+  /** Tempo de pressão parada antes de liberar o arraste (ms). */
+  atraso?: number;
   children: ReactNode;
 };
 
 /** Contexto de arrastar-e-soltar com suporte a toque (mobile) e teclado. */
-export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
+export function ListaOrdenavel({ id, ids, onReordenar, atraso = 250, children }: ListaProps) {
   const sensores = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { delay: 250, tolerance: 6 } }),
+    useSensor(PointerSensor, { activationConstraint: { delay: atraso, tolerance: 6 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 250, tolerance: 6 },
+      activationConstraint: { delay: atraso, tolerance: 6 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,

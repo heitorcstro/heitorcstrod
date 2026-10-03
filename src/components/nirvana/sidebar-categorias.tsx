@@ -370,6 +370,22 @@ export function SidebarCategorias({
               })}
 
 
+        {/* Seção 3: Arquivados */}
+        <button
+          type="button"
+          onClick={onAbrirArquivados}
+          className={cn(
+            "flex w-full flex-row items-center justify-between gap-2 border-b border-gray-200 px-2 py-3 text-left text-black transition-colors hover:bg-black/5",
+            !expandido && "justify-center px-0",
+          )}
+        >
+          <span className="whitespace-nowrap text-sm font-medium">
+            {expandido ? "Arquivados" : "📦"}
+          </span>
+          {expandido && totalArquivados > 0 && (
+            <span className="shrink-0 text-xs text-black/60">{totalArquivados}</span>
+          )}
+        </button>
               {/* Seção 2: Categorias */}
               <button
                 type="button"
@@ -438,7 +454,7 @@ export function SidebarCategorias({
           </div>
         )}
 
-        {/* Seção 3: Arquivados */}
+        {!expandido && (<>
         <button
           type="button"
           onClick={onAbrirArquivados}
@@ -454,6 +470,7 @@ export function SidebarCategorias({
             <span className="shrink-0 text-xs text-black/60">{totalArquivados}</span>
           )}
         </button>
+        </>)}
       </div>
     </aside>
   );
