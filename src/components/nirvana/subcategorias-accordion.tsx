@@ -132,6 +132,7 @@ export function SubcategoriasAccordion({
         id={`subcategorias-${categoria.id}`}
         ids={subcategoriasVisiveis.map((s) => s.id)}
         onReordenar={onReordenarSubcategorias}
+        atraso={450}
       >
         <Accordion
           type="multiple"
