@@ -73,6 +73,7 @@ export function ItemGestos({
   return (
     <div
       role="button"
+      data-control="Orla"
       tabIndex={0}
       aria-label={`${item.texto}. ${
         item.prioridade ? ROTULOS_PRIORIDADE[item.prioridade] : "Sem prioridade"

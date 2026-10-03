@@ -1,3 +1,4 @@
+import { pressaoLonga } from "./pressao-longa";
 import { useState } from "react";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import {
@@ -101,7 +102,8 @@ export function ListaView({
                 variant="ghost"
                 size="icon"
                 aria-label={`Excluir ${item.texto}`}
-                onClick={() => onRemoverItem(item.id)}
+                data-control="Cais"
+                {...pressaoLonga(() => onRemoverItem(item.id))}
                 className="shrink-0 text-muted-foreground hover:text-destructive"
               >
                 <Trash2 className="size-4" />
@@ -171,6 +173,7 @@ export function ListaView({
               id={`itens-${subcategoria.id}`}
               ids={itensAtivos.map((i) => i.id)}
               onReordenar={onReordenarItens}
+              atraso={400}
             >
               <ul className="mt-6 divide-y divide-border border-y border-border">
                 {itensAtivos.map(renderizarItem)}
@@ -199,6 +202,7 @@ export function ListaView({
                   id={`itens-marcados-${subcategoria.id}`}
                   ids={itensMarcados.map((i) => i.id)}
                   onReordenar={onReordenarItens}
+              atraso={400}
                 >
                   <ul className="divide-y divide-border border-y border-border bg-white">
                     {itensMarcados.map(renderizarItem)}
