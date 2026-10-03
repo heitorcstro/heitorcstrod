@@ -22,6 +22,10 @@ import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+const vibrar = () => {
+  if (typeof navigator !== "undefined") navigator.vibrate?.(15);
+};
+
 type ListaProps = {
   /** Identificador estável: evita divergência de ids entre servidor e cliente. */
   id: string;
@@ -33,9 +37,9 @@ type ListaProps = {
 /** Contexto de arrastar-e-soltar com suporte a toque (mobile) e teclado. */
 export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
   const sensores = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { delay: 225, tolerance: 8 } }),
+    useSensor(PointerSensor, { activationConstraint: { delay: 250, tolerance: 6 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 225, tolerance: 8 },
+      activationConstraint: { delay: 250, tolerance: 6 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
@@ -49,7 +53,7 @@ export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
   };
 
   return (
-    <DndContext sensors={sensores} collisionDetection={closestCenter} onDragEnd={aoSoltar}>
+    <DndContext sensors={sensores} collisionDetection={closestCenter} onDragStart={vibrar} onDragEnd={aoSoltar}>
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
         {children}
       </SortableContext>
@@ -85,9 +89,9 @@ const alvoValido = (tipoAtivo: TipoArrasto | null, tipoAlvo: TipoArrasto | null)
  */
 export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
   const sensores = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { delay: 225, tolerance: 8 } }),
+    useSensor(PointerSensor, { activationConstraint: { delay: 250, tolerance: 6 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 225, tolerance: 8 },
+      activationConstraint: { delay: 250, tolerance: 6 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
@@ -121,7 +125,7 @@ export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
   };
 
   return (
-    <DndContext sensors={sensores} collisionDetection={deteccao} onDragEnd={aoSoltar}>
+    <DndContext sensors={sensores} collisionDetection={deteccao} onDragStart={vibrar} onDragEnd={aoSoltar}>
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
         {children}
       </SortableContext>
@@ -236,6 +240,16 @@ export function ItemOrdenavel({
   const alvoEstatico = Boolean(tipo && tipoAtivo && tipoAtivo !== tipo);
   const destacado = alvoEstatico && isOver;
 
+  const controle =
+    textoAlca === "Mover subcategoria"
+      ? "Duna"
+      : textoAlca.toLowerCase().includes("pasta")
+        ? "Lira"
+        : textoAlca.toLowerCase().includes("categoria")
+          ? "Alfa"
+          : undefined;
+  const prontoClasse = isDragging ? "scale-105 ring-2 ring-blue-600 shadow-md" : undefined;
+
   const alca = inline ? (
     <span
       ref={setActivatorNodeRef}
@@ -243,8 +257,9 @@ export function ItemOrdenavel({
       {...attributes}
       {...listeners}
       aria-label={textoAlca}
+      data-control={controle}
       tabIndex={0}
-      className={
+      className={cn(
         alcaIcone
           ? cn(
               "group inline-flex h-6 w-6 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 transition-colors hover:bg-black/5 active:cursor-grabbing",
@@ -254,8 +269,9 @@ export function ItemOrdenavel({
             (alcaLetra
               ? "inline-flex h-6 w-6 shrink-0 cursor-grab touch-none select-none items-center justify-center rounded-md border border-black bg-white p-0 text-xs font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
               : "inline-flex shrink-0 cursor-grab touch-none select-none items-center rounded-md border border-black bg-white px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-black/5 active:cursor-grabbing"
-            )
-      }
+            ),
+        prontoClasse,
+      )}
     >
       {alcaIcone ? (
         <img
@@ -281,6 +297,7 @@ export function ItemOrdenavel({
       {...attributes}
       {...listeners}
       aria-label={textoAlca}
+      data-control={controle}
       className="h-8 shrink-0 cursor-grab touch-none px-2 text-xs text-foreground active:cursor-grabbing"
     >
       {textoAlca}
