@@ -3,6 +3,7 @@ import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 export const TEMPO_PRESSAO_BOTAO = 300;
 
 let temporizador: ReturnType<typeof setTimeout> | null = null;
+let inicio: { x: number; y: number } | null = null;
 
 const cancelar = () => {
   if (temporizador) {
@@ -27,10 +28,15 @@ export function pressaoLonga(
       if (opcoes?.prevenirPadrao) e.preventDefault();
       if (e.button !== 0) return;
       cancelar();
+      inicio = { x: e.clientX, y: e.clientY };
       temporizador = setTimeout(() => {
         temporizador = null;
         acao();
       }, atraso);
+    },
+    onPointerMove: (e: PointerEvent<HTMLElement>) => {
+      if (!inicio) return;
+      if (Math.abs(e.clientX - inicio.x) > 8 || Math.abs(e.clientY - inicio.y) > 8) cancelar();
     },
     onPointerUp: cancelar,
     onPointerLeave: cancelar,
