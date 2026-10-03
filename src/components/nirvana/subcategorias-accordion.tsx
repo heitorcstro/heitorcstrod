@@ -132,7 +132,6 @@ export function SubcategoriasAccordion({
         id={`subcategorias-${categoria.id}`}
         ids={subcategoriasVisiveis.map((s) => s.id)}
         onReordenar={onReordenarSubcategorias}
-        atraso={450}
       >
         <Accordion
           type="multiple"
@@ -200,10 +199,8 @@ export function SubcategoriasAccordion({
                           variant="ghost"
                           size="icon"
                           aria-label={`Excluir ${item.texto}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onRemoverItem(sub.id, item.id);
-                          }}
+                          data-control="Cais"
+                          {...pressaoLonga(() => onRemoverItem(sub.id, item.id))}
                           className="size-8 shrink-0 text-muted-foreground hover:text-destructive"
                         >
                           <Trash2 className="size-4" />
@@ -384,6 +381,7 @@ export function SubcategoriasAccordion({
                           onReordenar={(ativoId, sobreId) =>
                             onReordenarItens(sub.id, itensOrdenados, ativoId, sobreId)
                           }
+                          atraso={400}
                         >
                           <ul className="divide-y divide-border border-y border-border">
                             {itensAtivos.map(renderizarItem)}
@@ -413,7 +411,8 @@ export function SubcategoriasAccordion({
                               ids={itensMarcados.map((i) => i.id)}
                               onReordenar={(ativoId, sobreId) =>
                                 onReordenarItens(sub.id, itensOrdenados, ativoId, sobreId)
-                              }
+                          }
+                          atraso={400}
                             >
                               <ul className="divide-y divide-border border-y border-border">
                                 {itensMarcados.map(renderizarItem)}

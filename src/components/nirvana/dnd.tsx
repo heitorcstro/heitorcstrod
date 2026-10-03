@@ -245,6 +245,8 @@ export function ItemOrdenavel({
   const controle =
     textoAlca === "Mover subcategoria"
       ? "Duna"
+      : textoAlca === "Mover item"
+        ? "Puma"
       : textoAlca.toLowerCase().includes("pasta")
         ? "Lira"
         : textoAlca.toLowerCase().includes("categoria")
