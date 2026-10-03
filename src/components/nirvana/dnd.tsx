@@ -33,9 +33,9 @@ type ListaProps = {
 /** Contexto de arrastar-e-soltar com suporte a toque (mobile) e teclado. */
 export function ListaOrdenavel({ id, ids, onReordenar, children }: ListaProps) {
   const sensores = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { delay: 225, tolerance: 8 } }),
+    useSensor(PointerSensor, { activationConstraint: { delay: 250, tolerance: 6 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 225, tolerance: 8 },
+      activationConstraint: { delay: 250, tolerance: 6 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
@@ -85,9 +85,9 @@ const alvoValido = (tipoAtivo: TipoArrasto | null, tipoAlvo: TipoArrasto | null)
  */
 export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
   const sensores = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { delay: 225, tolerance: 8 } }),
+    useSensor(PointerSensor, { activationConstraint: { delay: 250, tolerance: 6 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 225, tolerance: 8 },
+      activationConstraint: { delay: 250, tolerance: 6 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
