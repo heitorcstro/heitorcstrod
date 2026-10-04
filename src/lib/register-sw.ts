@@ -54,6 +54,18 @@ async function unregisterMatching(): Promise<void> {
   }
 }
 
+let reloading = false;
+
+function listenForControllerChange(): void {
+  // When a new service worker takes control (autoUpdate + skipWaiting +
+  // clientsClaim), reload once so the page runs on the fresh assets.
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (reloading) return;
+    reloading = true;
+    window.location.reload();
+  });
+}
+
 export async function registerSW(): Promise<void> {
   if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
     return;
@@ -63,6 +75,8 @@ export async function registerSW(): Promise<void> {
     await unregisterMatching();
     return;
   }
+
+  listenForControllerChange();
 
   try {
     await navigator.serviceWorker.register(SW_PATH, { scope: "/" });
