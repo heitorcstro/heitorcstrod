@@ -44,7 +44,7 @@ export function useDirectionalSwipe({ onSwipeRight, onSwipeLeft, threshold = 55 
         horizontal.current = true;
         houveSwipe.current = true;
       }
-      const c = Math.max(-72, Math.min(72, dx));
+      const c = Math.max(0, Math.min(72, dx));
       offsetRef.current = c;
       setOffsetX(c);
     },

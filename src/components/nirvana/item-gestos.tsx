@@ -32,12 +32,8 @@ export function ItemGestos({
   children,
 }: Props) {
   const { offsetX, consumirSwipe, swipeHandlers } = useDirectionalSwipe({
-    onSwipeRight: () => {
-      if (!item.concluido) onAlternarConclusao();
-    },
-    onSwipeLeft: () => {
-      if (item.concluido) onAlternarConclusao();
-    },
+    onSwipeRight: onAlternarConclusao,
+    onSwipeLeft: () => {},
   });
 
   const avancarPrioridade = () => {
@@ -49,7 +45,7 @@ export function ItemGestos({
   };
 
   const tint =
-    offsetX > 8 ? "bg-green-50" : offsetX < -8 ? "bg-amber-50" : "bg-transparent";
+    offsetX > 25 ? (item.concluido ? "bg-amber-50/80" : "bg-emerald-50/80") : "bg-transparent";
 
   return (
     <div
@@ -58,7 +54,7 @@ export function ItemGestos({
       tabIndex={0}
       aria-label={`${item.texto}. ${
         item.prioridade ? ROTULOS_PRIORIDADE[item.prioridade] : "Sem prioridade"
-      }. Toque para mudar a prioridade; deslize para a direita para marcar como feito e para a esquerda para desmarcar.`}
+      }. Toque para mudar a prioridade; deslize para a direita para ${item.concluido ? "desmarcar" : "marcar como feito"}.`}
       {...swipeHandlers}
       onClick={avancarPrioridade}
       onContextMenu={(event) => event.preventDefault()}
