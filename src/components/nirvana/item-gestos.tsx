@@ -1,5 +1,6 @@
-import { useEffect, useRef, type PointerEvent, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useDirectionalSwipe } from "@/hooks/use-directional-swipe";
 import { ROTULOS_PRIORIDADE, type Item, type Prioridade } from "./types";
 
 type Props = {
@@ -11,15 +12,9 @@ type Props = {
   children: ReactNode;
 };
 
-const TEMPO_PRESSAO_LONGA = 225;
-
-/**
- * Ciclo completo de prioridades, incluindo o estado inicial (sem prioridade).
- * null -> 1 -> 2 -> 3 -> D -> T -> null
- */
+/** null -> 1 -> 2 -> 3 -> D -> T -> null */
 const CICLO: (Prioridade | null)[] = [null, "1", "2", "3", "D", "T"];
 
-/** A única coisa que muda é a COR DO TEXTO; o fundo permanece branco. */
 const corDaPrioridade: Record<Prioridade, string> = {
   "1": "text-green-600",
   "2": "text-yellow-500",
@@ -36,39 +31,25 @@ export function ItemGestos({
   className,
   children,
 }: Props) {
-  const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const ignorarProximoClique = useRef(false);
-
-  const cancelarTemporizador = () => {
-    if (temporizador.current) {
-      clearTimeout(temporizador.current);
-      temporizador.current = null;
-    }
-  };
-
-  useEffect(() => cancelarTemporizador, []);
-
-  const iniciarPressao = (event: PointerEvent<HTMLDivElement>) => {
-    if (event.button !== 0) return;
-    cancelarTemporizador();
-    ignorarProximoClique.current = false;
-    temporizador.current = setTimeout(() => {
-      ignorarProximoClique.current = true;
-      temporizador.current = null;
-      onAlternarConclusao();
-    }, TEMPO_PRESSAO_LONGA);
-  };
+  const { offsetX, consumirSwipe, swipeHandlers } = useDirectionalSwipe({
+    onSwipeRight: () => {
+      if (!item.concluido) onAlternarConclusao();
+    },
+    onSwipeLeft: () => {
+      if (item.concluido) onAlternarConclusao();
+    },
+  });
 
   const avancarPrioridade = () => {
-    if (ignorarProximoClique.current) {
-      ignorarProximoClique.current = false;
-      return;
-    }
+    if (consumirSwipe()) return;
     const indiceAtual = item.prioridade ? CICLO.indexOf(item.prioridade) : 0;
     const proximo = CICLO[(indiceAtual + 1) % CICLO.length] ?? null;
     onDefinirPrioridade(proximo);
     if (proximo === "T") onTransferir();
   };
+
+  const tint =
+    offsetX > 8 ? "bg-green-50" : offsetX < -8 ? "bg-amber-50" : "bg-transparent";
 
   return (
     <div
@@ -77,14 +58,8 @@ export function ItemGestos({
       tabIndex={0}
       aria-label={`${item.texto}. ${
         item.prioridade ? ROTULOS_PRIORIDADE[item.prioridade] : "Sem prioridade"
-      }. Toque para mudar a prioridade; pressione por dois segundos para ${
-        item.concluido ? "desmarcar" : "marcar como feito"
-      }.`}
-      onPointerDown={iniciarPressao}
-      onPointerUp={cancelarTemporizador}
-      onPointerMove={(e) => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 4) cancelarTemporizador(); }}
-      onPointerLeave={cancelarTemporizador}
-      onPointerCancel={cancelarTemporizador}
+      }. Toque para mudar a prioridade; deslize para a direita para marcar como feito e para a esquerda para desmarcar.`}
+      {...swipeHandlers}
       onClick={avancarPrioridade}
       onContextMenu={(event) => event.preventDefault()}
       onKeyDown={(event) => {
@@ -93,8 +68,14 @@ export function ItemGestos({
           avancarPrioridade();
         }
       }}
+      style={{
+        transform: `translateX(${offsetX}px)`,
+        transition: offsetX === 0 ? "transform 150ms ease-out" : "none",
+        touchAction: "pan-y",
+      }}
       className={cn(
-        "cursor-pointer select-none bg-transparent text-gray-900 transition-colors",
+        "cursor-pointer select-none rounded text-gray-900 transition-colors",
+        tint,
         item.prioridade ? corDaPrioridade[item.prioridade] : "text-gray-900",
         className,
       )}
