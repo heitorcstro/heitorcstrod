@@ -200,7 +200,11 @@ export function SubcategoriasAccordion({
                           size="icon"
                           aria-label={`Excluir ${item.texto}`}
                           data-control="Cais"
-                          {...pressaoLonga(() => onRemoverItem(sub.id, item.id))}
+                          {...pressaoLonga(() => {
+                            if (window.confirm(`Deseja realmente excluir o item "${item.texto}"?`)) {
+                              onRemoverItem(sub.id, item.id);
+                            }
+                          })}
                           className="size-8 shrink-0 text-muted-foreground hover:text-destructive"
                         >
                           <Trash2 className="size-4" />

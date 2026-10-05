@@ -103,7 +103,11 @@ export function ListaView({
                 size="icon"
                 aria-label={`Excluir ${item.texto}`}
                 data-control="Cais"
-                {...pressaoLonga(() => onRemoverItem(item.id))}
+                {...pressaoLonga(() => {
+                  if (window.confirm(`Deseja realmente excluir o item "${item.texto}"?`)) {
+                    onRemoverItem(item.id);
+                  }
+                })}
                 className="shrink-0 text-muted-foreground hover:text-destructive"
               >
                 <Trash2 className="size-4" />
