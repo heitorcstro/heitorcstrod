@@ -22,6 +22,30 @@ import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+/** Alfa (categoria) exige 400ms parado; demais (Lira/pasta) 250ms. */
+const atrasoPorAlca = (evento: Event) => {
+  const alvo = evento.target as Element | null;
+  return alvo?.closest?.('[data-control="Alfa"]') ? 400 : 250;
+};
+
+class SensorPonteiroHierarquia extends PointerSensor {
+  constructor(props: ConstructorParameters<typeof PointerSensor>[0]) {
+    super({
+      ...props,
+      options: { ...props.options, activationConstraint: { delay: atrasoPorAlca(props.event), tolerance: 6 } },
+    });
+  }
+}
+
+class SensorToqueHierarquia extends TouchSensor {
+  constructor(props: ConstructorParameters<typeof TouchSensor>[0]) {
+    super({
+      ...props,
+      options: { ...props.options, activationConstraint: { delay: atrasoPorAlca(props.event), tolerance: 6 } },
+    });
+  }
+}
+
 const vibrar = () => {
   if (typeof navigator !== "undefined") navigator.vibrate?.(15);
 };
@@ -37,7 +61,7 @@ type ListaProps = {
 };
 
 /** Contexto de arrastar-e-soltar com suporte a toque (mobile) e teclado. */
-export function ListaOrdenavel({ id, ids, onReordenar, atraso = 250, children }: ListaProps) {
+export function ListaOrdenavel({ id, ids, onReordenar, atraso = 400, children }: ListaProps) {
   const sensores = useSensors(
     useSensor(PointerSensor, { activationConstraint: { delay: atraso, tolerance: 6 } }),
     useSensor(TouchSensor, {
@@ -91,10 +115,8 @@ const alvoValido = (tipoAtivo: TipoArrasto | null, tipoAlvo: TipoArrasto | null)
  */
 export function ContextoArrasto({ ids, onSoltar, children }: ContextoProps) {
   const sensores = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { delay: 250, tolerance: 6 } }),
-    useSensor(TouchSensor, {
-      activationConstraint: { delay: 250, tolerance: 6 },
-    }),
+    useSensor(SensorPonteiroHierarquia),
+    useSensor(SensorToqueHierarquia),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
